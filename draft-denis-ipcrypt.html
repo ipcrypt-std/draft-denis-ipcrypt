@@ -11,13 +11,13 @@
        The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations: 
        
          
-           ipcrypt-deterministic:  Deterministic encryption using AES128 (applied as a single‑block operation). 
+           ipcrypt-deterministic :  Deterministic encryption using AES128 (applied as a single‑block operation). 
          
          
-           ipcrypt-nd:  Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak. 
+           ipcrypt-nd :  Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak. 
          
          
-           ipcrypt-ndx:  Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak. 
+           ipcrypt-ndx :  Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak. 
          
        
        Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated, as specified in  ) to produce larger ciphertexts that resist correlation attacks. 
@@ -1096,13 +1096,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-abstract-2">The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations:<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-abstract-3.1">
-          <p id="section-abstract-3.1.1"><strong>ipcrypt-deterministic:</strong> Deterministic encryption using AES128 (applied as a single‑block operation).<a href="#section-abstract-3.1.1" class="pilcrow">¶</a></p>
+          <p id="section-abstract-3.1.1"><strong><code>ipcrypt-deterministic</code>:</strong> Deterministic encryption using AES128 (applied as a single‑block operation).<a href="#section-abstract-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-abstract-3.2">
-          <p id="section-abstract-3.2.1"><strong>ipcrypt-nd:</strong> Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak.<a href="#section-abstract-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-abstract-3.2.1"><strong><code>ipcrypt-nd</code>:</strong> Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak.<a href="#section-abstract-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-abstract-3.3">
-          <p id="section-abstract-3.3.1"><strong>ipcrypt-ndx:</strong> Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak.<a href="#section-abstract-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-abstract-3.3.1"><strong><code>ipcrypt-ndx</code>:</strong> Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak.<a href="#section-abstract-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-abstract-4">Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated, as specified in <span>[<a href="#RFC4086" class="cite xref">RFC4086</a>]</span>) to produce larger ciphertexts that resist correlation attacks.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
@@ -1197,10 +1197,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-generic-constructions" class="internal xref">Generic Constructions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-deterministic-encryption-ip" class="internal xref">Deterministic Encryption (ipcrypt‑deterministic)</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-deterministic-encryption" class="internal xref">Deterministic Encryption</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-specific-instantiation-ipcr" class="internal xref">Specific Instantiation: ipcrypt‑deterministic</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-specific-instantiation-ipcr" class="internal xref">Specific Instantiation: <code>ipcrypt-deterministic</code></a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
                     <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-operation-flow-diagram" class="internal xref">Operation Flow Diagram</a></p>
@@ -1216,7 +1216,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-nondeterministic-encryption" class="internal xref">Non‑Deterministic Encryption</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-ipcryptnd-kiasubc" class="internal xref">ipcrypt‑nd (KIASU‑BC)</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-ipcrypt-nd-kiasubc" class="internal xref"><code>ipcrypt-nd</code> (KIASU‑BC)</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
                     <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-usage-considerations" class="internal xref">Usage Considerations</a></p>
@@ -1224,7 +1224,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-ipcryptndx-aesxex" class="internal xref">ipcrypt‑ndx (AES‑XEX)</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-ipcrypt-ndx-aesxex" class="internal xref"><code>ipcrypt-ndx</code> (AES‑XEX)</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
                     <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-usage-considerations-2" class="internal xref">Usage Considerations</a></p>
@@ -1272,13 +1272,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.11.2.1.2.3.1"><a href="#appendix-B.1.3" class="auto internal xref">B.1.3</a>.  <a href="#name-conversion-from-a-16-byte-a" class="internal xref">Conversion from a 16-Byte Array to an IP Address</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1.2.4">
-                    <p id="section-toc.1-1.11.2.1.2.4.1"><a href="#appendix-B.1.4" class="auto internal xref">B.1.4</a>.  <a href="#name-deterministic-encryption-ipc" class="internal xref">Deterministic Encryption (ipcrypt‑deterministic)</a></p>
+                    <p id="section-toc.1-1.11.2.1.2.4.1"><a href="#appendix-B.1.4" class="auto internal xref">B.1.4</a>.  <a href="#name-deterministic-encryption-ip" class="internal xref">Deterministic Encryption (<code>ipcrypt-deterministic</code>)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1.2.5">
-                    <p id="section-toc.1-1.11.2.1.2.5.1"><a href="#appendix-B.1.5" class="auto internal xref">B.1.5</a>.  <a href="#name-nondeterministic-encryption-" class="internal xref">Non‑Deterministic Encryption using KIASU‑BC (ipcrypt‑nd)</a></p>
+                    <p id="section-toc.1-1.11.2.1.2.5.1"><a href="#appendix-B.1.5" class="auto internal xref">B.1.5</a>.  <a href="#name-nondeterministic-encryption-" class="internal xref">Non‑Deterministic Encryption using KIASU‑BC (<code>ipcrypt-nd</code>)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1.2.6">
-                    <p id="section-toc.1-1.11.2.1.2.6.1"><a href="#appendix-B.1.6" class="auto internal xref">B.1.6</a>.  <a href="#name-nondeterministic-encryption-u" class="internal xref">Non‑Deterministic Encryption using AES‑XEX (ipcrypt‑ndx)</a></p>
+                    <p id="section-toc.1-1.11.2.1.2.6.1"><a href="#appendix-B.1.6" class="auto internal xref">B.1.6</a>.  <a href="#name-nondeterministic-encryption-u" class="internal xref">Non‑Deterministic Encryption using AES‑XEX (<code>ipcrypt-ndx</code>)</a></p>
 </li>
                 </ul>
 </li>
@@ -1292,10 +1292,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.11.2.2.2.2.1"><a href="#appendix-B.2.2" class="auto internal xref">B.2.2</a>.  <a href="#name-deterministic-encryption-fl" class="internal xref">Deterministic Encryption Flow</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2.2.3">
-                    <p id="section-toc.1-1.11.2.2.2.3.1"><a href="#appendix-B.2.3" class="auto internal xref">B.2.3</a>.  <a href="#name-nondeterministic-encryption-f" class="internal xref">Non‑Deterministic Encryption Flow (ipcrypt‑nd)</a></p>
+                    <p id="section-toc.1-1.11.2.2.2.3.1"><a href="#appendix-B.2.3" class="auto internal xref">B.2.3</a>.  <a href="#name-nondeterministic-encryption-f" class="internal xref">Non‑Deterministic Encryption Flow (<code>ipcrypt-nd</code>)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2.2.4">
-                    <p id="section-toc.1-1.11.2.2.2.4.1"><a href="#appendix-B.2.4" class="auto internal xref">B.2.4</a>.  <a href="#name-nondeterministic-encryption-fl" class="internal xref">Non‑Deterministic Encryption Flow (ipcrypt‑ndx)</a></p>
+                    <p id="section-toc.1-1.11.2.2.2.4.1"><a href="#appendix-B.2.4" class="auto internal xref">B.2.4</a>.  <a href="#name-nondeterministic-encryption-fl" class="internal xref">Non‑Deterministic Encryption Flow (<code>ipcrypt-ndx</code>)</a></p>
 </li>
                 </ul>
 </li>
@@ -1340,28 +1340,26 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-terminology">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
       </h2>
-<p id="section-2-1">Throughout this document, the following terms and conventions apply:<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in BCP 14 <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Throughout this document, the following terms and conventions apply:<a href="#section-2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2-2.1">
-          <p id="section-2-2.1.1"><strong>IP Address:</strong> An IPv4 or IPv6 address as defined in <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>.<a href="#section-2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2-3.1">
+          <p id="section-2-3.1.1"><strong>IP Address:</strong> An IPv4 or IPv6 address as defined in <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-2-2.2">
-          <p id="section-2-2.2.1"><strong>16‑Byte Representation:</strong> A fixed-length representation used for both IPv4 (via IPv4‑mapped IPv6) and IPv6 addresses.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-2-3.2">
+          <p id="section-2-3.2.1"><strong>16‑Byte Representation:</strong> A fixed-length representation used for both IPv4 (via IPv4‑mapped IPv6) and IPv6 addresses.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-2-2.3">
-          <p id="section-2-2.3.1"><strong>Tweak:</strong> A non‑secret, additional input to a tweakable block cipher that further randomizes the output.<a href="#section-2-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-2-3.3">
+          <p id="section-2-3.3.1"><strong>Tweak:</strong> A non‑secret, additional input to a tweakable block cipher that further randomizes the output.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-2-2.4">
-          <p id="section-2-2.4.1"><strong>Deterministic Encryption:</strong> Encryption that always produces the same ciphertext for a given input and key.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-2-3.4">
+          <p id="section-2-3.4.1"><strong>Deterministic Encryption:</strong> Encryption that always produces the same ciphertext for a given input and key.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-2-2.5">
-          <p id="section-2-2.5.1"><strong>Non‑Deterministic Encryption:</strong> Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.<a href="#section-2-2.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-2-3.5">
+          <p id="section-2-3.5.1"><strong>Non‑Deterministic Encryption:</strong> Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.<a href="#section-2-3.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-2-2.6">
-          <p id="section-2-2.6.1"><strong>(Input, Tweak) Collision:</strong> A scenario where the same input is encrypted with the same tweak; this reveals that the input was repeated but not the input’s value.<a href="#section-2-2.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-2-2.7">
-          <p id="section-2-2.7.1"><strong>MUST, SHOULD, etc.:</strong> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> keywords are used as defined.<a href="#section-2-2.7.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-2-3.6">
+          <p id="section-2-3.6.1"><strong>(Input, Tweak) Collision:</strong> A scenario where the same input is encrypted with the same tweak; this reveals that the input was repeated but not the input’s value.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -1383,15 +1381,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-ipv6-addresses" class="section-name selfRef">IPv6 Addresses</a>
           </h4>
 <p id="section-3.1.1-1">IPv6 addresses are natively 128 bits and are converted directly using network‑byte order (big‑endian) as specified in <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-2"><em>Example Diagram:</em><a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-2"><em>Example:</em><a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.1.1-3">
 <pre>
-IPv6 Address:
-   2001:0db8:85a3:0000:0000:8a2e:0370:7334
-         ||
-         vv
-16-Byte Representation:
-   [20 01 | 0d b8 | 85 a3 | 00 00 | 00 00 | 8a 2e | 03 70 | 73 34]
+IPv6 Address:    2001:0db8:85a3:0000:0000:8a2e:0370:7334
+16-Byte Representation: [20 01 0d b8 85 a3 00 00 00 00 8a 2e 03 70 73 34]
 </pre><a href="#section-3.1.1-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1404,14 +1398,8 @@ IPv6 Address:
 <p id="section-3.1.2-1">IPv4 addresses (32 bits) are mapped using the IPv4‑mapped IPv6 format:<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.1.2-2">
 <pre>
-IPv4 Address:      192.0.2.1
-       |
-       v
-Octets:         C0  00  02  01
-       |
-       v
-16-Byte Representation:
- [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
+IPv4 Address:    192.0.2.1
+16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
 </pre><a href="#section-3.1.2-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1423,11 +1411,29 @@ Octets:         C0  00  02  01
         <h3 id="name-converting-from-a-16byte-re">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-converting-from-a-16byte-re" class="section-name selfRef">Converting from a 16‑Byte Representation to an IP Address</a>
         </h3>
-<p id="section-3.2-1">The conversion algorithm is as follows:
-1. Examine the first 12 bytes.
-2. If they match the IPv4‑mapped prefix (10 bytes of 0x00 followed by 0xFF, 0xFF), interpret the last 4 bytes as an IPv4 address in dotted‑decimal notation.
-3. Otherwise, interpret the 16 bytes as an IPv6 address in colon‑hexadecimal notation.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">(For additional illustration, see Appendix B.)<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The conversion algorithm is as follows:<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.2-2">
+<li id="section-3.2-2.1">
+            <p id="section-3.2-2.1.1">Examine the first 12 bytes of the 16-byte representation<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-3.2-2.2">
+            <p id="section-3.2-2.2.1">If they match the IPv4‑mapped prefix (10 bytes of 0x00 followed by 0xFF, 0xFF):<a href="#section-3.2-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-2.2.2.1">
+                <p id="section-3.2-2.2.2.1.1">Interpret the last 4 bytes as an IPv4 address in dotted‑decimal notation<a href="#section-3.2-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li id="section-3.2-2.3">
+            <p id="section-3.2-2.3.1">Otherwise:<a href="#section-3.2-2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-2.3.2.1">
+                <p id="section-3.2-2.3.2.1.1">Interpret the 16 bytes as an IPv6 address in colon‑hexadecimal notation<a href="#section-3.2-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+        </ol>
+<p id="section-3.2-3">(For additional illustration, see Appendix B.)<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1438,14 +1444,39 @@ Octets:         C0  00  02  01
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-generic-constructions" class="section-name selfRef">Generic Constructions</a>
       </h2>
 <p id="section-4-1">This specification defines two generic cryptographic constructions:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4-2">
+<li id="section-4-2.1">
+          <p id="section-4-2.1.1"><strong>128-bit Block Cipher Construction:</strong><a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4-2.1">
-          <p id="section-4-2.1.1"><strong>128-bit Block Cipher:</strong> Used in deterministic encryption (e.g., AES‑128 treated as a permutation).<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4-2.1.2.1">
+              <p id="section-4-2.1.2.1.1">Used in deterministic encryption<a href="#section-4-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-4-2.2">
-          <p id="section-4-2.2.1"><strong>128-bit Tweakable Block Cipher (TBC):</strong> Used in non‑deterministic encryption; it accepts a key, a tweak, and a message. Although the tweak is typically randomly sampled (and MUST be uniformly random when generated), its reuse on different inputs does not compromise confidentiality.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-4-2.1.2.2">
+              <p id="section-4-2.1.2.2.1">Operates on a single 16-byte block<a href="#section-4-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-      </ul>
+            <li class="normal" id="section-4-2.1.2.3">
+              <p id="section-4-2.1.2.3.1">Example: AES‑128 treated as a permutation<a href="#section-4-2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li id="section-4-2.2">
+          <p id="section-4-2.2.1"><strong>128-bit Tweakable Block Cipher (TBC) Construction:</strong><a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4-2.2.2.1">
+              <p id="section-4-2.2.2.1.1">Used in non‑deterministic encryption<a href="#section-4-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4-2.2.2.2">
+              <p id="section-4-2.2.2.2.1">Accepts a key, a tweak, and a message<a href="#section-4-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4-2.2.2.3">
+              <p id="section-4-2.2.2.3.1">The tweak is typically randomly sampled (and MUST be uniformly random when generated)<a href="#section-4-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4-2.2.2.4">
+              <p id="section-4-2.2.2.4.1">Reuse of the same tweak on different inputs does not compromise confidentiality<a href="#section-4-2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+      </ol>
 <p id="section-4-3">Valid options for implementing a tweakable block cipher include, but are not limited to:<a href="#section-4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-4.1">
@@ -1461,19 +1492,19 @@ Octets:         C0  00  02  01
           <p id="section-4-4.4.1"><strong>AES-XEX</strong><a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-4-5">Implementers may choose any cipher that meets the required security properties and provides robust resistance against related-tweak and other cryptographic attacks.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-5">Implementers MUST choose a cipher that meets the required security properties and provides robust resistance against related-tweak and other cryptographic attacks.<a href="#section-4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="deterministic-encryption-ipcryptdeterministic">
+<div id="deterministic-encryption">
 <section id="section-5">
-      <h2 id="name-deterministic-encryption-ip">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-deterministic-encryption-ip" class="section-name selfRef">Deterministic Encryption (ipcrypt‑deterministic)</a>
+      <h2 id="name-deterministic-encryption">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-deterministic-encryption" class="section-name selfRef">Deterministic Encryption</a>
       </h2>
 <p id="section-5-1">Deterministic encryption applies a 128‑bit block cipher directly to the 16‑byte representation of an IP address.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<div id="specific-instantiation-ipcryptdeterministic">
+<div id="specific-instantiation-ipcrypt-deterministic">
 <section id="section-5.1">
         <h3 id="name-specific-instantiation-ipcr">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-specific-instantiation-ipcr" class="section-name selfRef">Specific Instantiation: ipcrypt‑deterministic</a>
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-specific-instantiation-ipcr" class="section-name selfRef">Specific Instantiation: <code>ipcrypt-deterministic</code></a>
         </h3>
 <p id="section-5.1-1">This instantiation employs AES128 in a single‑block operation. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <div id="operation-flow-diagram">
@@ -1548,19 +1579,19 @@ To ensure IPv4 format preservation, implementers <strong>MUST</strong> consider 
 <p id="section-6-4">This document defines two instantiations:<a href="#section-6-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-5.1">
-          <p id="section-6-5.1.1"><strong>ipcrypt‑nd:</strong> Uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak.
+          <p id="section-6-5.1.1"><strong><code>ipcrypt-nd</code>:</strong> Uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak.
 See <span>[<a href="#KIASU-BC" class="cite xref">KIASU-BC</a>]</span> for details.<a href="#section-6-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-5.2">
-          <p id="section-6-5.2.1"><strong>ipcrypt‑ndx:</strong> Uses the AES‑XEX tweakable block cipher with a 16‑byte (128‑bit) tweak.
+          <p id="section-6-5.2.1"><strong><code>ipcrypt-ndx</code>:</strong> Uses the AES‑XEX tweakable block cipher with a 16‑byte (128‑bit) tweak.
 See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for background.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-6-6">In both cases, if a tweak is generated randomly, it <strong>MUST be uniformly random</strong>. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.<a href="#section-6-6" class="pilcrow">¶</a></p>
-<div id="ipcryptnd-kiasubc">
+<div id="ipcrypt-nd-kiasubc">
 <section id="section-6.1">
-        <h3 id="name-ipcryptnd-kiasubc">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-ipcryptnd-kiasubc" class="section-name selfRef">ipcrypt‑nd (KIASU‑BC)</a>
+        <h3 id="name-ipcrypt-nd-kiasubc">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-ipcrypt-nd-kiasubc" class="section-name selfRef"><code>ipcrypt-nd</code> (KIASU‑BC)</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.1-1.1">
@@ -1582,10 +1613,10 @@ See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for backgrou
 </div>
 </section>
 </div>
-<div id="ipcryptndx-aesxex">
+<div id="ipcrypt-ndx-aesxex">
 <section id="section-6.2">
-        <h3 id="name-ipcryptndx-aesxex">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-ipcryptndx-aesxex" class="section-name selfRef">ipcrypt‑ndx (AES‑XEX)</a>
+        <h3 id="name-ipcrypt-ndx-aesxex">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-ipcrypt-ndx-aesxex" class="section-name selfRef"><code>ipcrypt-ndx</code> (AES‑XEX)</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.2-1.1">
@@ -1601,7 +1632,7 @@ See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for backgrou
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-usage-considerations-2" class="section-name selfRef">Usage Considerations</a>
           </h4>
 <p id="section-6.2.1-1">Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-2">As with ipcrypt‑nd, an (input, tweak) collision reveals repetition without compromising the input value.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">As with ipcrypt-nd, an (input, tweak) collision reveals repetition without compromising the input value.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.2.1-3">These limits are per key; regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1614,17 +1645,17 @@ See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for backgrou
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.3-1.1">
-            <p id="section-6.3-1.1.1"><strong>Deterministic (ipcrypt‑deterministic):</strong>
+            <p id="section-6.3-1.1.1"><strong>Deterministic (<code>ipcrypt-deterministic</code>):</strong>
 Produces a 16‑byte output; preserves format but reveals repeated inputs.<a href="#section-6.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-1.2">
             <p id="section-6.3-1.2.1"><strong>Non‑Deterministic:</strong><a href="#section-6.3-1.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3-1.2.2.1">
-                <p id="section-6.3-1.2.2.1.1"><strong>ipcrypt‑nd (KIASU‑BC):</strong> Produces a 24‑byte output using an 8‑byte tweak; (input, tweak) collisions reveal repeated inputs (with the same tweak) but not their values.<a href="#section-6.3-1.2.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3-1.2.2.1.1"><strong><code>ipcrypt-nd</code> (KIASU‑BC):</strong> Produces a 24‑byte output using an 8‑byte tweak; (input, tweak) collisions reveal repeated inputs (with the same tweak) but not their values.<a href="#section-6.3-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.3-1.2.2.2">
-                <p id="section-6.3-1.2.2.2.1"><strong>ipcrypt‑ndx (AES‑XEX):</strong> Produces a 32‑byte output using a 16‑byte tweak; supports higher secure operation counts per key.<a href="#section-6.3-1.2.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3-1.2.2.2.1"><strong><code>ipcrypt-ndx</code> (AES‑XEX):</strong> Produces a 32‑byte output using a 16‑byte tweak; supports higher secure operation counts per key.<a href="#section-6.3-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -1842,10 +1873,10 @@ function Bytes16ToIP(bytes16):
 </div>
 </section>
 </div>
-<div id="deterministic-encryption-ipcryptdeterministic-1">
+<div id="deterministic-encryption-ipcrypt-deterministic">
 <section id="appendix-B.1.4">
-          <h4 id="name-deterministic-encryption-ipc">
-<a href="#appendix-B.1.4" class="section-number selfRef">B.1.4. </a><a href="#name-deterministic-encryption-ipc" class="section-name selfRef">Deterministic Encryption (ipcrypt‑deterministic)</a>
+          <h4 id="name-deterministic-encryption-ip">
+<a href="#appendix-B.1.4" class="section-number selfRef">B.1.4. </a><a href="#name-deterministic-encryption-ip" class="section-name selfRef">Deterministic Encryption (<code>ipcrypt-deterministic</code>)</a>
           </h4>
 <div class="lang-pseudocode sourcecode" id="appendix-B.1.4-1">
 <pre>
@@ -1858,10 +1889,10 @@ function ipcrypt_deterministic(ip_address, key):
 </div>
 </section>
 </div>
-<div id="nondeterministic-encryption-using-kiasubc-ipcryptnd">
+<div id="nondeterministic-encryption-using-kiasubc-ipcrypt-nd">
 <section id="appendix-B.1.5">
           <h4 id="name-nondeterministic-encryption-">
-<a href="#appendix-B.1.5" class="section-number selfRef">B.1.5. </a><a href="#name-nondeterministic-encryption-" class="section-name selfRef">Non‑Deterministic Encryption using KIASU‑BC (ipcrypt‑nd)</a>
+<a href="#appendix-B.1.5" class="section-number selfRef">B.1.5. </a><a href="#name-nondeterministic-encryption-" class="section-name selfRef">Non‑Deterministic Encryption using KIASU‑BC (<code>ipcrypt-nd</code>)</a>
           </h4>
 <div class="lang-pseudocode sourcecode" id="appendix-B.1.5-1">
 <pre>
@@ -1876,10 +1907,10 @@ function ipcrypt_nd(ip_address, key):
 </div>
 </section>
 </div>
-<div id="nondeterministic-encryption-using-aesxex-ipcryptndx">
+<div id="nondeterministic-encryption-using-aesxex-ipcrypt-ndx">
 <section id="appendix-B.1.6">
           <h4 id="name-nondeterministic-encryption-u">
-<a href="#appendix-B.1.6" class="section-number selfRef">B.1.6. </a><a href="#name-nondeterministic-encryption-u" class="section-name selfRef">Non‑Deterministic Encryption using AES‑XEX (ipcrypt‑ndx)</a>
+<a href="#appendix-B.1.6" class="section-number selfRef">B.1.6. </a><a href="#name-nondeterministic-encryption-u" class="section-name selfRef">Non‑Deterministic Encryption using AES‑XEX (<code>ipcrypt-ndx</code>)</a>
           </h4>
 <div class="lang-pseudocode sourcecode" id="appendix-B.1.6-1">
 <pre>
@@ -1947,10 +1978,10 @@ function ipcrypt_ndx(ip_address, key):
 </div>
 </section>
 </div>
-<div id="nondeterministic-encryption-flow-ipcryptnd">
+<div id="nondeterministic-encryption-flow-ipcrypt-nd">
 <section id="appendix-B.2.3">
           <h4 id="name-nondeterministic-encryption-f">
-<a href="#appendix-B.2.3" class="section-number selfRef">B.2.3. </a><a href="#name-nondeterministic-encryption-f" class="section-name selfRef">Non‑Deterministic Encryption Flow (ipcrypt‑nd)</a>
+<a href="#appendix-B.2.3" class="section-number selfRef">B.2.3. </a><a href="#name-nondeterministic-encryption-f" class="section-name selfRef">Non‑Deterministic Encryption Flow (<code>ipcrypt-nd</code>)</a>
           </h4>
 <div class="alignLeft art-text artwork" id="appendix-B.2.3-1">
 <pre>
@@ -1972,15 +2003,15 @@ function ipcrypt_ndx(ip_address, key):
     [Concatenate Tweak || Ciphertext]
                   |
                   v
-         24-Byte Output (ipcrypt‑nd)
+         24-Byte Output (`ipcrypt-nd`)
 </pre><a href="#appendix-B.2.3-1" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
-<div id="nondeterministic-encryption-flow-ipcryptndx">
+<div id="nondeterministic-encryption-flow-ipcrypt-ndx">
 <section id="appendix-B.2.4">
           <h4 id="name-nondeterministic-encryption-fl">
-<a href="#appendix-B.2.4" class="section-number selfRef">B.2.4. </a><a href="#name-nondeterministic-encryption-fl" class="section-name selfRef">Non‑Deterministic Encryption Flow (ipcrypt‑ndx)</a>
+<a href="#appendix-B.2.4" class="section-number selfRef">B.2.4. </a><a href="#name-nondeterministic-encryption-fl" class="section-name selfRef">Non‑Deterministic Encryption Flow (<code>ipcrypt-ndx</code>)</a>
           </h4>
 <div class="alignLeft art-text artwork" id="appendix-B.2.4-1">
 <pre>
@@ -2002,7 +2033,7 @@ function ipcrypt_ndx(ip_address, key):
     [Concatenate Tweak || Ciphertext]
                   |
                   v
-         32-Byte Output (ipcrypt‑ndx)
+         32-Byte Output (`ipcrypt-ndx`)
 </pre><a href="#appendix-B.2.4-1" class="pilcrow">¶</a>
 </div>
 </section>
