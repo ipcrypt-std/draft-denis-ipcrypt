@@ -8,7 +8,7 @@ Intended status: Informational                                April 2025
 Expires: 16 October 2025
 
 
-          A Proposal for IP Address Encryption and Obfuscation
+           Methods for IP Address Encryption and Obfuscation
                        draft-denis-ipcrypt-latest
 
 Abstract
