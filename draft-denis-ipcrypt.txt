@@ -124,12 +124,12 @@ Table of Contents
 
 1.  Introduction
 
-   This document specifies a standard for the encryption and obfuscation
-   of IP addresses for both operational use and privacy preservation.
-   The objective is to enable network operators, researchers, and
-   privacy advocates to share or analyze data while protecting sensitive
-   address information, addressing concerns raised in [RFC7624]
-   regarding confidentiality in the face of pervasive surveillance.
+   This document specifies methods for the encryption and obfuscation of
+   IP addresses for both operational use and privacy preservation.  The
+   objective is to enable network operators, researchers, and privacy
+   advocates to share or analyze data while protecting sensitive address
+   information, addressing concerns raised in [RFC7624] regarding
+   confidentiality in the face of pervasive surveillance.
 
 1.1.  Use Cases and Motivations
 
@@ -210,7 +210,7 @@ IPv4 Address:    192.0.2.1
    1.  Examine the first 12 bytes of the 16-byte representation
 
    2.  If they match the IPv4-mapped prefix (10 bytes of 0x00 followed
-       by 0xFF, 0xFF):
+       by 0xFF,0xFF``):
 
        *  Interpret the last 4 bytes as an IPv4 address in
           dotted-decimal notation
@@ -308,7 +308,8 @@ IPv4 Address:    192.0.2.1
    *  Otherwise, it is interpreted as an IPv6 address.
 
       *Note:* To ensure IPv4 format preservation, implementers *MUST*
-      consider using cycle-walking or an FPE mode if required.
+      consider using cycle-walking, a 32-bit random permutation, or an
+      FPE mode if required.
 
 6.  Non-Deterministic Encryption
 
@@ -483,8 +484,7 @@ IPv4 Address:    192.0.2.1
               crypto02.pdf>.
 
    [XTS-AES]  Black, J., Dawson, E., Gueron, S., and P. Rogaway, "The
-              XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 2010,
-              <https://web.cs.ucdavis.edu/~rogaway/papers/xts.pdf>.
+              XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 2010.
 
 Appendix A.  Acknowledgments
 
@@ -608,13 +608,13 @@ B.2.2.  Deterministic Encryption Flow
        [AES128 Single-Block Encrypt]
                    |
                    v
-           16-Byte Ciphertext
+          16-Byte Ciphertext
                    |
                    v
-           [Convert to IP Format]
+        [Convert to IP Format]
                    |
                    v
-            Encrypted IP Address
+          Encrypted IP Address
 
 B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
 
@@ -630,7 +630,7 @@ B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
           [KIASU-BC Tweakable Encrypt]
                      |
                      v
-            16-Byte Ciphertext
+             16-Byte Ciphertext
                      |
                      v
        [Concatenate Tweak || Ciphertext]
