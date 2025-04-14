@@ -476,7 +476,7 @@ function ipcrypt_ndx(ip_address, key):
     [Concatenate Tweak || Ciphertext]
                   |
                   v
-         24-Byte Output (`ipcrypt-nd`)
+         24-Byte Output (ipcrypt-nd)
 ~~~
 
 ### Non‑Deterministic Encryption Flow (ipcrypt-ndx)
@@ -500,5 +500,5 @@ function ipcrypt_ndx(ip_address, key):
     [Concatenate Tweak || Ciphertext]
                   |
                   v
-         32-Byte Output (`ipcrypt-ndx`)
+         32-Byte Output (ipcrypt-ndx)
 ~~~
