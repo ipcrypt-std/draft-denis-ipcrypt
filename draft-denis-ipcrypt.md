@@ -280,6 +280,25 @@ Ultimately, the effective security is determined by the underlying block cipher'
 - **Optimization:** Since only a single block is encrypted, only the first tweak needs to be
   computed, avoiding the need for a full key schedule.
 
+> **Technical Note:**
+> For a single block of AES-XTS, the key is split into two halves (K1, K2). The tweak is
+> first encrypted using AES128 with K2 to produce an encrypted tweak (ET). The IP address
+> is then encrypted as: AES128(IP ⊕ ET, K1) ⊕ ET (where ⊕ denotes the bitwise XOR operation).
+> This construction provides the security properties of XTS while only requiring two AES
+> operations per block.
+
+~~~pseudocode
+function AES_XTS_encrypt(key, tweak, block):
+    // Split the key into two halves
+    K1, K2 = split_key(key)
+
+    // Encrypt the tweak with the second half of the key
+    ET = AES128_encrypt(K2, tweak)
+
+    // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
+    return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
+~~~
+
 ### Usage Considerations
 
 Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.
