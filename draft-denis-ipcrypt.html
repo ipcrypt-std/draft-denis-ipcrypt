@@ -1319,10 +1319,18 @@ svg :is([fill="white"], [fill^="#fff"]) {
         <h3 id="name-use-cases-and-motivations">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-use-cases-and-motivations" class="section-name selfRef">Use Cases and Motivations</a>
         </h3>
-<p id="section-1.1-1">The main motivations include:
-- <strong>Privacy Protection:</strong> Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured.
-- <strong>Format Preservation:</strong> Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification.
-- <strong>Mitigation of Correlation Attacks:</strong> Deterministic encryption reveals repeated inputs; non‑deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-1">The main motivations include:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-2.1">
+            <p id="section-1.1-2.1.1"><strong>Privacy Protection:</strong> Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-2.2">
+            <p id="section-1.1-2.2.1"><strong>Format Preservation:</strong> Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-2.3">
+            <p id="section-1.1-2.3.1"><strong>Mitigation of Correlation Attacks:</strong> Deterministic encryption reveals repeated inputs; non‑deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 </section>
@@ -1332,14 +1340,30 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-terminology">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
       </h2>
-<p id="section-2-1">Throughout this document, the following terms and conventions apply:
-- <strong>IP Address:</strong> An IPv4 or IPv6 address.
-- <strong>16‑Byte Representation:</strong> A fixed-length representation used for both IPv4 (via IPv4‑mapped IPv6) and IPv6 addresses.
-- <strong>Tweak:</strong> A non‑secret, additional input to a tweakable block cipher that further randomizes the output.
-- <strong>Deterministic Encryption:</strong> Encryption that always produces the same ciphertext for a given input and key.
-- <strong>Non‑Deterministic Encryption:</strong> Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.
-- <strong>(Input, Tweak) Collision:</strong> A scenario where the same input is encrypted with the same tweak; this reveals that the input was repeated but not the input’s value.
-- <strong>MUST, SHOULD, etc.:</strong> RFC 2119 keywords are used as defined.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">Throughout this document, the following terms and conventions apply:<a href="#section-2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-2.1">
+          <p id="section-2-2.1.1"><strong>IP Address:</strong> An IPv4 or IPv6 address.<a href="#section-2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-2.2">
+          <p id="section-2-2.2.1"><strong>16‑Byte Representation:</strong> A fixed-length representation used for both IPv4 (via IPv4‑mapped IPv6) and IPv6 addresses.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-2.3">
+          <p id="section-2-2.3.1"><strong>Tweak:</strong> A non‑secret, additional input to a tweakable block cipher that further randomizes the output.<a href="#section-2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-2.4">
+          <p id="section-2-2.4.1"><strong>Deterministic Encryption:</strong> Encryption that always produces the same ciphertext for a given input and key.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-2.5">
+          <p id="section-2-2.5.1"><strong>Non‑Deterministic Encryption:</strong> Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.<a href="#section-2-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-2.6">
+          <p id="section-2-2.6.1"><strong>(Input, Tweak) Collision:</strong> A scenario where the same input is encrypted with the same tweak; this reveals that the input was repeated but not the input’s value.<a href="#section-2-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-2.7">
+          <p id="section-2-2.7.1"><strong>MUST, SHOULD, etc.:</strong> RFC 2119 keywords are used as defined.<a href="#section-2-2.7.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 </section>
 </div>
 <div id="ip-address-conversion">
@@ -1413,15 +1437,31 @@ Octets:         C0  00  02  01
       <h2 id="name-generic-constructions">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-generic-constructions" class="section-name selfRef">Generic Constructions</a>
       </h2>
-<p id="section-4-1">This specification defines two generic cryptographic constructions:
-- <strong>128-bit Block Cipher:</strong> Used in deterministic encryption (e.g., AES‑128 treated as a permutation).
-- <strong>128-bit Tweakable Block Cipher (TBC):</strong> Used in non‑deterministic encryption; it accepts a key, a tweak, and a message. Although the tweak is typically randomly sampled (and MUST be uniformly random when generated), its reuse on different inputs does not compromise confidentiality.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">Valid options for implementing a tweakable block cipher include, but are not limited to:
-- <strong>SKINNY</strong>
-- <strong>DEOXYS-BC</strong>
-- <strong>KIASU-BC</strong>
-- <strong>AES-XEX</strong><a href="#section-4-2" class="pilcrow">¶</a></p>
-<p id="section-4-3">Implementers may choose any cipher that meets the required security properties and provides robust resistance against related-tweak and other cryptographic attacks.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-1">This specification defines two generic cryptographic constructions:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4-2.1">
+          <p id="section-4-2.1.1"><strong>128-bit Block Cipher:</strong> Used in deterministic encryption (e.g., AES‑128 treated as a permutation).<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-2.2">
+          <p id="section-4-2.2.1"><strong>128-bit Tweakable Block Cipher (TBC):</strong> Used in non‑deterministic encryption; it accepts a key, a tweak, and a message. Although the tweak is typically randomly sampled (and MUST be uniformly random when generated), its reuse on different inputs does not compromise confidentiality.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-4-3">Valid options for implementing a tweakable block cipher include, but are not limited to:<a href="#section-4-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4-4.1">
+          <p id="section-4-4.1.1"><strong>SKINNY</strong><a href="#section-4-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-4.2">
+          <p id="section-4-4.2.1"><strong>DEOXYS-BC</strong><a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-4.3">
+          <p id="section-4-4.3.1"><strong>KIASU-BC</strong><a href="#section-4-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-4.4">
+          <p id="section-4-4.4.1"><strong>AES-XEX</strong><a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-4-5">Implementers may choose any cipher that meets the required security properties and provides robust resistance against related-tweak and other cryptographic attacks.<a href="#section-4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="deterministic-encryption-ipcryptdeterministic">

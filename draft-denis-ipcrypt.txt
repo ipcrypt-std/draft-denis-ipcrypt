@@ -129,30 +129,45 @@ Table of Contents
 
 1.1.  Use Cases and Motivations
 
-   The main motivations include: - *Privacy Protection:* Encrypting IP
-   addresses prevents the disclosure of user-specific information when
-   data is logged or measured. - *Format Preservation:* Ensuring that
-   the encrypted output remains a valid IP address allows network
-   devices to process the data without modification. - *Mitigation of
-   Correlation Attacks:* Deterministic encryption reveals repeated
-   inputs; non-deterministic modes use a random tweak to obscure
-   linkability while keeping the underlying input confidential.
+   The main motivations include:
+
+   *  *Privacy Protection:* Encrypting IP addresses prevents the
+      disclosure of user-specific information when data is logged or
+      measured.
+
+   *  *Format Preservation:* Ensuring that the encrypted output remains
+      a valid IP address allows network devices to process the data
+      without modification.
+
+   *  *Mitigation of Correlation Attacks:* Deterministic encryption
+      reveals repeated inputs; non-deterministic modes use a random
+      tweak to obscure linkability while keeping the underlying input
+      confidential.
 
 2.  Terminology
 
    Throughout this document, the following terms and conventions apply:
-   - *IP Address:* An IPv4 or IPv6 address. - *16-Byte Representation:*
-   A fixed-length representation used for both IPv4 (via IPv4-mapped
-   IPv6) and IPv6 addresses. - *Tweak:* A non-secret, additional input
-   to a tweakable block cipher that further randomizes the output. -
-   *Deterministic Encryption:* Encryption that always produces the same
-   ciphertext for a given input and key. - *Non-Deterministic
-   Encryption:* Encryption that produces different ciphertexts for the
-   same input due to the inclusion of a randomly sampled tweak. -
-   *(Input, Tweak) Collision:* A scenario where the same input is
-   encrypted with the same tweak; this reveals that the input was
-   repeated but not the input’s value. - *MUST, SHOULD, etc.:* RFC 2119
-   keywords are used as defined.
+
+   *  *IP Address:* An IPv4 or IPv6 address.
+
+   *  *16-Byte Representation:* A fixed-length representation used for
+      both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
+
+   *  *Tweak:* A non-secret, additional input to a tweakable block
+      cipher that further randomizes the output.
+
+   *  *Deterministic Encryption:* Encryption that always produces the
+      same ciphertext for a given input and key.
+
+   *  *Non-Deterministic Encryption:* Encryption that produces different
+      ciphertexts for the same input due to the inclusion of a randomly
+      sampled tweak.
+
+   *  *(Input, Tweak) Collision:* A scenario where the same input is
+      encrypted with the same tweak; this reveals that the input was
+      repeated but not the input’s value.
+
+   *  *MUST, SHOULD, etc.:* RFC 2119 keywords are used as defined.
 
 3.  IP Address Conversion
 
@@ -202,16 +217,27 @@ Table of Contents
 
 4.  Generic Constructions
 
-   This specification defines two generic cryptographic constructions: -
-   *128-bit Block Cipher:* Used in deterministic encryption (e.g.,
-   AES-128 treated as a permutation). - *128-bit Tweakable Block Cipher
-   (TBC):* Used in non-deterministic encryption; it accepts a key, a
-   tweak, and a message.  Although the tweak is typically randomly
-   sampled (and MUST be uniformly random when generated), its reuse on
-   different inputs does not compromise confidentiality.
+   This specification defines two generic cryptographic constructions:
+
+   *  *128-bit Block Cipher:* Used in deterministic encryption (e.g.,
+      AES-128 treated as a permutation).
+
+   *  *128-bit Tweakable Block Cipher (TBC):* Used in non-deterministic
+      encryption; it accepts a key, a tweak, and a message.  Although
+      the tweak is typically randomly sampled (and MUST be uniformly
+      random when generated), its reuse on different inputs does not
+      compromise confidentiality.
 
    Valid options for implementing a tweakable block cipher include, but
-   are not limited to: - *SKINNY* - *DEOXYS-BC* - *KIASU-BC* - *AES-XEX*
+   are not limited to:
+
+   *  *SKINNY*
+
+   *  *DEOXYS-BC*
+
+   *  *KIASU-BC*
+
+   *  *AES-XEX*
 
    Implementers may choose any cipher that meets the required security
    properties and provides robust resistance against related-tweak and
