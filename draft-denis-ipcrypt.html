@@ -1501,6 +1501,14 @@ IPv4 Address:    192.0.2.1
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-deterministic-encryption" class="section-name selfRef">Deterministic Encryption</a>
       </h2>
 <p id="section-5-1">Deterministic encryption applies a 128‑bit block cipher directly to the 16‑byte representation of an IP address.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-5-2.1">
+          <p id="section-5-2.1.1"><strong>Note:</strong>
+All instantiations documented in this specification (<code>ipcrypt-deterministic</code>, <code>ipcrypt-nd</code>, and <code>ipcrypt-ndx</code>)
+are invertible - encrypted IP addresses can be decrypted back to their original values using the same key.
+For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 <div id="specific-instantiation-ipcrypt-deterministic">
 <section id="section-5.1">
         <h3 id="name-specific-instantiation-ipcr">

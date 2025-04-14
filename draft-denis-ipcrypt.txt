@@ -266,6 +266,13 @@ IPv4 Address:    192.0.2.1
    Deterministic encryption applies a 128-bit block cipher directly to
    the 16-byte representation of an IP address.
 
+      *Note:* All instantiations documented in this specification
+      (ipcrypt-deterministic, ipcrypt-nd, and ipcrypt-ndx) are
+      invertible - encrypted IP addresses can be decrypted back to their
+      original values using the same key.  For non-deterministic modes,
+      the tweak must be preserved along with the ciphertext to enable
+      decryption.
+
 5.1.  Specific Instantiation: ipcrypt-deterministic
 
    This instantiation employs AES128 in a single-block operation.  Since
