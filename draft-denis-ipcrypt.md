@@ -200,6 +200,11 @@ Implementers MUST choose a cipher that meets the required security properties an
 
 Deterministic encryption applies a 128‑bit block cipher directly to the 16‑byte representation of an IP address.
 
+> **Note:**
+> All instantiations documented in this specification (`ipcrypt-deterministic`, `ipcrypt-nd`, and `ipcrypt-ndx`)
+> are invertible - encrypted IP addresses can be decrypted back to their original values using the same key.
+> For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.
+
 ## Specific Instantiation: ipcrypt-deterministic
 
 This instantiation employs AES128 in a single‑block operation. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.
