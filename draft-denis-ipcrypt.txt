@@ -31,7 +31,7 @@ Abstract
    *  *ipcrypt-nd:* Non-deterministic encryption using the KIASU-BC
       tweakable block cipher with an 8-byte tweak.
 
-   *  *ipcrypt-ndx:* Non-deterministic encryption using the AES-XEX
+   *  *ipcrypt-ndx:* Non-deterministic encryption using the AES-XTS
       tweakable block cipher with a 16-byte tweak.
 
    Deterministic mode produces a 16-byte ciphertext (enabling format
@@ -96,7 +96,7 @@ Table of Contents
    6.  Non-Deterministic Encryption
      6.1.  ipcrypt-nd (KIASU-BC)
        6.1.1.  Usage Considerations
-     6.2.  ipcrypt-ndx (AES-XEX)
+     6.2.  ipcrypt-ndx (AES-XTS)
        6.2.1.  Usage Considerations
      6.3.  Comparison of Modes
    7.  Security Considerations
@@ -113,7 +113,7 @@ Table of Contents
        B.1.4.  Deterministic Encryption (ipcrypt-deterministic)
        B.1.5.  Non-Deterministic Encryption using KIASU-BC
                (ipcrypt-nd)
-       B.1.6.  Non-Deterministic Encryption using AES-XEX
+       B.1.6.  Non-Deterministic Encryption using AES-XTS
                (ipcrypt-ndx)
      B.2.  Appendix B.  Diagrams
        B.2.1.  IPv4 Address Conversion Diagram
@@ -255,7 +255,7 @@ IPv4 Address:    192.0.2.1
 
    *  *KIASU-BC*
 
-   *  *AES-XEX*
+   *  *AES-XTS*
 
    Implementers MUST choose a cipher that meets the required security
    properties and provides robust resistance against related-tweak and
@@ -330,8 +330,10 @@ IPv4 Address:    192.0.2.1
    *  *ipcrypt-nd:* Uses the KIASU-BC tweakable block cipher with an
       8-byte (64-bit) tweak.  See [KIASU-BC] for details.
 
-   *  *ipcrypt-ndx:* Uses the AES-XEX tweakable block cipher with a
-      16-byte (128-bit) tweak.  See [XTS-AES] for background.
+   *  *ipcrypt-ndx:* Uses the AES-XTS tweakable block cipher with a
+      16-byte (128-bit) tweak.  See [XTS-AES] for background.  Since
+      only a single block is encrypted, only the first tweak needs to be
+      computed, avoiding the need for a full key schedule.
 
    In both cases, if a tweak is generated randomly, it *MUST be
    uniformly random*. Reusing the same randomly generated tweak on
@@ -358,12 +360,16 @@ IPv4 Address:    192.0.2.1
    Ultimately, the effective security is determined by the underlying
    block cipher’s strength (≈2^128 for AES-128).
 
-6.2.  ipcrypt-ndx (AES-XEX)
+6.2.  ipcrypt-ndx (AES-XTS)
 
    *  *Tweak:* 16 bytes (128 bits).
 
    *  *Output:* 32 bytes total (16-byte tweak concatenated with a
       16-byte ciphertext).
+
+   *  *Optimization:* Since only a single block is encrypted, only the
+      first tweak needs to be computed, avoiding the need for a full key
+      schedule.
 
 6.2.1.  Usage Considerations
 
@@ -388,8 +394,10 @@ IPv4 Address:    192.0.2.1
          8-byte tweak; (input, tweak) collisions reveal repeated inputs
          (with the same tweak) but not their values.
 
-      -  *ipcrypt-ndx (AES-XEX):* Produces a 32-byte output using a
+      -  *ipcrypt-ndx (AES-XTS):* Produces a 32-byte output using a
          16-byte tweak; supports higher secure operation counts per key.
+         Since only a single block is encrypted, it avoids the need for
+         a full key schedule.
 
 7.  Security Considerations
 
@@ -574,13 +582,14 @@ B.1.5.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
        result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
        return result
 
-B.1.6.  Non-Deterministic Encryption using AES-XEX (ipcrypt-ndx)
+B.1.6.  Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
 
    function ipcrypt_ndx(ip_address, key):
        bytes16 = convertTo16Bytes(ip_address)
        // Generate a 16-byte random tweak (MUST be uniformly random)
        tweak = random_bytes(16)
-       ciphertext = AES_XEX_encrypt(key, tweak, bytes16)
+       // Since only a single block is encrypted, only the first tweak needs to be computed
+       ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
        result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
        return result
 
@@ -649,7 +658,7 @@ B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
        [Generate Random 16-Byte Tweak]
                      |
                      v
-          [AES-XEX Tweakable Encrypt]
+          [AES-XTS Tweakable Encrypt]
                      |
                      v
              16-Byte Ciphertext

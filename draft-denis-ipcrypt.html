@@ -17,7 +17,7 @@
            ipcrypt-nd :  Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak. 
          
          
-           ipcrypt-ndx :  Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak. 
+           ipcrypt-ndx :  Non‑deterministic encryption using the AES‑XTS tweakable block cipher with a 16‑byte tweak. 
          
        
        Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated, as specified in  ) to produce larger ciphertexts that resist correlation attacks. 
@@ -1102,7 +1102,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
           <p id="section-abstract-3.2.1"><strong><code>ipcrypt-nd</code>:</strong> Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak.<a href="#section-abstract-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-abstract-3.3">
-          <p id="section-abstract-3.3.1"><strong><code>ipcrypt-ndx</code>:</strong> Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak.<a href="#section-abstract-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-abstract-3.3.1"><strong><code>ipcrypt-ndx</code>:</strong> Non‑deterministic encryption using the AES‑XTS tweakable block cipher with a 16‑byte tweak.<a href="#section-abstract-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-abstract-4">Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated, as specified in <span>[<a href="#RFC4086" class="cite xref">RFC4086</a>]</span>) to produce larger ciphertexts that resist correlation attacks.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
@@ -1224,7 +1224,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-ipcrypt-ndx-aesxex" class="internal xref">ipcrypt-ndx (AES‑XEX)</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-ipcrypt-ndx-aesxts" class="internal xref">ipcrypt-ndx (AES‑XTS)</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
                     <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-usage-considerations-2" class="internal xref">Usage Considerations</a></p>
@@ -1278,7 +1278,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.11.2.1.2.5.1"><a href="#appendix-B.1.5" class="auto internal xref">B.1.5</a>.  <a href="#name-nondeterministic-encryption-" class="internal xref">Non‑Deterministic Encryption using KIASU‑BC (ipcrypt-nd)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1.2.6">
-                    <p id="section-toc.1-1.11.2.1.2.6.1"><a href="#appendix-B.1.6" class="auto internal xref">B.1.6</a>.  <a href="#name-nondeterministic-encryption-u" class="internal xref">Non‑Deterministic Encryption using AES‑XEX (ipcrypt-ndx)</a></p>
+                    <p id="section-toc.1-1.11.2.1.2.6.1"><a href="#appendix-B.1.6" class="auto internal xref">B.1.6</a>.  <a href="#name-nondeterministic-encryption-u" class="internal xref">Non‑Deterministic Encryption using AES‑XTS (ipcrypt-ndx)</a></p>
 </li>
                 </ul>
 </li>
@@ -1489,7 +1489,7 @@ IPv4 Address:    192.0.2.1
           <p id="section-4-4.3.1"><strong>KIASU-BC</strong><a href="#section-4-4.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-4.4">
-          <p id="section-4-4.4.1"><strong>AES-XEX</strong><a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-4.4.1"><strong>AES-XTS</strong><a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-4-5">Implementers MUST choose a cipher that meets the required security properties and provides robust resistance against related-tweak and other cryptographic attacks.<a href="#section-4-5" class="pilcrow">¶</a></p>
@@ -1583,8 +1583,9 @@ To ensure IPv4 format preservation, implementers <strong>MUST</strong> consider 
 See <span>[<a href="#KIASU-BC" class="cite xref">KIASU-BC</a>]</span> for details.<a href="#section-6-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-5.2">
-          <p id="section-6-5.2.1"><strong><code>ipcrypt-ndx</code>:</strong> Uses the AES‑XEX tweakable block cipher with a 16‑byte (128‑bit) tweak.
-See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for background.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-5.2.1"><strong><code>ipcrypt-ndx</code>:</strong> Uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak.
+See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for background. Since only a single block is encrypted, only the first tweak
+needs to be computed, avoiding the need for a full key schedule.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-6-6">In both cases, if a tweak is generated randomly, it <strong>MUST be uniformly random</strong>. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.<a href="#section-6-6" class="pilcrow">¶</a></p>
@@ -1613,10 +1614,10 @@ See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for backgrou
 </div>
 </section>
 </div>
-<div id="ipcrypt-ndx-aesxex">
+<div id="ipcrypt-ndx-aesxts">
 <section id="section-6.2">
-        <h3 id="name-ipcrypt-ndx-aesxex">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-ipcrypt-ndx-aesxex" class="section-name selfRef">ipcrypt-ndx (AES‑XEX)</a>
+        <h3 id="name-ipcrypt-ndx-aesxts">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-ipcrypt-ndx-aesxts" class="section-name selfRef">ipcrypt-ndx (AES‑XTS)</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.2-1.1">
@@ -1624,6 +1625,10 @@ See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for backgrou
 </li>
           <li class="normal" id="section-6.2-1.2">
             <p id="section-6.2-1.2.1"><strong>Output:</strong> 32 bytes total (16‑byte tweak concatenated with a 16‑byte ciphertext).<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-1.3">
+            <p id="section-6.2-1.3.1"><strong>Optimization:</strong> Since only a single block is encrypted, only the first tweak needs to be
+computed, avoiding the need for a full key schedule.<a href="#section-6.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <div id="usage-considerations-1">
@@ -1655,7 +1660,7 @@ Produces a 16‑byte output; preserves format but reveals repeated inputs.<a hre
                 <p id="section-6.3-1.2.2.1.1"><strong><code>ipcrypt-nd</code> (KIASU‑BC):</strong> Produces a 24‑byte output using an 8‑byte tweak; <code>(input, tweak)</code> collisions reveal repeated inputs (with the same tweak) but not their values.<a href="#section-6.3-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.3-1.2.2.2">
-                <p id="section-6.3-1.2.2.2.1"><strong><code>ipcrypt-ndx</code> (AES‑XEX):</strong> Produces a 32‑byte output using a 16‑byte tweak; supports higher secure operation counts per key.<a href="#section-6.3-1.2.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3-1.2.2.2.1"><strong><code>ipcrypt-ndx</code> (AES‑XTS):</strong> Produces a 32‑byte output using a 16‑byte tweak; supports higher secure operation counts per key. Since only a single block is encrypted, it avoids the need for a full key schedule.<a href="#section-6.3-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -1907,10 +1912,10 @@ function ipcrypt_nd(ip_address, key):
 </div>
 </section>
 </div>
-<div id="nondeterministic-encryption-using-aesxex-ipcrypt-ndx">
+<div id="nondeterministic-encryption-using-aesxts-ipcrypt-ndx">
 <section id="appendix-B.1.6">
           <h4 id="name-nondeterministic-encryption-u">
-<a href="#appendix-B.1.6" class="section-number selfRef">B.1.6. </a><a href="#name-nondeterministic-encryption-u" class="section-name selfRef">Non‑Deterministic Encryption using AES‑XEX (ipcrypt-ndx)</a>
+<a href="#appendix-B.1.6" class="section-number selfRef">B.1.6. </a><a href="#name-nondeterministic-encryption-u" class="section-name selfRef">Non‑Deterministic Encryption using AES‑XTS (ipcrypt-ndx)</a>
           </h4>
 <div class="lang-pseudocode sourcecode" id="appendix-B.1.6-1">
 <pre>
@@ -1918,7 +1923,8 @@ function ipcrypt_ndx(ip_address, key):
     bytes16 = convertTo16Bytes(ip_address)
     // Generate a 16-byte random tweak (MUST be uniformly random)
     tweak = random_bytes(16)
-    ciphertext = AES_XEX_encrypt(key, tweak, bytes16)
+    // Since only a single block is encrypted, only the first tweak needs to be computed
+    ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
     result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
     return result
 </pre><a href="#appendix-B.1.6-1" class="pilcrow">¶</a>
@@ -2024,7 +2030,7 @@ function ipcrypt_ndx(ip_address, key):
     [Generate Random 16-Byte Tweak]
                   |
                   v
-       [AES-XEX Tweakable Encrypt]
+       [AES-XTS Tweakable Encrypt]
                   |
                   v
           16-Byte Ciphertext
