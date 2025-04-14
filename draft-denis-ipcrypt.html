@@ -1299,6 +1299,20 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
+                <p id="section-toc.1-1.11.2.3.1"><a href="#appendix-B.3" class="auto internal xref">B.3</a>.  <a href="#name-appendix-c-test-vectors" class="internal xref">Appendix C. Test Vectors</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3.2.1">
+                    <p id="section-toc.1-1.11.2.3.2.1.1"><a href="#appendix-B.3.1" class="auto internal xref">B.3.1</a>.  <a href="#name-ipcrypt-deterministic-test-" class="internal xref">ipcrypt-deterministic Test Vectors</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3.2.2">
+                    <p id="section-toc.1-1.11.2.3.2.2.1"><a href="#appendix-B.3.2" class="auto internal xref">B.3.2</a>.  <a href="#name-ipcrypt-nd-test-vectors" class="internal xref">ipcrypt-nd Test Vectors</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3.2.3">
+                    <p id="section-toc.1-1.11.2.3.2.3.1"><a href="#appendix-B.3.3" class="auto internal xref">B.3.3</a>.  <a href="#name-ipcrypt-ndx-test-vectors" class="internal xref">ipcrypt-ndx Test Vectors</a></p>
+</li>
+                </ul>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
@@ -2079,6 +2093,103 @@ function ipcrypt_ndx(ip_address, key):
        32-Byte Output (ipcrypt-ndx)
 </pre><a href="#appendix-B.2.4-1" class="pilcrow">¶</a>
 </div>
+</section>
+</div>
+</section>
+</div>
+<div id="appendix-c-test-vectors">
+<section id="appendix-B.3">
+        <h3 id="name-appendix-c-test-vectors">
+<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-appendix-c-test-vectors" class="section-name selfRef">Appendix C. Test Vectors</a>
+        </h3>
+<p id="appendix-B.3-1">This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak value is also included.<a href="#appendix-B.3-1" class="pilcrow">¶</a></p>
+<div id="ipcrypt-deterministic-test-vectors">
+<section id="appendix-B.3.1">
+          <h4 id="name-ipcrypt-deterministic-test-">
+<a href="#appendix-B.3.1" class="section-number selfRef">B.3.1. </a><a href="#name-ipcrypt-deterministic-test-" class="section-name selfRef">ipcrypt-deterministic Test Vectors</a>
+          </h4>
+<div class="alignLeft art-text artwork" id="appendix-B.3.1-1">
+<pre>
+# Test vector 1 (All-zero key)
+Key:          00000000000000000000000000000000
+Input IP:     0.0.0.0
+Encrypted IP: 7a73:3179:bcf3:5036:5f4b:754d:9518:fb70
+
+# Test vector 2 (All-zero key)
+Key:          00000000000000000000000000000000
+Input IP:     255.255.255.255
+Encrypted IP: 105d:f4d1:e4b7:4dca:12b3:f38c:4c3c:d9c
+
+# Test vector 3 (AES test vector key)
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+Input IP:     192.0.2.1
+Encrypted IP: 2001:db8:85a3::8a2e:370:7334
+</pre><a href="#appendix-B.3.1-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="ipcrypt-nd-test-vectors">
+<section id="appendix-B.3.2">
+          <h4 id="name-ipcrypt-nd-test-vectors">
+<a href="#appendix-B.3.2" class="section-number selfRef">B.3.2. </a><a href="#name-ipcrypt-nd-test-vectors" class="section-name selfRef">ipcrypt-nd Test Vectors</a>
+          </h4>
+<div class="alignLeft art-text artwork" id="appendix-B.3.2-1">
+<pre>
+# Test vector 1 (All-zero key)
+Key:          00000000000000000000000000000000
+Input IP:     0.0.0.0
+Tweak:        08e0c289bff23b7c
+Encrypted IP: 6da0:6fb4:2a9:6ece:14a9:c1d0:d0fb:3ff2
+
+# Test vector 2 (All-zero key)
+Key:          00000000000000000000000000000000
+Input IP:     192.0.2.1
+Tweak:        21bd1834bc088cd2
+Encrypted IP: f7e2:130:d53b:555a:a3f:a2db:4810:823
+
+# Test vector 3 (AES test vector key)
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+Input IP:     2001:db8::1
+Tweak:        b4ecbe30b70898d7
+Encrypted IP: 7a73:3179:bcf3:5036:5f4b:754d:9518:fb70
+</pre><a href="#appendix-B.3.2-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="ipcrypt-ndx-test-vectors">
+<section id="appendix-B.3.3">
+          <h4 id="name-ipcrypt-ndx-test-vectors">
+<a href="#appendix-B.3.3" class="section-number selfRef">B.3.3. </a><a href="#name-ipcrypt-ndx-test-vectors" class="section-name selfRef">ipcrypt-ndx Test Vectors</a>
+          </h4>
+<div class="alignLeft art-text artwork" id="appendix-B.3.3-1">
+<pre>
+# Test vector 1 (All-zero key)
+Key:          0000000000000000000000000000000000000000000000000000000000000000
+Input IP:     0.0.0.0
+Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
+Encrypted IP: f7e2:130:d53b:555a:a3f:a2db:4810:823
+
+# Test vector 2 (All-zero key)
+Key:          0000000000000000000000000000000000000000000000000000000000000000
+Input IP:     192.0.2.1
+Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
+Encrypted IP: 6da0:6fb4:2a9:6ece:14a9:c1d0:d0fb:3ff2
+
+# Test vector 3 (Doubled AES test vector key)
+Key:          2b7e151628aed2a6abf7158809cf4f3c2b7e151628aed2a6abf7158809cf4f3c
+Input IP:     2001:db8::1
+Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
+Encrypted IP: 105d:f4d1:e4b7:4dca:12b3:f38c:4c3c:d9c
+</pre><a href="#appendix-B.3.3-1" class="pilcrow">¶</a>
+</div>
+<p id="appendix-B.3.3-2">Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.<a href="#appendix-B.3.3-2" class="pilcrow">¶</a></p>
+<p id="appendix-B.3.3-3">The complete set of test vectors is available in the reference implementation repository. The vectors above represent a subset chosen to demonstrate key test cases:
+- All-zero keys and inputs
+- Standard test vector keys
+- IPv4 addresses
+- IPv6 addresses
+- IPv4-mapped IPv6 addresses<a href="#appendix-B.3.3-3" class="pilcrow">¶</a></p>
+<p id="appendix-B.3.3-4">Implementations SHOULD verify their correctness against these test vectors before deployment.<a href="#appendix-B.3.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
