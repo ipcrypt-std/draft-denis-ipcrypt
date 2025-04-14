@@ -390,10 +390,6 @@ Table of Contents
 
 9.2.  Informative References
 
-   [AES-XEX-Spec]
-              Denis, F., "Proposed specification for AES-XEX as used in
-              this document", 2025.
-
    [BRW2005]  Bellare, M., Rogaway, P., and D. Wagner, "Format-
               Preserving Encryption", CRYPTO 2005, 2005.
 
