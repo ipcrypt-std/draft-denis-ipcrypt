@@ -1,8 +1,8 @@
 <!-- regenerate: on (set to off if you edit this file) -->
 
-# A proposal for IP address encryption and obfuscation
+# Methods for IP Address Encryption and Obfuscation
 
-This is the working area for the individual Internet-Draft, "A proposal for IP address encryption and obfuscation".
+This is the working area for the individual Internet-Draft, "Methods for IP Address Encryption and Obfuscation".
 
 * [Editor's Copy](https://jedisct1.github.io/draft-denis-ipcrypt/#go.draft-denis-ipcrypt.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-denis-ipcrypt)
