@@ -106,22 +106,22 @@ Table of Contents
      9.1.  Normative References
      9.2.  Informative References
    Appendix A.  Acknowledgments
-   Appendix B.  Authors’ Addresses
-   Appendix C.  Appendices
-     C.1.  Appendix A.  Pseudocode and Examples
-       C.1.1.  IPv4 Address Conversion
-       C.1.2.  IPv6 Address Conversion
-       C.1.3.  Conversion from a 16-Byte Array to an IP Address
-       C.1.4.  Deterministic Encryption (ipcrypt-deterministic)
-       C.1.5.  Non-Deterministic Encryption using KIASU-BC
+   Appendix B.  Appendices
+     B.1.  Appendix A.  Pseudocode and Examples
+       B.1.1.  IPv4 Address Conversion
+       B.1.2.  IPv6 Address Conversion
+       B.1.3.  Conversion from a 16-Byte Array to an IP Address
+       B.1.4.  Deterministic Encryption (ipcrypt-deterministic)
+       B.1.5.  Non-Deterministic Encryption using KIASU-BC
                (ipcrypt-nd)
-       C.1.6.  Non-Deterministic Encryption using AES-XEX
+       B.1.6.  Non-Deterministic Encryption using AES-XEX
                (ipcrypt-ndx)
-     C.2.  Appendix B.  ASCII Art Diagrams
-       C.2.1.  IPv4 Address Conversion Diagram
-       C.2.2.  Deterministic Encryption Flow
-       C.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
-       C.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
+     B.2.  Appendix B.  Diagrams
+       B.2.1.  IPv4 Address Conversion Diagram
+       B.2.2.  Deterministic Encryption Flow
+       B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
+       B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
+   Author's Address
 
 1.  Introduction
 
@@ -173,17 +173,26 @@ Table of Contents
 
    _Example Diagram:_
 
-   IPv6 Address: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 || vv 16-Byte
-   Representation: [20 01 | 0d b8 | 85 a3 | 00 00 | 00 00 | 8a 2e | 03
-   70 | 73 34]
+   IPv6 Address:
+      2001:0db8:85a3:0000:0000:8a2e:0370:7334
+            ||
+            vv
+   16-Byte Representation:
+      [20 01 | 0d b8 | 85 a3 | 00 00 | 00 00 | 8a 2e | 03 70 | 73 34]
 
 3.1.2.  IPv4 Addresses
 
    IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6
    format:
 
-   IPv4 Address: 192.0.2.1 | v Octets: C0 00 02 01 | v 16-Byte
-   Representation: [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
+   IPv4 Address:      192.0.2.1
+          |
+          v
+   Octets:         C0  00  02  01
+          |
+          v
+   16-Byte Representation:
+    [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
 
 3.2.  Converting from a 16-Byte Representation to an IP Address
 
@@ -225,13 +234,31 @@ Table of Contents
 
 5.1.1.  Operation Flow Diagram
 
-   +---------------------+ | IP Address | | (IPv4 or IPv6) |
-   +---------------------+ | v +---------------------+ | Convert to 16
-   Bytes | +---------------------+ | v +---------------------+ | AES128
-   Encrypt | | (Single Block) | +---------------------+ | v
-   +---------------------+ | 16-Byte Output | +---------------------+ |
-   v +---------------------+ | Convert to IP Format|
-   +---------------------+
+         +---------------------+
+         |   IP Address        |
+         | (IPv4 or IPv6)      |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         | Convert to 16 Bytes |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         |   AES128 Encrypt    |
+         |   (Single Block)    |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         |  16-Byte Output     |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         | Convert to IP Format|
+         +---------------------+
 
 5.2.  Format Preservation
 
@@ -382,98 +409,175 @@ Appendix A.  Acknowledgments
    the broader cryptographic community that have helped shape this
    specification.
 
-Appendix B.  Authors’ Addresses
+Appendix B.  Appendices
 
-   *  *Frank Denis* Fastly Inc. Email: fde@00f.net
-
-Appendix C.  Appendices
-
-C.1.  Appendix A.  Pseudocode and Examples
+B.1.  Appendix A.  Pseudocode and Examples
 
    This appendix provides detailed pseudocode for key operations
    described in this document.
 
-C.1.1.  IPv4 Address Conversion
+B.1.1.  IPv4 Address Conversion
 
-   pseudocode function IPv4To16Bytes(ipv4_address): // Split the IPv4
-   address into its octets parts = ipv4_address.split(".") if
-   length(parts) != 4: raise Error("Invalid IPv4 address") // Create a
-   16-byte array with the IPv4-mapped prefix bytes16 = [0x00] * 10 // 10
-   bytes of 0x00 bytes16.append(0xFF) // 11th byte: 0xFF
-   bytes16.append(0xFF) // 12th byte: 0xFF // Append each octet
-   (converted to an 8-bit integer) for part in parts:
-   bytes16.append(int(part) & 0xFF) return bytes16
+   function IPv4To16Bytes(ipv4_address):
+       // Split the IPv4 address into its octets
+       parts = ipv4_address.split(".")
+       if length(parts) != 4:
+            raise Error("Invalid IPv4 address")
+       // Create a 16-byte array with the IPv4-mapped prefix
+       bytes16 = [0x00] * 10         // 10 bytes of 0x00
+       bytes16.append(0xFF)          // 11th byte: 0xFF
+       bytes16.append(0xFF)          // 12th byte: 0xFF
+       // Append each octet (converted to an 8-bit integer)
+       for part in parts:
+            bytes16.append(int(part) & 0xFF)
+       return bytes16
 
-   _Example:_ For "192.0.2.1", the function returns: [00, 00, 00, 00,
-   00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
+   _Example:_ For "192.0.2.1", the function returns
 
-C.1.2.  IPv6 Address Conversion
+   [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
 
-   pseudocode function IPv6To16Bytes(ipv6_address): // Parse the IPv6
-   address into eight 16-bit words.  words = parseIPv6(ipv6_address) //
-   Expands shorthand notation and returns 8 words bytes16 = [] for word
-   in words: high_byte = (word >> 8) & 0xFF low_byte = word & 0xFF
-   bytes16.append(high_byte) bytes16.append(low_byte) return bytes16
+B.1.2.  IPv6 Address Conversion
+
+   function IPv6To16Bytes(ipv6_address):
+       // Parse the IPv6 address into eight 16-bit words.
+       words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
+       bytes16 = []
+       for word in words:
+            high_byte = (word >> 8) & 0xFF
+            low_byte = word & 0xFF
+            bytes16.append(high_byte)
+            bytes16.append(low_byte)
+       return bytes16
 
    _Example:_ For "2001:0db8:85a3:0000:0000:8a2e:0370:7334", the output
    is the corresponding 16-byte sequence.
 
-C.1.3.  Conversion from a 16-Byte Array to an IP Address
+B.1.3.  Conversion from a 16-Byte Array to an IP Address
 
-   pseudocode function Bytes16ToIP(bytes16): if length(bytes16) != 16:
-   raise Error("Invalid byte array") // Check for the IPv4-mapped prefix
-   if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11]
-   == 0xFF: ipv4_parts = [] for i from 12 to 15:
-   ipv4_parts.append(str(bytes16[i])) ipv4_address = join(ipv4_parts,
-   ".") return ipv4_address else: words = [] for i from 0 to 15 step 2:
-   word = (bytes16[i] << 8) | bytes16[i+1] words.append(format(word,
-   "x")) ipv6_address = join(words, ":") return ipv6_address
+   function Bytes16ToIP(bytes16):
+       if length(bytes16) != 16:
+            raise Error("Invalid byte array")
+       // Check for the IPv4-mapped prefix
+       if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11] == 0xFF:
+            ipv4_parts = []
+            for i from 12 to 15:
+                ipv4_parts.append(str(bytes16[i]))
+            ipv4_address = join(ipv4_parts, ".")
+            return ipv4_address
+       else:
+            words = []
+            for i from 0 to 15 step 2:
+                word = (bytes16[i] << 8) | bytes16[i+1]
+                words.append(format(word, "x"))
+            ipv6_address = join(words, ":")
+            return ipv6_address
 
-C.1.4.  Deterministic Encryption (ipcrypt-deterministic)
+B.1.4.  Deterministic Encryption (ipcrypt-deterministic)
 
-   pseudocode function ipcrypt_deterministic(ip_address, key): bytes16 =
-   convertTo16Bytes(ip_address) ciphertext = AES128_encrypt(key,
-   bytes16) encrypted_ip = Bytes16ToIP(ciphertext) return encrypted_ip
+   function ipcrypt_deterministic(ip_address, key):
+       bytes16 = convertTo16Bytes(ip_address)
+       ciphertext = AES128_encrypt(key, bytes16)
+       encrypted_ip = Bytes16ToIP(ciphertext)
+       return encrypted_ip
 
-C.1.5.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
+B.1.5.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
 
-   pseudocode function ipcrypt_nd(ip_address, key): bytes16 =
-   convertTo16Bytes(ip_address) // Generate an 8-byte random tweak (MUST
-   be uniformly random) tweak = random_bytes(8) ciphertext =
-   KIASU_BC_encrypt(key, tweak, bytes16) result = concatenate(tweak,
-   ciphertext) // 8 bytes || 16 bytes = 24 bytes total return result
+   function ipcrypt_nd(ip_address, key):
+       bytes16 = convertTo16Bytes(ip_address)
+       // Generate an 8-byte random tweak (MUST be uniformly random)
+       tweak = random_bytes(8)
+       ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
+       result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
+       return result
 
-C.1.6.  Non-Deterministic Encryption using AES-XEX (ipcrypt-ndx)
+B.1.6.  Non-Deterministic Encryption using AES-XEX (ipcrypt-ndx)
 
-   pseudocode function ipcrypt_ndx(ip_address, key): bytes16 =
-   convertTo16Bytes(ip_address) // Generate a 16-byte random tweak (MUST
-   be uniformly random) tweak = random_bytes(16) ciphertext =
-   AES_XEX_encrypt(key, tweak, bytes16) result = concatenate(tweak,
-   ciphertext) // 16 bytes || 16 bytes = 32 bytes total return result
+   function ipcrypt_ndx(ip_address, key):
+       bytes16 = convertTo16Bytes(ip_address)
+       // Generate a 16-byte random tweak (MUST be uniformly random)
+       tweak = random_bytes(16)
+       ciphertext = AES_XEX_encrypt(key, tweak, bytes16)
+       result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
+       return result
 
-C.2.  Appendix B.  ASCII Art Diagrams
+B.2.  Appendix B.  Diagrams
 
-C.2.1.  IPv4 Address Conversion Diagram
+B.2.1.  IPv4 Address Conversion Diagram
 
-   IPv4: 192.0.2.1 | v Octets: C0 00 02 01 | v 16-Byte Array: [00 00 00
-   00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
+          IPv4: 192.0.2.1
+              |
+              v
+     Octets:  C0  00  02  01
+              |
+              v
+      16-Byte Array:
+   [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
 
-C.2.2.  Deterministic Encryption Flow
+B.2.2.  Deterministic Encryption Flow
 
-   IP Address | v [Convert to 16 Bytes] | v [AES128 Single-Block
-   Encrypt] | v 16-Byte Ciphertext | v [Convert to IP Format] | v
-   Encrypted IP Address
+               IP Address
+                   |
+                   v
+         [Convert to 16 Bytes]
+                   |
+                   v
+          [AES128 Single-Block Encrypt]
+                   |
+                   v
+           16-Byte Ciphertext
+                   |
+                   v
+           [Convert to IP Format]
+                   |
+                   v
+            Encrypted IP Address
 
-C.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
+B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
 
-   IP Address | v [Convert to 16 Bytes] ---> 16-Byte Representation | v
-   [Generate Random 8-Byte Tweak] | v [KIASU-BC Tweakable Encrypt] | v
-   16-Byte Ciphertext | v [Concatenate Tweak || Ciphertext] | v 24-Byte
-   Output (ipcrypt-nd)
+                 IP Address
+                     |
+                     v
+         [Convert to 16 Bytes] ---> 16-Byte Representation
+                     |
+                     v
+       [Generate Random 8-Byte Tweak]
+                     |
+                     v
+          [KIASU-BC Tweakable Encrypt]
+                     |
+                     v
+            16-Byte Ciphertext
+                     |
+                     v
+       [Concatenate Tweak || Ciphertext]
+                     |
+                     v
+            24-Byte Output (ipcrypt-nd)
 
-C.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
+B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
 
-   IP Address | v [Convert to 16 Bytes] ---> 16-Byte Representation | v
-   [Generate Random 16-Byte Tweak] | v [AES-XEX Tweakable Encrypt] | v
-   16-Byte Ciphertext | v [Concatenate Tweak || Ciphertext] | v 32-Byte
-   Output (ipcrypt-ndx)
+                 IP Address
+                     |
+                     v
+         [Convert to 16 Bytes] ---> 16-Byte Representation
+                     |
+                     v
+       [Generate Random 16-Byte Tweak]
+                     |
+                     v
+          [AES-XEX Tweakable Encrypt]
+                     |
+                     v
+            16-Byte Ciphertext
+                     |
+                     v
+       [Concatenate Tweak || Ciphertext]
+                     |
+                     v
+            32-Byte Output (ipcrypt-ndx)
+
+Author's Address
+
+   Frank Denis
+   Fastly Inc.
+   Email: fde@00f.net
