@@ -8,18 +8,20 @@ Intended status: Informational                                April 2025
 Expires: 16 October 2025
 
 
-          A proposal for IP address encryption and obfuscation
+          A Proposal for IP Address Encryption and Obfuscation
                        draft-denis-ipcrypt-latest
 
 Abstract
 
    This document specifies methods for encrypting and obfuscating IP
    addresses, providing both deterministic format-preserving and
-   non-deterministic constructions.  The methods apply uniformly to both
-   IPv4 and IPv6 addresses by converting them into a 16-byte
-   representation.  Two generic constructions are defined—one using a
-   128-bit block cipher and the other using a 128-bit tweakable block
-   cipher—along with three concrete instantiations:
+   non-deterministic constructions.
+
+   The methods apply uniformly to both IPv4 and IPv6 addresses by
+   converting them into a 16-byte representation.  Two generic
+   constructions are defined—one using a 128-bit block cipher and the
+   other using a 128-bit tweakable block cipher—along with three
+   concrete instantiations:
 
    *  *ipcrypt-deterministic:* Deterministic encryption using AES128
       (applied as a single-block operation).
@@ -33,13 +35,7 @@ Abstract
    Deterministic mode produces a 16-byte ciphertext (enabling format
    preservation), while non-deterministic modes prepend a randomly
    sampled tweak (which MUST be uniformly random when generated) to
-   produce larger ciphertexts that resist correlation attacks.  Although
-   independent random sampling of a tweak may yield collisions in
-   accordance with birthday bounds, such collisions are harmless when
-   they occur with different inputs and merely reveal that the same
-   (input, tweak) pair was used without exposing the input’s value.
-   Moreover, the usage limits discussed apply per cryptographic key; by
-   regularly rotating keys, these limits can be extended.
+   produce larger ciphertexts that resist correlation attacks.
 
 Discussion Venues
 
@@ -273,12 +269,15 @@ Table of Contents
 6.  Non-Deterministic Encryption
 
    Non-deterministic encryption leverages a tweakable block cipher
-   together with a random tweak.  Although the tweak is generated
-   uniformly at random (and thus may occasionally collide per birthday
-   bounds), such collisions are benign when they occur with different
-   inputs.  An (input, tweak) collision reveals that the same input was
-   encrypted with the same tweak but does not disclose the input’s
-   value.  The usage limits discussed below apply per cryptographic key;
+   together with a random tweak.
+
+   Although the tweak is generated uniformly at random (and thus may
+   occasionally collide per birthday bounds), such collisions are benign
+   when they occur with different inputs.  An (input, tweak) collision
+   reveals that the same input was encrypted with the same tweak but
+   does not disclose the input’s value.
+
+   The usage limits discussed below apply per cryptographic key;
    rotating keys can extend secure usage beyond these bounds.
 
    This document defines two instantiations:
@@ -303,11 +302,14 @@ Table of Contents
 6.1.1.  Usage Considerations
 
    Random sampling of an 8-byte tweak yields an expected collision for a
-   specific tweak value after about 2^(64/2) = 2^32 operations.  If an
-   (input, tweak) collision occurs, it indicates that the same input was
-   processed with that tweak without revealing the input’s value.  These
-   collision bounds apply per cryptographic key; by rotating keys
-   regularly, secure usage can be extended well beyond these bounds.
+   specific tweak value after about 2^(64/2) = 2^32 operations.
+
+   If an (input, tweak) collision occurs, it indicates that the same
+   input was processed with that tweak without revealing the input’s
+   value.  These collision bounds apply per cryptographic key; by
+   rotating keys regularly, secure usage can be extended well beyond
+   these bounds.
+
    Ultimately, the effective security is determined by the underlying
    block cipher’s strength (≈2^128 for AES-128).
 
@@ -321,11 +323,14 @@ Table of Contents
 6.2.1.  Usage Considerations
 
    Independent sampling of a 16-byte tweak results in an expected
-   collision after about 2^(128/2) = 2^64 operations.  As with
-   ipcrypt-nd, an (input, tweak) collision reveals repetition without
-   compromising the input value.  These limits are per key; regular key
-   rotation further extends secure usage.  The effective security is
-   governed by the strength of AES-128 (approximately 2^128 operations).
+   collision after about 2^(128/2) = 2^64 operations.
+
+   As with ipcrypt-nd, an (input, tweak) collision reveals repetition
+   without compromising the input value.
+
+   These limits are per key; regular key rotation further extends secure
+   usage.  The effective security is governed by the strength of AES-128
+   (approximately 2^128 operations).
 
 6.3.  Comparison of Modes
 
@@ -349,12 +354,15 @@ Table of Contents
 
    *  *Non-Deterministic Mode:* The inclusion of a random tweak ensures
       that encrypting the same input generally produces different
-      outputs.  In cases where an (input, tweak) collision occurs, an
-      attacker learns only that the same input was processed with that
-      tweak, not the value of the input itself.  Security is determined
-      by the underlying block cipher (≈2^128 for AES-128) on a per-key
-      basis.  Key rotation is recommended to extend secure usage beyond
-      the per-key collision bounds.
+      outputs.
+
+      In cases where an (input, tweak) collision occurs, an attacker
+      learns only that the same input was processed with that tweak, not
+      the value of the input itself.  Security is determined by the
+      underlying block cipher (≈2^128 for AES-128) on a per-key basis.
+
+      Key rotation is recommended to extend secure usage beyond the per-
+      key collision bounds.
 
 8.  IANA Considerations
 
@@ -364,43 +372,47 @@ Table of Contents
 
 9.1.  Normative References
 
-   *  [FIPS-197] National Institute of Standards and Technology (NIST),
-      “Advanced Encryption Standard (AES),” FIPS PUB 197.
+   [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
+              2001.
 
-   *  [RFC4291] Deering, S. and H.  Coltun, “IP Version 6 Addressing
-      Architecture,” RFC 4291, February 2006.
+   [NIST-SP-800-38G]
+              NIST, "Recommendation for Block Cipher Modes of Operation:
+              Methods for Format-Preserving Encryption", NIST SP
+              800-38G, March 2016.
 
-   *  [RFC8174] Bradner, S., “Key words for use in RFCs to Indicate
-      Requirement Levels,” RFC 8174, March 2017.
+   [RFC4291]  Deering, S. and H. Coltun, "IP Version 6 Addressing
+              Architecture", RFC 4291, February 2006,
+              <https://www.rfc-editor.org/rfc/rfc4291>.
 
-   *  [NIST SP 800-38G] National Institute of Standards and Technology,
-      “Recommendation for Block Cipher Modes of Operation: Methods for
-      Format-Preserving Encryption,” NIST SP 800-38G, March 2016.
+   [RFC8174]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", RFC 8174, March 2017,
+              <https://www.rfc-editor.org/rfc/rfc8174>.
 
 9.2.  Informative References
 
-   *  [LRW2002] Liskov, M., Rivest, R., and Wagner, D., “Tweakable
-      Blockcipher Modes,” in _Fast Software Encryption_, 2002.
+   [AES-XEX-Spec]
+              Denis, F., "Proposed specification for AES-XEX as used in
+              this document", 2025.
 
-   *  [IEEE-P1619] IEEE Standard for Encryption of Data on Block-
-      Oriented Storage Devices, IEEE P1619.
+   [BRW2005]  Bellare, M., Rogaway, P., and D. Wagner, "Format-
+              Preserving Encryption", CRYPTO 2005, 2005.
 
-   *  [BRW2005] Bellare, M., Rogaway, P., and Wagner, D., “Format-
-      Preserving Encryption,” in the Proceedings of CRYPTO 2005.
+   [IEEE-P1619]
+              IEEE, "IEEE Standard for Encryption of Data on Block-
+              Oriented Storage Devices", IEEE P1619, 2007.
 
-   *  [KIASU-BC] Jean J., Nikolić, I. and Peyrin, T., “Tweaks and Keys
-      for Block Ciphers: the TWEAKEY Framework,” in Cryptology ePrint
-      Archive, Paper 2014/831.
+   [IPCrypt2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
+              tool", 2025, <https://github.com/jedisct1/ipcrypt2>.
 
-   *  [AES-XEX-Spec] Proposed specification for AES-XEX as used in this
-      document.
+   [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
+              Block Ciphers: the TWEAKEY Framework", Cryptology ePrint
+              Archive Paper 2014/831, 2014.
 
-   *  [XTS-AES] Black, J., Dawson, E., Gueron, S., and Rogaway, P., “The
-      XTS-AES Mode for Disk Encryption.”
+   [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable
+              Blockcipher Modes", Fast Software Encryption 2002, 2002.
 
-   *  [IPCrypt2] “ipcrypt2: IP address encryption/obfuscation tool,”
-      available at https://github.com/jedisct1/ipcrypt2
-      (https://github.com/jedisct1/ipcrypt2).
+   [XTS-AES]  Black, J., Dawson, E., Gueron, S., and P. Rogaway, "The
+              XTS-AES Mode for Disk Encryption", 2010.
 
 Appendix A.  Acknowledgments
 

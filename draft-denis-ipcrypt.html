@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>A proposal for IP address encryption and obfuscation</title>
+<title>A Proposal for IP Address Encryption and Obfuscation</title>
 <meta content="Frank Denis" name="author">
 <meta content="
-       This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations: 
+       This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions. 
+       The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations: 
        
          
            ipcrypt-deterministic:  Deterministic encryption using AES128 (applied as a single‑block operation). 
@@ -19,7 +20,7 @@
            ipcrypt-ndx:  Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak. 
          
        
-       Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated) to produce larger ciphertexts that resist correlation attacks. Although independent random sampling of a tweak may yield collisions in accordance with birthday bounds, such collisions are harmless when they occur with different inputs and merely reveal that the same (input, tweak) pair was used without exposing the input’s value. Moreover, the usage limits discussed apply per cryptographic key; by regularly rotating keys, these limits can be extended. 
+       Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated) to produce larger ciphertexts that resist correlation attacks. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1088,22 +1089,23 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">A proposal for IP address encryption and obfuscation</h1>
+<h1 id="title">A Proposal for IP Address Encryption and Obfuscation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations:<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations:<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-abstract-2.1">
-          <p id="section-abstract-2.1.1"><strong>ipcrypt-deterministic:</strong> Deterministic encryption using AES128 (applied as a single‑block operation).<a href="#section-abstract-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-abstract-3.1">
+          <p id="section-abstract-3.1.1"><strong>ipcrypt-deterministic:</strong> Deterministic encryption using AES128 (applied as a single‑block operation).<a href="#section-abstract-3.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-abstract-2.2">
-          <p id="section-abstract-2.2.1"><strong>ipcrypt-nd:</strong> Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak.<a href="#section-abstract-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-abstract-3.2">
+          <p id="section-abstract-3.2.1"><strong>ipcrypt-nd:</strong> Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak.<a href="#section-abstract-3.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-abstract-2.3">
-          <p id="section-abstract-2.3.1"><strong>ipcrypt-ndx:</strong> Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak.<a href="#section-abstract-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-abstract-3.3">
+          <p id="section-abstract-3.3.1"><strong>ipcrypt-ndx:</strong> Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak.<a href="#section-abstract-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-abstract-3">Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated) to produce larger ciphertexts that resist correlation attacks. Although independent random sampling of a tweak may yield collisions in accordance with birthday bounds, such collisions are harmless when they occur with different inputs and merely reveal that the same (input, tweak) pair was used without exposing the input’s value. Moreover, the usage limits discussed apply per cryptographic key; by regularly rotating keys, these limits can be extended.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-4">Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated) to produce larger ciphertexts that resist correlation attacks.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1500,19 +1502,21 @@ To ensure IPv4 format preservation, implementers <strong>MUST</strong> consider 
       <h2 id="name-nondeterministic-encryption">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-nondeterministic-encryption" class="section-name selfRef">Non‑Deterministic Encryption</a>
       </h2>
-<p id="section-6-1">Non‑deterministic encryption leverages a tweakable block cipher together with a random tweak. Although the tweak is generated uniformly at random (and thus may occasionally collide per birthday bounds), such collisions are benign when they occur with different inputs. An (input, tweak) collision reveals that the same input was encrypted with the same tweak but does not disclose the input’s value. The usage limits discussed below apply per cryptographic key; rotating keys can extend secure usage beyond these bounds.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">This document defines two instantiations:<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-1">Non‑deterministic encryption leverages a tweakable block cipher together with a random tweak.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Although the tweak is generated uniformly at random (and thus may occasionally collide per birthday bounds), such collisions are benign when they occur with different inputs. An (input, tweak) collision reveals that the same input was encrypted with the same tweak but does not disclose the input’s value.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The usage limits discussed below apply per cryptographic key; rotating keys can extend secure usage beyond these bounds.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">This document defines two instantiations:<a href="#section-6-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6-3.1">
-          <p id="section-6-3.1.1"><strong>ipcrypt‑nd:</strong> Uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak.
-See [KIASU-BC] for details.<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6-5.1">
+          <p id="section-6-5.1.1"><strong>ipcrypt‑nd:</strong> Uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak.
+See <span>[<a href="#KIASU-BC" class="cite xref">KIASU-BC</a>]</span> for details.<a href="#section-6-5.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-3.2">
-          <p id="section-6-3.2.1"><strong>ipcrypt‑ndx:</strong> Uses the AES‑XEX tweakable block cipher with a 16‑byte (128‑bit) tweak.
-See [XTS-AES] for background.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-6-5.2">
+          <p id="section-6-5.2.1"><strong>ipcrypt‑ndx:</strong> Uses the AES‑XEX tweakable block cipher with a 16‑byte (128‑bit) tweak.
+See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for background.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-6-4">In both cases, if a tweak is generated randomly, it <strong>MUST be uniformly random</strong>. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-6">In both cases, if a tweak is generated randomly, it <strong>MUST be uniformly random</strong>. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.<a href="#section-6-6" class="pilcrow">¶</a></p>
 <div id="ipcryptnd-kiasubc">
 <section id="section-6.1">
         <h3 id="name-ipcryptnd-kiasubc">
@@ -1531,7 +1535,9 @@ See [XTS-AES] for background.<a href="#section-6-3.2.1" class="pilcrow">¶</a></
           <h4 id="name-usage-considerations">
 <a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-usage-considerations" class="section-name selfRef">Usage Considerations</a>
           </h4>
-<p id="section-6.1.1-1">Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations. If an (input, tweak) collision occurs, it indicates that the same input was processed with that tweak without revealing the input’s value. These collision bounds apply per cryptographic key; by rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher’s strength (≈2^128 for AES‑128).<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-1">Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-2">If an (input, tweak) collision occurs, it indicates that the same input was processed with that tweak without revealing the input’s value. These collision bounds apply per cryptographic key; by rotating keys regularly, secure usage can be extended well beyond these bounds.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-3">Ultimately, the effective security is determined by the underlying block cipher’s strength (≈2^128 for AES‑128).<a href="#section-6.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1554,7 +1560,9 @@ See [XTS-AES] for background.<a href="#section-6-3.2.1" class="pilcrow">¶</a></
           <h4 id="name-usage-considerations-2">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-usage-considerations-2" class="section-name selfRef">Usage Considerations</a>
           </h4>
-<p id="section-6.2.1-1">Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations. As with ipcrypt‑nd, an (input, tweak) collision reveals repetition without compromising the input value. These limits are per key; regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-1">Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">As with ipcrypt‑nd, an (input, tweak) collision reveals repetition without compromising the input value.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-3">These limits are per key; regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1597,7 +1605,11 @@ AES‑128’s permutation behavior ensures distinct inputs yield distinct output
 </li>
         <li class="normal" id="section-7-1.2">
           <p id="section-7-1.2.1"><strong>Non‑Deterministic Mode:</strong>
-The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs. In cases where an (input, tweak) collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself. Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.<a href="#section-7-1.2.1" class="pilcrow">¶</a></p>
+The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs.<a href="#section-7-1.2.1" class="pilcrow">¶</a></p>
+<p id="section-7-1.2.2">
+In cases where an (input, tweak) collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself. Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis.<a href="#section-7-1.2.2" class="pilcrow">¶</a></p>
+<p id="section-7-1.2.3">
+Key rotation is recommended to extend secure usage beyond the per-key collision bounds.<a href="#section-7-1.2.3" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -1610,60 +1622,71 @@ The inclusion of a random tweak ensures that encrypting the same input generally
 <p id="section-8-1">This document does not require any IANA actions.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="references">
+<div id="sec-combined-references">
 <section id="section-9">
       <h2 id="name-references">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
-<div id="normative-references">
+<div id="sec-normative-references">
 <section id="section-9.1">
         <h3 id="name-normative-references">
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
-<ul class="normal">
-<li class="normal" id="section-9.1-1.1">
-            <p id="section-9.1-1.1.1">[FIPS-197] National Institute of Standards and Technology (NIST), “Advanced Encryption Standard (AES),” FIPS PUB 197.<a href="#section-9.1-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.1-1.2">
-            <p id="section-9.1-1.2.1">[RFC4291] Deering, S. and H. Coltun, “IP Version 6 Addressing Architecture,” RFC 4291, February 2006.<a href="#section-9.1-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.1-1.3">
-            <p id="section-9.1-1.3.1">[RFC8174] Bradner, S., “Key words for use in RFCs to Indicate Requirement Levels,” RFC 8174, March 2017.<a href="#section-9.1-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.1-1.4">
-            <p id="section-9.1-1.4.1">[NIST SP 800-38G] National Institute of Standards and Technology, “Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption,” NIST SP 800-38G, March 2016.<a href="#section-9.1-1.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<dl class="references">
+<dt id="FIPS-197">[FIPS-197]</dt>
+        <dd>
+<span class="refAuthor">NIST</span>, <span class="refTitle">"Advanced Encryption Standard (AES)"</span>, <span class="seriesInfo">FIPS PUB 197</span>, <time datetime="2001" class="refDate">2001</time>. </dd>
+<dd class="break"></dd>
+<dt id="NIST-SP-800-38G">[NIST-SP-800-38G]</dt>
+        <dd>
+<span class="refAuthor">NIST</span>, <span class="refTitle">"Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption"</span>, <span class="seriesInfo">NIST SP 800-38G</span>, <time datetime="2016-03" class="refDate">March 2016</time>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4291">[RFC4291]</dt>
+        <dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">H. Coltun</span>, <span class="refTitle">"IP Version 6 Addressing Architecture"</span>, <span class="seriesInfo">RFC 4291</span>, <time datetime="2006-02" class="refDate">February 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4291">https://www.rfc-editor.org/rfc/rfc4291</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">RFC 8174</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
 </section>
 </div>
-<div id="informative-references">
+<div id="sec-informative-references">
 <section id="section-9.2">
         <h3 id="name-informative-references">
 <a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
-<ul class="normal">
-<li class="normal" id="section-9.2-1.1">
-            <p id="section-9.2-1.1.1">[LRW2002] Liskov, M., Rivest, R., and Wagner, D., “Tweakable Blockcipher Modes,” in <em>Fast Software Encryption</em>, 2002.<a href="#section-9.2-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.2-1.2">
-            <p id="section-9.2-1.2.1">[IEEE-P1619] IEEE Standard for Encryption of Data on Block-Oriented Storage Devices, IEEE P1619.<a href="#section-9.2-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.2-1.3">
-            <p id="section-9.2-1.3.1">[BRW2005] Bellare, M., Rogaway, P., and Wagner, D., “Format-Preserving Encryption,” in the Proceedings of CRYPTO 2005.<a href="#section-9.2-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.2-1.4">
-            <p id="section-9.2-1.4.1">[KIASU-BC] Jean J., Nikolić, I. and Peyrin, T., “Tweaks and Keys for Block Ciphers: the TWEAKEY Framework,” in Cryptology ePrint Archive, Paper 2014/831.<a href="#section-9.2-1.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.2-1.5">
-            <p id="section-9.2-1.5.1">[AES-XEX-Spec] Proposed specification for AES-XEX as used in this document.<a href="#section-9.2-1.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.2-1.6">
-            <p id="section-9.2-1.6.1">[XTS-AES] Black, J., Dawson, E., Gueron, S., and Rogaway, P., “The XTS-AES Mode for Disk Encryption.”<a href="#section-9.2-1.6.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.2-1.7">
-            <p id="section-9.2-1.7.1">[IPCrypt2] “ipcrypt2: IP address encryption/obfuscation tool,” available at <a href="https://github.com/jedisct1/ipcrypt2">https://github.com/jedisct1/ipcrypt2</a>.<a href="#section-9.2-1.7.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<dl class="references">
+<dt id="AES-XEX-Spec">[AES-XEX-Spec]</dt>
+        <dd>
+<span class="refAuthor">Denis, F.</span>, <span class="refTitle">"Proposed specification for AES-XEX as used in this document"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
+<dd class="break"></dd>
+<dt id="BRW2005">[BRW2005]</dt>
+        <dd>
+<span class="refAuthor">Bellare, M.</span>, <span class="refAuthor">Rogaway, P.</span>, and <span class="refAuthor">D. Wagner</span>, <span class="refTitle">"Format-Preserving Encryption"</span>, <span class="seriesInfo">CRYPTO 2005</span>, <time datetime="2005" class="refDate">2005</time>. </dd>
+<dd class="break"></dd>
+<dt id="IEEE-P1619">[IEEE-P1619]</dt>
+        <dd>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for Encryption of Data on Block-Oriented Storage Devices"</span>, <span class="seriesInfo">IEEE P1619</span>, <time datetime="2007" class="refDate">2007</time>. </dd>
+<dd class="break"></dd>
+<dt id="IPCrypt2">[IPCrypt2]</dt>
+        <dd>
+<span class="refAuthor">Denis, F.</span>, <span class="refTitle">"ipcrypt2: IP address encryption/obfuscation tool"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://github.com/jedisct1/ipcrypt2">https://github.com/jedisct1/ipcrypt2</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="KIASU-BC">[KIASU-BC]</dt>
+        <dd>
+<span class="refAuthor">Jean, J.</span>, <span class="refAuthor">Nikolić, I.</span>, and <span class="refAuthor">T. Peyrin</span>, <span class="refTitle">"Tweaks and Keys for Block Ciphers: the TWEAKEY Framework"</span>, <span class="seriesInfo">Cryptology ePrint Archive Paper 2014/831</span>, <time datetime="2014" class="refDate">2014</time>. </dd>
+<dd class="break"></dd>
+<dt id="LRW2002">[LRW2002]</dt>
+        <dd>
+<span class="refAuthor">Liskov, M.</span>, <span class="refAuthor">Rivest, R.</span>, and <span class="refAuthor">D. Wagner</span>, <span class="refTitle">"Tweakable Blockcipher Modes"</span>, <span class="seriesInfo">Fast Software Encryption 2002</span>, <time datetime="2002" class="refDate">2002</time>. </dd>
+<dd class="break"></dd>
+<dt id="XTS-AES">[XTS-AES]</dt>
+      <dd>
+<span class="refAuthor">Black, J.</span>, <span class="refAuthor">Dawson, E.</span>, <span class="refAuthor">Gueron, S.</span>, and <span class="refAuthor">P. Rogaway</span>, <span class="refTitle">"The XTS-AES Mode for Disk Encryption"</span>, <time datetime="2010" class="refDate">2010</time>. </dd>
+<dd class="break"></dd>
+</dl>
 </section>
 </div>
 </section>
