@@ -1,0 +1,667 @@
+
+
+
+
+Network Working Group                                           F. Denis
+Internet-Draft                                               Fastly Inc.
+Intended status: Informational                                April 2025
+Expires: 16 October 2025
+
+
+           Methods for IP Address Encryption and Obfuscation
+                       draft-denis-ipcrypt-latest
+
+Abstract
+
+   This document specifies methods for encrypting and obfuscating IP
+   addresses, providing both deterministic format-preserving and
+   non-deterministic constructions.  These methods address privacy
+   concerns raised in [RFC6973] and [RFC7258] regarding pervasive
+   monitoring and data collection.
+
+   The methods apply uniformly to both IPv4 and IPv6 addresses by
+   converting them into a 16-byte representation.  Two generic
+   constructions are defined—one using a 128-bit block cipher and the
+   other using a 128-bit tweakable block cipher—along with three
+   concrete instantiations:
+
+   *  *ipcrypt-deterministic:* Deterministic encryption using AES128
+      (applied as a single-block operation).
+
+   *  *ipcrypt-nd:* Non-deterministic encryption using the KIASU-BC
+      tweakable block cipher with an 8-byte tweak.
+
+   *  *ipcrypt-ndx:* Non-deterministic encryption using the AES-XEX
+      tweakable block cipher with a 16-byte tweak.
+
+   Deterministic mode produces a 16-byte ciphertext (enabling format
+   preservation), while non-deterministic modes prepend a randomly
+   sampled tweak (which MUST be uniformly random when generated, as
+   specified in [RFC4086]) to produce larger ciphertexts that resist
+   correlation attacks.
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/jedisct1/draft-denis-ipcrypt.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 3 October 2025.
+
+Copyright Notice
+
+   Copyright (c) 2025 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+     1.1.  Use Cases and Motivations
+   2.  Terminology
+   3.  IP Address Conversion
+     3.1.  Converting to a 16-Byte Representation
+       3.1.1.  IPv6 Addresses
+       3.1.2.  IPv4 Addresses
+     3.2.  Converting from a 16-Byte Representation to an IP Address
+   4.  Generic Constructions
+   5.  Deterministic Encryption
+     5.1.  Specific Instantiation: ipcrypt-deterministic
+       5.1.1.  Operation Flow Diagram
+     5.2.  Format Preservation
+   6.  Non-Deterministic Encryption
+     6.1.  ipcrypt-nd (KIASU-BC)
+       6.1.1.  Usage Considerations
+     6.2.  ipcrypt-ndx (AES-XEX)
+       6.2.1.  Usage Considerations
+     6.3.  Comparison of Modes
+   7.  Security Considerations
+   8.  IANA Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
+   Appendix A.  Acknowledgments
+   Appendix B.  Appendices
+     B.1.  Appendix A.  Pseudocode and Examples
+       B.1.1.  IPv4 Address Conversion
+       B.1.2.  IPv6 Address Conversion
+       B.1.3.  Conversion from a 16-Byte Array to an IP Address
+       B.1.4.  Deterministic Encryption (ipcrypt-deterministic)
+       B.1.5.  Non-Deterministic Encryption using KIASU-BC
+               (ipcrypt-nd)
+       B.1.6.  Non-Deterministic Encryption using AES-XEX
+               (ipcrypt-ndx)
+     B.2.  Appendix B.  Diagrams
+       B.2.1.  IPv4 Address Conversion Diagram
+       B.2.2.  Deterministic Encryption Flow
+       B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
+       B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
+   Author's Address
+
+1.  Introduction
+
+   This document specifies a standard for the encryption and obfuscation
+   of IP addresses for both operational use and privacy preservation.
+   The objective is to enable network operators, researchers, and
+   privacy advocates to share or analyze data while protecting sensitive
+   address information, addressing concerns raised in [RFC7624]
+   regarding confidentiality in the face of pervasive surveillance.
+
+1.1.  Use Cases and Motivations
+
+   The main motivations include:
+
+   *  *Privacy Protection:* Encrypting IP addresses prevents the
+      disclosure of user-specific information when data is logged or
+      measured, as discussed in [RFC6973].
+
+   *  *Format Preservation:* Ensuring that the encrypted output remains
+      a valid IP address allows network devices to process the data
+      without modification.
+
+   *  *Mitigation of Correlation Attacks:* Deterministic encryption
+      reveals repeated inputs; non-deterministic modes use a random
+      tweak to obscure linkability while keeping the underlying input
+      confidential.
+
+2.  Terminology
+
+   The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”,
+   “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and
+   “OPTIONAL” in this document are to be interpreted as described in BCP
+   14 [RFC8174] when, and only when, they appear in all capitals, as
+   shown here.
+
+   Throughout this document, the following terms and conventions apply:
+
+   *  *IP Address:* An IPv4 or IPv6 address as defined in [RFC4291].
+
+   *  *16-Byte Representation:* A fixed-length representation used for
+      both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
+
+   *  *Tweak:* A non-secret, additional input to a tweakable block
+      cipher that further randomizes the output.
+
+   *  *Deterministic Encryption:* Encryption that always produces the
+      same ciphertext for a given input and key.
+
+   *  *Non-Deterministic Encryption:* Encryption that produces different
+      ciphertexts for the same input due to the inclusion of a randomly
+      sampled tweak.
+
+   *  *(Input, Tweak) Collision:* A scenario where the same input is
+      encrypted with the same tweak; this reveals that the input was
+      repeated but not the input’s value.
+
+3.  IP Address Conversion
+
+   This section describes the conversion of IP addresses to and from a
+   16-byte representation.  This conversion is necessary to operate a
+   128-bit cipher on both IPv4 and IPv6 addresses.
+
+3.1.  Converting to a 16-Byte Representation
+
+3.1.1.  IPv6 Addresses
+
+   IPv6 addresses are natively 128 bits and are converted directly using
+   network-byte order (big-endian) as specified in [RFC4291].
+
+   _Example:_
+
+IPv6 Address:    2001:0db8:85a3:0000:0000:8a2e:0370:7334
+16-Byte Representation: [20 01 0d b8 85 a3 00 00 00 00 8a 2e 03 70 73 34]
+
+3.1.2.  IPv4 Addresses
+
+   IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6
+   format:
+
+IPv4 Address:    192.0.2.1
+16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
+
+3.2.  Converting from a 16-Byte Representation to an IP Address
+
+   The conversion algorithm is as follows:
+
+   1.  Examine the first 12 bytes of the 16-byte representation
+
+   2.  If they match the IPv4-mapped prefix (10 bytes of 0x00 followed
+       by 0xFF, 0xFF):
+
+       *  Interpret the last 4 bytes as an IPv4 address in
+          dotted-decimal notation
+
+   3.  Otherwise:
+
+       *  Interpret the 16 bytes as an IPv6 address in colon-hexadecimal
+          notation
+
+   (For additional illustration, see Appendix B.)
+
+4.  Generic Constructions
+
+   This specification defines two generic cryptographic constructions:
+
+   1.  *128-bit Block Cipher Construction:*
+
+       *  Used in deterministic encryption
+
+       *  Operates on a single 16-byte block
+
+       *  Example: AES-128 treated as a permutation
+
+   2.  *128-bit Tweakable Block Cipher (TBC) Construction:*
+
+       *  Used in non-deterministic encryption
+
+       *  Accepts a key, a tweak, and a message
+
+       *  The tweak is typically randomly sampled (and MUST be uniformly
+          random when generated)
+
+       *  Reuse of the same tweak on different inputs does not
+          compromise confidentiality
+
+   Valid options for implementing a tweakable block cipher include, but
+   are not limited to:
+
+   *  *SKINNY*
+
+   *  *DEOXYS-BC*
+
+   *  *KIASU-BC*
+
+   *  *AES-XEX*
+
+   Implementers MUST choose a cipher that meets the required security
+   properties and provides robust resistance against related-tweak and
+   other cryptographic attacks.
+
+5.  Deterministic Encryption
+
+   Deterministic encryption applies a 128-bit block cipher directly to
+   the 16-byte representation of an IP address.
+
+5.1.  Specific Instantiation: ipcrypt-deterministic
+
+   This instantiation employs AES128 in a single-block operation.  Since
+   AES128 is a permutation, every distinct 16-byte input maps to a
+   unique 16-byte ciphertext, preserving the IP address format.
+
+5.1.1.  Operation Flow Diagram
+
+         +---------------------+
+         |      IP Address     |
+         |    (IPv4 or IPv6)   |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         | Convert to 16 Bytes |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         |   AES128 Encrypt    |
+         |   (Single Block)    |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         |    16-Byte Output   |
+         +---------------------+
+                    |
+                    v
+         +---------------------+
+         | Convert to IP Format|
+         +---------------------+
+
+5.2.  Format Preservation
+
+   *  If the 16-byte ciphertext begins with an IPv4-mapped prefix, it
+      *MUST* be rendered as a dotted-decimal IPv4 address.
+
+   *  Otherwise, it is interpreted as an IPv6 address.
+
+      *Note:* To ensure IPv4 format preservation, implementers *MUST*
+      consider using cycle-walking or an FPE mode if required.
+
+6.  Non-Deterministic Encryption
+
+   Non-deterministic encryption leverages a tweakable block cipher
+   together with a random tweak.
+
+   Although the tweak is generated uniformly at random (and thus may
+   occasionally collide per birthday bounds), such collisions are benign
+   when they occur with different inputs.  An (input, tweak) collision
+   reveals that the same input was encrypted with the same tweak but
+   does not disclose the input’s value.
+
+   The usage limits discussed below apply per cryptographic key;
+   rotating keys can extend secure usage beyond these bounds.
+
+   This document defines two instantiations:
+
+   *  *ipcrypt-nd:* Uses the KIASU-BC tweakable block cipher with an
+      8-byte (64-bit) tweak.  See [KIASU-BC] for details.
+
+   *  *ipcrypt-ndx:* Uses the AES-XEX tweakable block cipher with a
+      16-byte (128-bit) tweak.  See [XTS-AES] for background.
+
+   In both cases, if a tweak is generated randomly, it *MUST be
+   uniformly random*. Reusing the same randomly generated tweak on
+   different inputs is acceptable from a confidentiality standpoint.
+
+6.1.  ipcrypt-nd (KIASU-BC)
+
+   *  *Tweak:* 8 bytes (64 bits).
+
+   *  *Output:* 24 bytes total (8-byte tweak concatenated with a 16-byte
+      ciphertext).
+
+6.1.1.  Usage Considerations
+
+   Random sampling of an 8-byte tweak yields an expected collision for a
+   specific tweak value after about 2^(64/2) = 2^32 operations.
+
+   If an (input, tweak) collision occurs, it indicates that the same
+   input was processed with that tweak without revealing the input’s
+   value.  These collision bounds apply per cryptographic key; by
+   rotating keys regularly, secure usage can be extended well beyond
+   these bounds.
+
+   Ultimately, the effective security is determined by the underlying
+   block cipher’s strength (≈2^128 for AES-128).
+
+6.2.  ipcrypt-ndx (AES-XEX)
+
+   *  *Tweak:* 16 bytes (128 bits).
+
+   *  *Output:* 32 bytes total (16-byte tweak concatenated with a
+      16-byte ciphertext).
+
+6.2.1.  Usage Considerations
+
+   Independent sampling of a 16-byte tweak results in an expected
+   collision after about 2^(128/2) = 2^64 operations.
+
+   As with ipcrypt-nd, an (input, tweak) collision reveals repetition
+   without compromising the input value.
+
+   These limits are per key; regular key rotation further extends secure
+   usage.  The effective security is governed by the strength of AES-128
+   (approximately 2^128 operations).
+
+6.3.  Comparison of Modes
+
+   *  *Deterministic (ipcrypt-deterministic):* Produces a 16-byte
+      output; preserves format but reveals repeated inputs.
+
+   *  *Non-Deterministic:*
+
+      -  *ipcrypt-nd (KIASU-BC):* Produces a 24-byte output using an
+         8-byte tweak; (input, tweak) collisions reveal repeated inputs
+         (with the same tweak) but not their values.
+
+      -  *ipcrypt-ndx (AES-XEX):* Produces a 32-byte output using a
+         16-byte tweak; supports higher secure operation counts per key.
+
+7.  Security Considerations
+
+   *  *Deterministic Mode:* AES-128’s permutation behavior ensures
+      distinct inputs yield distinct outputs; however, repeated inputs
+      result in identical ciphertexts, thereby revealing repetition.
+
+   *  *Non-Deterministic Mode:* The inclusion of a random tweak ensures
+      that encrypting the same input generally produces different
+      outputs.
+
+      In cases where an (input, tweak) collision occurs, an attacker
+      learns only that the same input was processed with that tweak, not
+      the value of the input itself.  Security is determined by the
+      underlying block cipher (≈2^128 for AES-128) on a per-key basis.
+
+      Key rotation is recommended to extend secure usage beyond the per-
+      key collision bounds.
+
+8.  IANA Considerations
+
+   This document does not require any IANA actions.
+
+9.  References
+
+9.1.  Normative References
+
+   [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
+              26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
+              NIST.FIPS.197.pdf>.
+
+   [NIST-SP-800-38G]
+              NIST, "Recommendation for Block Cipher Modes of Operation:
+              Methods for Format-Preserving Encryption", NIST SP
+              800-38G, March 2016,
+              <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/
+              NIST.SP.800-38G.pdf>.
+
+   [RFC4086]  Eastlake 3rd, D., Schiller, J., and S. Crocker,
+              "Randomness Requirements for Security", BCP 106, RFC 4086,
+              DOI 10.17487/RFC4086, June 2005,
+              <https://www.rfc-editor.org/rfc/rfc4086>.
+
+   [RFC4291]  Hinden, R. and S. Deering, "IP Version 6 Addressing
+              Architecture", RFC 4291, DOI 10.17487/RFC4291, February
+              2006, <https://www.rfc-editor.org/rfc/rfc4291>.
+
+   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
+              Morris, J., Hansen, M., and R. Smith, "Privacy
+              Considerations for Internet Protocols", RFC 6973,
+              DOI 10.17487/RFC6973, July 2013,
+              <https://www.rfc-editor.org/rfc/rfc6973>.
+
+   [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
+              Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
+              2014, <https://www.rfc-editor.org/rfc/rfc7258>.
+
+   [RFC7624]  Barnes, R., Schneier, B., Jennings, C., Hardie, T.,
+              Trammell, B., Huitema, C., and D. Borkmann,
+              "Confidentiality in the Face of Pervasive Surveillance: A
+              Threat Model and Problem Statement", RFC 7624,
+              DOI 10.17487/RFC7624, August 2015,
+              <https://www.rfc-editor.org/rfc/rfc7624>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+9.2.  Informative References
+
+   [BRW2005]  Bellare, M., Rogaway, P., and D. Wagner, "Format-
+              Preserving Encryption", CRYPTO 2005, 2005,
+              <https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf>.
+
+   [IEEE-P1619]
+              IEEE, "IEEE Standard for Cryptographic Protection of Data
+              on Block-Oriented Storage Devices", IEEE 1619-2007, 18
+              December 2007,
+              <https://standards.ieee.org/ieee/1619/2041/>.
+
+   [IPCrypt2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
+              tool", 2025, <https://github.com/jedisct1/ipcrypt2>.
+
+   [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
+              Block Ciphers: the TWEAKEY Framework", Cryptology ePrint
+              Archive Paper 2014/831, 2014,
+              <https://eprint.iacr.org/2014/831>.
+
+   [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable Block
+              Ciphers", Fast Software Encryption 2002, 2002,
+              <https://www.cs.berkeley.edu/~daw/papers/tweak-
+              crypto02.pdf>.
+
+   [XTS-AES]  Black, J., Dawson, E., Gueron, S., and P. Rogaway, "The
+              XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 2010,
+              <https://web.cs.ucdavis.edu/~rogaway/papers/xts.pdf>.
+
+Appendix A.  Acknowledgments
+
+   The author gratefully acknowledges the contributions and insightful
+   comments from members of the IETF independent stream community and
+   the broader cryptographic community that have helped shape this
+   specification.
+
+Appendix B.  Appendices
+
+B.1.  Appendix A.  Pseudocode and Examples
+
+   This appendix provides detailed pseudocode for key operations
+   described in this document.
+
+B.1.1.  IPv4 Address Conversion
+
+   function IPv4To16Bytes(ipv4_address):
+       // Split the IPv4 address into its octets
+       parts = ipv4_address.split(".")
+       if length(parts) != 4:
+            raise Error("Invalid IPv4 address")
+       // Create a 16-byte array with the IPv4-mapped prefix
+       bytes16 = [0x00] * 10         // 10 bytes of 0x00
+       bytes16.append(0xFF)          // 11th byte: 0xFF
+       bytes16.append(0xFF)          // 12th byte: 0xFF
+       // Append each octet (converted to an 8-bit integer)
+       for part in parts:
+            bytes16.append(int(part) & 0xFF)
+       return bytes16
+
+   _Example:_ For "192.0.2.1", the function returns
+
+   [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
+
+B.1.2.  IPv6 Address Conversion
+
+   function IPv6To16Bytes(ipv6_address):
+       // Parse the IPv6 address into eight 16-bit words.
+       words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
+       bytes16 = []
+       for word in words:
+            high_byte = (word >> 8) & 0xFF
+            low_byte = word & 0xFF
+            bytes16.append(high_byte)
+            bytes16.append(low_byte)
+       return bytes16
+
+   _Example:_ For "2001:0db8:85a3:0000:0000:8a2e:0370:7334", the output
+   is the corresponding 16-byte sequence.
+
+B.1.3.  Conversion from a 16-Byte Array to an IP Address
+
+   function Bytes16ToIP(bytes16):
+       if length(bytes16) != 16:
+            raise Error("Invalid byte array")
+       // Check for the IPv4-mapped prefix
+       if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11] == 0xFF:
+            ipv4_parts = []
+            for i from 12 to 15:
+                ipv4_parts.append(str(bytes16[i]))
+            ipv4_address = join(ipv4_parts, ".")
+            return ipv4_address
+       else:
+            words = []
+            for i from 0 to 15 step 2:
+                word = (bytes16[i] << 8) | bytes16[i+1]
+                words.append(format(word, "x"))
+            ipv6_address = join(words, ":")
+            return ipv6_address
+
+B.1.4.  Deterministic Encryption (ipcrypt-deterministic)
+
+   function ipcrypt_deterministic(ip_address, key):
+       bytes16 = convertTo16Bytes(ip_address)
+       ciphertext = AES128_encrypt(key, bytes16)
+       encrypted_ip = Bytes16ToIP(ciphertext)
+       return encrypted_ip
+
+B.1.5.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
+
+   function ipcrypt_nd(ip_address, key):
+       bytes16 = convertTo16Bytes(ip_address)
+       // Generate an 8-byte random tweak (MUST be uniformly random)
+       tweak = random_bytes(8)
+       ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
+       result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
+       return result
+
+B.1.6.  Non-Deterministic Encryption using AES-XEX (ipcrypt-ndx)
+
+   function ipcrypt_ndx(ip_address, key):
+       bytes16 = convertTo16Bytes(ip_address)
+       // Generate a 16-byte random tweak (MUST be uniformly random)
+       tweak = random_bytes(16)
+       ciphertext = AES_XEX_encrypt(key, tweak, bytes16)
+       result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
+       return result
+
+B.2.  Appendix B.  Diagrams
+
+B.2.1.  IPv4 Address Conversion Diagram
+
+          IPv4: 192.0.2.1
+              |
+              v
+     Octets:  C0  00  02  01
+              |
+              v
+      16-Byte Array:
+   [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
+
+B.2.2.  Deterministic Encryption Flow
+
+               IP Address
+                   |
+                   v
+         [Convert to 16 Bytes]
+                   |
+                   v
+          [AES128 Single-Block Encrypt]
+                   |
+                   v
+           16-Byte Ciphertext
+                   |
+                   v
+           [Convert to IP Format]
+                   |
+                   v
+            Encrypted IP Address
+
+B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
+
+                 IP Address
+                     |
+                     v
+         [Convert to 16 Bytes] ---> 16-Byte Representation
+                     |
+                     v
+       [Generate Random 8-Byte Tweak]
+                     |
+                     v
+          [KIASU-BC Tweakable Encrypt]
+                     |
+                     v
+            16-Byte Ciphertext
+                     |
+                     v
+       [Concatenate Tweak || Ciphertext]
+                     |
+                     v
+            24-Byte Output (`ipcrypt-nd`)
+
+B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
+
+                 IP Address
+                     |
+                     v
+         [Convert to 16 Bytes] ---> 16-Byte Representation
+                     |
+                     v
+       [Generate Random 16-Byte Tweak]
+                     |
+                     v
+          [AES-XEX Tweakable Encrypt]
+                     |
+                     v
+            16-Byte Ciphertext
+                     |
+                     v
+       [Concatenate Tweak || Ciphertext]
+                     |
+                     v
+            32-Byte Output (`ipcrypt-ndx`)
+
+Author's Address
+
+   Frank Denis
+   Fastly Inc.
+   Email: fde@00f.net
