@@ -275,8 +275,8 @@ IPv4 Address:    192.0.2.1
 5.1.1.  Operation Flow Diagram
 
          +---------------------+
-         |   IP Address        |
-         | (IPv4 or IPv6)      |
+         |      IP Address     |
+         |    (IPv4 or IPv6)   |
          +---------------------+
                     |
                     v
@@ -292,7 +292,7 @@ IPv4 Address:    192.0.2.1
                     |
                     v
          +---------------------+
-         |  16-Byte Output     |
+         |    16-Byte Output   |
          +---------------------+
                     |
                     v
