@@ -7,7 +7,7 @@
 <title>A Proposal for IP Address Encryption and Obfuscation</title>
 <meta content="Frank Denis" name="author">
 <meta content="
-       This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions. 
+       This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions. These methods address privacy concerns raised in   and   regarding pervasive monitoring and data collection. 
        The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations: 
        
          
@@ -20,7 +20,7 @@
            ipcrypt-ndx:  Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak. 
          
        
-       Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated) to produce larger ciphertexts that resist correlation attacks. 
+       Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated, as specified in  ) to produce larger ciphertexts that resist correlation attacks. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1092,7 +1092,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">A Proposal for IP Address Encryption and Obfuscation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions. These methods address privacy concerns raised in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span> and <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> regarding pervasive monitoring and data collection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations:<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-abstract-3.1">
@@ -1105,7 +1105,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
           <p id="section-abstract-3.3.1"><strong>ipcrypt-ndx:</strong> Non‑deterministic encryption using the AES‑XEX tweakable block cipher with a 16‑byte tweak.<a href="#section-abstract-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-abstract-4">Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated) to produce larger ciphertexts that resist correlation attacks.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
+<p id="section-abstract-4">Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated, as specified in <span>[<a href="#RFC4086" class="cite xref">RFC4086</a>]</span>) to produce larger ciphertexts that resist correlation attacks.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1313,7 +1313,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This document specifies a standard for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">This document specifies a standard for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information, addressing concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality in the face of pervasive surveillance.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <div id="use-cases-and-motivations">
 <section id="section-1.1">
         <h3 id="name-use-cases-and-motivations">
@@ -1322,7 +1322,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-1">The main motivations include:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-2.1">
-            <p id="section-1.1-2.1.1"><strong>Privacy Protection:</strong> Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.1.1"><strong>Privacy Protection:</strong> Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured, as discussed in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.2">
             <p id="section-1.1-2.2.1"><strong>Format Preservation:</strong> Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
@@ -1343,7 +1343,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-2-1">Throughout this document, the following terms and conventions apply:<a href="#section-2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2-2.1">
-          <p id="section-2-2.1.1"><strong>IP Address:</strong> An IPv4 or IPv6 address.<a href="#section-2-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-2-2.1.1"><strong>IP Address:</strong> An IPv4 or IPv6 address as defined in <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>.<a href="#section-2-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-2.2">
           <p id="section-2-2.2.1"><strong>16‑Byte Representation:</strong> A fixed-length representation used for both IPv4 (via IPv4‑mapped IPv6) and IPv6 addresses.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
@@ -1681,9 +1681,25 @@ Key rotation is recommended to extend secure usage beyond the per-key collision 
         <dd>
 <span class="refAuthor">NIST</span>, <span class="refTitle">"Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption"</span>, <span class="seriesInfo">NIST SP 800-38G</span>, <time datetime="2016-03" class="refDate">March 2016</time>, <span>&lt;<a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf">https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC4086">[RFC4086]</dt>
+        <dd>
+<span class="refAuthor">Eastlake 3rd, D.</span>, <span class="refAuthor">Schiller, J.</span>, and <span class="refAuthor">S. Crocker</span>, <span class="refTitle">"Randomness Requirements for Security"</span>, <span class="seriesInfo">BCP 106</span>, <span class="seriesInfo">RFC 4086</span>, <span class="seriesInfo">DOI 10.17487/RFC4086</span>, <time datetime="2005-06" class="refDate">June 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4086">https://www.rfc-editor.org/rfc/rfc4086</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC4291">[RFC4291]</dt>
         <dd>
 <span class="refAuthor">Hinden, R.</span> and <span class="refAuthor">S. Deering</span>, <span class="refTitle">"IP Version 6 Addressing Architecture"</span>, <span class="seriesInfo">RFC 4291</span>, <span class="seriesInfo">DOI 10.17487/RFC4291</span>, <time datetime="2006-02" class="refDate">February 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4291">https://www.rfc-editor.org/rfc/rfc4291</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6973">[RFC6973]</dt>
+        <dd>
+<span class="refAuthor">Cooper, A.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Aboba, B.</span>, <span class="refAuthor">Peterson, J.</span>, <span class="refAuthor">Morris, J.</span>, <span class="refAuthor">Hansen, M.</span>, and <span class="refAuthor">R. Smith</span>, <span class="refTitle">"Privacy Considerations for Internet Protocols"</span>, <span class="seriesInfo">RFC 6973</span>, <span class="seriesInfo">DOI 10.17487/RFC6973</span>, <time datetime="2013-07" class="refDate">July 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6973">https://www.rfc-editor.org/rfc/rfc6973</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7258">[RFC7258]</dt>
+        <dd>
+<span class="refAuthor">Farrell, S.</span> and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Pervasive Monitoring Is an Attack"</span>, <span class="seriesInfo">BCP 188</span>, <span class="seriesInfo">RFC 7258</span>, <span class="seriesInfo">DOI 10.17487/RFC7258</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7258">https://www.rfc-editor.org/rfc/rfc7258</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7624">[RFC7624]</dt>
+        <dd>
+<span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Schneier, B.</span>, <span class="refAuthor">Jennings, C.</span>, <span class="refAuthor">Hardie, T.</span>, <span class="refAuthor">Trammell, B.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">D. Borkmann</span>, <span class="refTitle">"Confidentiality in the Face of Pervasive Surveillance: A Threat Model and Problem Statement"</span>, <span class="seriesInfo">RFC 7624</span>, <span class="seriesInfo">DOI 10.17487/RFC7624</span>, <time datetime="2015-08" class="refDate">August 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7624">https://www.rfc-editor.org/rfc/rfc7624</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
       <dd>

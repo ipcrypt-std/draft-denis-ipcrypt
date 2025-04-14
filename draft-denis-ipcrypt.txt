@@ -15,7 +15,9 @@ Abstract
 
    This document specifies methods for encrypting and obfuscating IP
    addresses, providing both deterministic format-preserving and
-   non-deterministic constructions.
+   non-deterministic constructions.  These methods address privacy
+   concerns raised in [RFC6973] and [RFC7258] regarding pervasive
+   monitoring and data collection.
 
    The methods apply uniformly to both IPv4 and IPv6 addresses by
    converting them into a 16-byte representation.  Two generic
@@ -34,8 +36,9 @@ Abstract
 
    Deterministic mode produces a 16-byte ciphertext (enabling format
    preservation), while non-deterministic modes prepend a randomly
-   sampled tweak (which MUST be uniformly random when generated) to
-   produce larger ciphertexts that resist correlation attacks.
+   sampled tweak (which MUST be uniformly random when generated, as
+   specified in [RFC4086]) to produce larger ciphertexts that resist
+   correlation attacks.
 
 Discussion Venues
 
@@ -125,7 +128,8 @@ Table of Contents
    of IP addresses for both operational use and privacy preservation.
    The objective is to enable network operators, researchers, and
    privacy advocates to share or analyze data while protecting sensitive
-   address information.
+   address information, addressing concerns raised in [RFC7624]
+   regarding confidentiality in the face of pervasive surveillance.
 
 1.1.  Use Cases and Motivations
 
@@ -133,7 +137,7 @@ Table of Contents
 
    *  *Privacy Protection:* Encrypting IP addresses prevents the
       disclosure of user-specific information when data is logged or
-      measured.
+      measured, as discussed in [RFC6973].
 
    *  *Format Preservation:* Ensuring that the encrypted output remains
       a valid IP address allows network devices to process the data
@@ -148,7 +152,7 @@ Table of Contents
 
    Throughout this document, the following terms and conventions apply:
 
-   *  *IP Address:* An IPv4 or IPv6 address.
+   *  *IP Address:* An IPv4 or IPv6 address as defined in [RFC4291].
 
    *  *16-Byte Representation:* A fixed-length representation used for
       both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
@@ -409,9 +413,31 @@ Table of Contents
               <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/
               NIST.SP.800-38G.pdf>.
 
+   [RFC4086]  Eastlake 3rd, D., Schiller, J., and S. Crocker,
+              "Randomness Requirements for Security", BCP 106, RFC 4086,
+              DOI 10.17487/RFC4086, June 2005,
+              <https://www.rfc-editor.org/rfc/rfc4086>.
+
    [RFC4291]  Hinden, R. and S. Deering, "IP Version 6 Addressing
               Architecture", RFC 4291, DOI 10.17487/RFC4291, February
               2006, <https://www.rfc-editor.org/rfc/rfc4291>.
+
+   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
+              Morris, J., Hansen, M., and R. Smith, "Privacy
+              Considerations for Internet Protocols", RFC 6973,
+              DOI 10.17487/RFC6973, July 2013,
+              <https://www.rfc-editor.org/rfc/rfc6973>.
+
+   [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
+              Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
+              2014, <https://www.rfc-editor.org/rfc/rfc7258>.
+
+   [RFC7624]  Barnes, R., Schneier, B., Jennings, C., Hardie, T.,
+              Trammell, B., Huitema, C., and D. Borkmann,
+              "Confidentiality in the Face of Pervasive Surveillance: A
+              Threat Model and Problem Statement", RFC 7624,
+              DOI 10.17487/RFC7624, August 2015,
+              <https://www.rfc-editor.org/rfc/rfc7624>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
