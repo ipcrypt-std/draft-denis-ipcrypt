@@ -167,7 +167,7 @@ Table of Contents
       encrypted with the same tweak; this reveals that the input was
       repeated but not the input’s value.
 
-   *  *MUST, SHOULD, etc.:* RFC 2119 keywords are used as defined.
+   *  *MUST, SHOULD, etc.:* [RFC8174] keywords are used as defined.
 
 3.  IP Address Conversion
 
@@ -180,7 +180,7 @@ Table of Contents
 3.1.1.  IPv6 Addresses
 
    IPv6 addresses are natively 128 bits and are converted directly using
-   network-byte order (big-endian).
+   network-byte order (big-endian) as specified in [RFC4291].
 
    _Example Diagram:_
 
@@ -409,13 +409,13 @@ Table of Contents
               <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/
               NIST.SP.800-38G.pdf>.
 
-   [RFC4291]  Deering, S. and H. Coltun, "IP Version 6 Addressing
-              Architecture", RFC 4291, February 2006,
-              <https://www.rfc-editor.org/rfc/rfc4291>.
+   [RFC4291]  Hinden, R. and S. Deering, "IP Version 6 Addressing
+              Architecture", RFC 4291, DOI 10.17487/RFC4291, February
+              2006, <https://www.rfc-editor.org/rfc/rfc4291>.
 
-   [RFC8174]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", RFC 8174, May 2017,
-              <https://www.rfc-editor.org/rfc/rfc8174>.
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
 9.2.  Informative References
 
