@@ -336,7 +336,7 @@ function IPv4To16Bytes(ipv4_address):
     bytes16.append(0xFF)          // 12th byte: 0xFF
     // Append each octet (converted to an 8-bit integer)
     for part in parts:
-         bytes16.append(int(part) & 0xFF)
+         bytes16.append(int(part))
     return bytes16
 ~~~
 
