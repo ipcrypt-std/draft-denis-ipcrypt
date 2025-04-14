@@ -373,42 +373,52 @@ Table of Contents
 9.1.  Normative References
 
    [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
-              2001.
+              26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
+              NIST.FIPS.197.pdf>.
 
    [NIST-SP-800-38G]
               NIST, "Recommendation for Block Cipher Modes of Operation:
               Methods for Format-Preserving Encryption", NIST SP
-              800-38G, March 2016.
+              800-38G, March 2016,
+              <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/
+              NIST.SP.800-38G.pdf>.
 
    [RFC4291]  Deering, S. and H. Coltun, "IP Version 6 Addressing
               Architecture", RFC 4291, February 2006,
               <https://www.rfc-editor.org/rfc/rfc4291>.
 
    [RFC8174]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", RFC 8174, March 2017,
+              Requirement Levels", RFC 8174, May 2017,
               <https://www.rfc-editor.org/rfc/rfc8174>.
 
 9.2.  Informative References
 
    [BRW2005]  Bellare, M., Rogaway, P., and D. Wagner, "Format-
-              Preserving Encryption", CRYPTO 2005, 2005.
+              Preserving Encryption", CRYPTO 2005, 2005,
+              <https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf>.
 
    [IEEE-P1619]
-              IEEE, "IEEE Standard for Encryption of Data on Block-
-              Oriented Storage Devices", IEEE P1619, 2007.
+              IEEE, "IEEE Standard for Cryptographic Protection of Data
+              on Block-Oriented Storage Devices", IEEE 1619-2007, 18
+              December 2007,
+              <https://standards.ieee.org/ieee/1619/2041/>.
 
    [IPCrypt2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
               tool", 2025, <https://github.com/jedisct1/ipcrypt2>.
 
    [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
               Block Ciphers: the TWEAKEY Framework", Cryptology ePrint
-              Archive Paper 2014/831, 2014.
+              Archive Paper 2014/831, 2014,
+              <https://eprint.iacr.org/2014/831>.
 
-   [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable
-              Blockcipher Modes", Fast Software Encryption 2002, 2002.
+   [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable Block
+              Ciphers", Fast Software Encryption 2002, 2002,
+              <https://www.cs.berkeley.edu/~daw/papers/tweak-
+              crypto02.pdf>.
 
    [XTS-AES]  Black, J., Dawson, E., Gueron, S., and P. Rogaway, "The
-              XTS-AES Mode for Disk Encryption", 2010.
+              XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 2010,
+              <https://web.cs.ucdavis.edu/~rogaway/papers/xts.pdf>.
 
 Appendix A.  Acknowledgments
 
