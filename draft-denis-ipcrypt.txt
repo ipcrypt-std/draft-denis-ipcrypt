@@ -602,10 +602,10 @@ B.2.2.  Deterministic Encryption Flow
                IP Address
                    |
                    v
-         [Convert to 16 Bytes]
+          [Convert to 16 Bytes]
                    |
                    v
-          [AES128 Single-Block Encrypt]
+       [AES128 Single-Block Encrypt]
                    |
                    v
            16-Byte Ciphertext
@@ -636,7 +636,7 @@ B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
        [Concatenate Tweak || Ciphertext]
                      |
                      v
-            24-Byte Output (ipcrypt-nd)
+          24-Byte Output (ipcrypt-nd)
 
 B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
 
@@ -652,13 +652,13 @@ B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
           [AES-XEX Tweakable Encrypt]
                      |
                      v
-            16-Byte Ciphertext
+             16-Byte Ciphertext
                      |
                      v
        [Concatenate Tweak || Ciphertext]
                      |
                      v
-            32-Byte Output (ipcrypt-ndx)
+          32-Byte Output (ipcrypt-ndx)
 
 Author's Address
 
