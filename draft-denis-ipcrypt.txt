@@ -636,7 +636,7 @@ B.2.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
        [Concatenate Tweak || Ciphertext]
                      |
                      v
-            24-Byte Output (`ipcrypt-nd`)
+            24-Byte Output (ipcrypt-nd)
 
 B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
 
@@ -658,7 +658,7 @@ B.2.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
        [Concatenate Tweak || Ciphertext]
                      |
                      v
-            32-Byte Output (`ipcrypt-ndx`)
+            32-Byte Output (ipcrypt-ndx)
 
 Author's Address
 
