@@ -513,7 +513,7 @@ B.1.1.  IPv4 Address Conversion
        bytes16.append(0xFF)          // 12th byte: 0xFF
        // Append each octet (converted to an 8-bit integer)
        for part in parts:
-            bytes16.append(int(part) & 0xFF)
+            bytes16.append(int(part))
        return bytes16
 
    _Example:_ For "192.0.2.1", the function returns
