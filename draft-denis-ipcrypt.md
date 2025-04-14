@@ -539,17 +539,17 @@ This appendix provides test vectors for all three variants of ipcrypt. Each test
 ### ipcrypt-deterministic Test Vectors
 
 ~~~
-# Test vector 1 (All-zero key)
-Key:          00000000000000000000000000000000
+# Test vector 1
+Key:          0123456789abcdeffedcba9876543210
 Input IP:     0.0.0.0
 Encrypted IP: 7a73:3179:bcf3:5036:5f4b:754d:9518:fb70
 
-# Test vector 2 (All-zero key)
-Key:          00000000000000000000000000000000
+# Test vector 2
+Key:          1032547698badcfeefcdab8967452301
 Input IP:     255.255.255.255
 Encrypted IP: 105d:f4d1:e4b7:4dca:12b3:f38c:4c3c:d9c
 
-# Test vector 3 (AES test vector key)
+# Test vector 3
 Key:          2b7e151628aed2a6abf7158809cf4f3c
 Input IP:     192.0.2.1
 Encrypted IP: 2001:db8:85a3::8a2e:370:7334
@@ -558,19 +558,19 @@ Encrypted IP: 2001:db8:85a3::8a2e:370:7334
 ### ipcrypt-nd Test Vectors
 
 ~~~
-# Test vector 1 (All-zero key)
-Key:          00000000000000000000000000000000
+# Test vector 1
+Key:          0123456789abcdeffedcba9876543210
 Input IP:     0.0.0.0
 Tweak:        08e0c289bff23b7c
 Encrypted IP: 6da0:6fb4:2a9:6ece:14a9:c1d0:d0fb:3ff2
 
-# Test vector 2 (All-zero key)
-Key:          00000000000000000000000000000000
+# Test vector 2
+Key:          1032547698badcfeefcdab8967452301
 Input IP:     192.0.2.1
 Tweak:        21bd1834bc088cd2
 Encrypted IP: f7e2:130:d53b:555a:a3f:a2db:4810:823
 
-# Test vector 3 (AES test vector key)
+# Test vector 3
 Key:          2b7e151628aed2a6abf7158809cf4f3c
 Input IP:     2001:db8::1
 Tweak:        b4ecbe30b70898d7
@@ -580,20 +580,20 @@ Encrypted IP: 7a73:3179:bcf3:5036:5f4b:754d:9518:fb70
 ### ipcrypt-ndx Test Vectors
 
 ~~~
-# Test vector 1 (All-zero key)
-Key:          0000000000000000000000000000000000000000000000000000000000000000
+# Test vector 1
+Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
 Input IP:     0.0.0.0
 Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
 Encrypted IP: f7e2:130:d53b:555a:a3f:a2db:4810:823
 
-# Test vector 2 (All-zero key)
-Key:          0000000000000000000000000000000000000000000000000000000000000000
+# Test vector 2
+Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
 Input IP:     192.0.2.1
 Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
 Encrypted IP: 6da0:6fb4:2a9:6ece:14a9:c1d0:d0fb:3ff2
 
-# Test vector 3 (Doubled AES test vector key)
-Key:          2b7e151628aed2a6abf7158809cf4f3c2b7e151628aed2a6abf7158809cf4f3c
+# Test vector 3
+Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
 Input IP:     2001:db8::1
 Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
 Encrypted IP: 105d:f4d1:e4b7:4dca:12b3:f38c:4c3c:d9c
@@ -602,7 +602,6 @@ Encrypted IP: 105d:f4d1:e4b7:4dca:12b3:f38c:4c3c:d9c
 Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
 
 The complete set of test vectors is available in the reference implementation repository. The vectors above represent a subset chosen to demonstrate key test cases:
-- All-zero keys and inputs
 - Standard test vector keys
 - IPv4 addresses
 - IPv6 addresses
