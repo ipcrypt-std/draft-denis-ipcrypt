@@ -542,17 +542,27 @@ This appendix provides test vectors for all three variants of ipcrypt. Each test
 # Test vector 1
 Key:          0123456789abcdeffedcba9876543210
 Input IP:     0.0.0.0
-Encrypted IP: 7a73:3179:bcf3:5036:5f4b:754d:9518:fb70
+Encrypted IP: bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb
 
 # Test vector 2
 Key:          1032547698badcfeefcdab8967452301
 Input IP:     255.255.255.255
-Encrypted IP: 105d:f4d1:e4b7:4dca:12b3:f38c:4c3c:d9c
+Encrypted IP: aed2:92f6:ea23:58c3:48fd:8b8:74e8:45d8
 
 # Test vector 3
 Key:          2b7e151628aed2a6abf7158809cf4f3c
 Input IP:     192.0.2.1
-Encrypted IP: 2001:db8:85a3::8a2e:370:7334
+Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
+
+# Test vector 4
+Key:          0123456789abcdeffedcba9876543210
+Input IP:     2001:db8:85a3::8a2e:370:7334
+Encrypted IP: 1eef:2352:64c8:18e6:6456:1373:f615:5032
+
+# Test vector 5
+Key:          1032547698badcfeefcdab8967452301
+Input IP:     192.0.2.1
+Encrypted IP: 7fde:a680:9546:ef2:d3c:7abb:1b38:2659
 ~~~
 
 ### ipcrypt-nd Test Vectors
@@ -562,19 +572,31 @@ Encrypted IP: 2001:db8:85a3::8a2e:370:7334
 Key:          0123456789abcdeffedcba9876543210
 Input IP:     0.0.0.0
 Tweak:        08e0c289bff23b7c
-Encrypted IP: 6da0:6fb4:2a9:6ece:14a9:c1d0:d0fb:3ff2
+Encrypted IP: d1d5:d5d3:2162:af56:dd4e:b765:4626:ed1a
 
 # Test vector 2
 Key:          1032547698badcfeefcdab8967452301
 Input IP:     192.0.2.1
 Tweak:        21bd1834bc088cd2
-Encrypted IP: f7e2:130:d53b:555a:a3f:a2db:4810:823
+Encrypted IP: 83df:e8b:f13:bbfe:a511:6613:e309:2ea5
 
 # Test vector 3
 Key:          2b7e151628aed2a6abf7158809cf4f3c
 Input IP:     2001:db8::1
 Tweak:        b4ecbe30b70898d7
-Encrypted IP: 7a73:3179:bcf3:5036:5f4b:754d:9518:fb70
+Encrypted IP: 750e:ab3d:a177:1af5:7de6:7d74:122c:6c17
+
+# Test vector 4
+Key:          0123456789abcdeffedcba9876543210
+Input IP:     2001:db8:85a3::8a2e:370:7334
+Tweak:        08e0c289bff23b7c
+Encrypted IP: 750e:ab3d:a177:1af5:7de6:7d74:122c:6c17
+
+# Test vector 5
+Key:          1032547698badcfeefcdab8967452301
+Input IP:     192.0.2.1
+Tweak:        21bd1834bc088cd2
+Encrypted IP: 83df:e8b:f13:bbfe:a511:6613:e309:2ea5
 ~~~
 
 ### ipcrypt-ndx Test Vectors
@@ -584,19 +606,31 @@ Encrypted IP: 7a73:3179:bcf3:5036:5f4b:754d:9518:fb70
 Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
 Input IP:     0.0.0.0
 Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Encrypted IP: f7e2:130:d53b:555a:a3f:a2db:4810:823
+Encrypted IP: 82db:d41:25fd:ace6:1db3:5b83:39f2:ee5
 
 # Test vector 2
 Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
 Input IP:     192.0.2.1
 Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
-Encrypted IP: 6da0:6fb4:2a9:6ece:14a9:c1d0:d0fb:3ff2
+Encrypted IP: 259e:85eb:aa00:667:d243:7ac7:e220:8d71
 
 # Test vector 3
 Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
 Input IP:     2001:db8::1
 Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Encrypted IP: 105d:f4d1:e4b7:4dca:12b3:f38c:4c3c:d9c
+Encrypted IP: fe8d:5246:4555:ef34:58e4:a6ee:fe14:eb28
+
+# Test vector 4
+Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Input IP:     2001:db8:85a3::8a2e:370:7334
+Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
+Encrypted IP: fe8d:5246:4555:ef34:58e4:a6ee:fe14:eb28
+
+# Test vector 5
+Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
+Input IP:     192.0.2.1
+Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
+Encrypted IP: c948:7dff:a929:2855:845d:234b:d1d7:2395
 ~~~
 
 Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
