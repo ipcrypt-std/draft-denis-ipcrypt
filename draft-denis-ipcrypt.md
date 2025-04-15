@@ -358,13 +358,11 @@ This document does not require any IANA actions.
 
 The author gratefully acknowledges the contributions and insightful comments from members of the IETF independent stream community and the broader cryptographic community that have helped shape this specification.
 
-# Appendices
-
-## Appendix A. Pseudocode and Examples {#pseudocode-and-examples}
+# Pseudocode and Examples {#pseudocode-and-examples}
 
 This appendix provides detailed pseudocode for key operations described in this document. For a visual representation of these operations, see {{diagrams}}.
 
-### IPv4 Address Conversion
+## IPv4 Address Conversion
 
 For a diagram of this conversion process, see {{ipv4-address-conversion-diagram}}.
 
@@ -390,7 +388,7 @@ _Example:_ For `"192.0.2.1"`, the function returns
 [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
 ~~~
 
-### IPv6 Address Conversion
+## IPv6 Address Conversion
 
 ~~~pseudocode
 function IPv6To16Bytes(ipv6_address):
@@ -407,7 +405,7 @@ function IPv6To16Bytes(ipv6_address):
 
 _Example:_ For `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"`, the output is the corresponding 16‑byte sequence.
 
-### Conversion from a 16-Byte Array to an IP Address
+## Conversion from a 16-Byte Array to an IP Address
 
 ~~~pseudocode
 function Bytes16ToIP(bytes16):
@@ -429,7 +427,7 @@ function Bytes16ToIP(bytes16):
          return ipv6_address
 ~~~
 
-### Deterministic Encryption (ipcrypt-deterministic)
+## Deterministic Encryption (ipcrypt-deterministic)
 
 ~~~pseudocode
 function ipcrypt_deterministic(ip_address, key):
@@ -439,7 +437,7 @@ function ipcrypt_deterministic(ip_address, key):
     return encrypted_ip
 ~~~
 
-### Non‑Deterministic Encryption using KIASU‑BC (ipcrypt-nd)
+## Non‑Deterministic Encryption using KIASU‑BC (ipcrypt-nd)
 
 ~~~pseudocode
 function ipcrypt_nd(ip_address, key):
@@ -451,7 +449,7 @@ function ipcrypt_nd(ip_address, key):
     return result
 ~~~
 
-### Non‑Deterministic Encryption using AES‑XTS (ipcrypt-ndx)
+## Non‑Deterministic Encryption using AES‑XTS (ipcrypt-ndx)
 
 ~~~pseudocode
 function ipcrypt_ndx(ip_address, key):
@@ -464,11 +462,11 @@ function ipcrypt_ndx(ip_address, key):
     return result
 ~~~
 
-## Appendix B. Diagrams {#diagrams}
+# Diagrams {#diagrams}
 
 This appendix provides visual representations of the key operations described in this document. For implementation details, see {{pseudocode-and-examples}}.
 
-### IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
+## IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
 
 ~~~
        IPv4: 192.0.2.1
@@ -481,7 +479,7 @@ This appendix provides visual representations of the key operations described in
 [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
 ~~~
 
-### Deterministic Encryption Flow
+## Deterministic Encryption Flow
 
 ~~~
             IP Address
@@ -502,7 +500,7 @@ This appendix provides visual representations of the key operations described in
        Encrypted IP Address
 ~~~
 
-### Non‑Deterministic Encryption Flow (ipcrypt-nd)
+## Non‑Deterministic Encryption Flow (ipcrypt-nd)
 
 ~~~
               IP Address
@@ -526,7 +524,7 @@ This appendix provides visual representations of the key operations described in
        24-Byte Output (ipcrypt-nd)
 ~~~
 
-### Non‑Deterministic Encryption Flow (ipcrypt-ndx)
+## Non‑Deterministic Encryption Flow (ipcrypt-ndx)
 
 ~~~
               IP Address
@@ -550,11 +548,11 @@ This appendix provides visual representations of the key operations described in
        32-Byte Output (ipcrypt-ndx)
 ~~~
 
-## Appendix C. Test Vectors {#test-vectors}
+# Test Vectors {#test-vectors}
 
 This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak value is also included.
 
-### ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
+## ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
 
 ~~~
 # Test vector 1
@@ -573,7 +571,7 @@ Input IP:     192.0.2.1
 Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
 ~~~
 
-### ipcrypt-nd Test Vectors {#ipcrypt-nd-test-vectors}
+## ipcrypt-nd Test Vectors {#ipcrypt-nd-test-vectors}
 
 ~~~
 # Test vector 1
@@ -595,7 +593,7 @@ Tweak:        b4ecbe30b70898d7
 Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
 ~~~
 
-### ipcrypt-ndx Test Vectors {#ipcrypt-ndx-test-vectors}
+## ipcrypt-ndx Test Vectors {#ipcrypt-ndx-test-vectors}
 
 ~~~
 # Test vector 1
@@ -621,15 +619,15 @@ Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak val
 
 Implementations SHOULD verify their correctness against these test vectors before deployment.
 
-## Appendix D. Implementing KIASU-BC {#implementing-kiasu-bc}
+# Implementing KIASU-BC {#implementing-kiasu-bc}
 
 This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak. For more information about the security properties of KIASU-BC, see {{KIASU-BC}}.
 
-### Overview
+## Overview
 
 KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the `ipcrypt-nd` instantiation.
 
-### Tweak Padding
+## Tweak Padding
 
 The 8-byte tweak is padded to 16 bytes using the following method:
 
@@ -643,7 +641,7 @@ Example:
 16-byte padded:  T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00
 ~~~
 
-### Round Structure
+## Round Structure
 
 Each round of KIASU-BC consists of the following standard AES operations:
 
@@ -654,7 +652,7 @@ Each round of KIASU-BC consists of the following standard AES operations:
 
 For details about these operations, see {{FIPS-197}}.
 
-### Key Schedule
+## Key Schedule
 
 The key schedule follows the standard AES-128 key expansion:
 
@@ -662,7 +660,7 @@ The key schedule follows the standard AES-128 key expansion:
 2. Each round key is XORed with the padded tweak before use
 3. The first round key is used in the initial AddRoundKey operation
 
-### Implementation Steps
+## Implementation Steps
 
 1. **Key Expansion:**
    - Expand the 16-byte key into 11 round keys using the standard AES key schedule
@@ -684,7 +682,7 @@ The key schedule follows the standard AES-128 key expansion:
      - ShiftRows
      - AddRoundKey (with tweaked round key)
 
-### Example Implementation
+## Example Implementation
 
 The following pseudocode illustrates the core operations of KIASU-BC:
 
