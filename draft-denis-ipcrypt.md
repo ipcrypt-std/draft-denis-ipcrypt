@@ -218,8 +218,6 @@ This instantiation employs AES128 in a single‑block operation. Since AES128 is
 
 For test vectors, see {{ipcrypt-deterministic-test-vectors}}.
 
-### Operation Flow Diagram
-
 ~~~
       +---------------------+
       |      IP Address     |
@@ -293,7 +291,7 @@ The choice of encoding is application-specific and outside the scope of this spe
 
 ## ipcrypt-nd and ipcrypt-ndx
 
-This document defines two instantiations:
+This document defines two concrete instantiations:
 
 - **`ipcrypt-nd`:** Uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak.
   See [KIASU-BC] for details.
