@@ -94,11 +94,13 @@ Table of Contents
        5.1.1.  Operation Flow Diagram
      5.2.  Format Preservation
    6.  Non-Deterministic Encryption
-     6.1.  ipcrypt-nd (KIASU-BC)
-       6.1.1.  Usage Considerations
-     6.2.  ipcrypt-ndx (AES-XTS)
-       6.2.1.  Usage Considerations
-     6.3.  Comparison of Modes
+     6.1.  Encryption Process
+     6.2.  Decryption Process
+     6.3.  ipcrypt-nd (KIASU-BC)
+       6.3.1.  Usage Considerations
+     6.4.  ipcrypt-ndx (AES-XTS)
+       6.4.1.  Usage Considerations
+     6.5.  Comparison of Modes
    7.  Security Considerations
    8.  IANA Considerations
    9.  References
@@ -280,7 +282,7 @@ IPv4 Address:    192.0.2.1
 
    *  *KIASU-BC* (see Appendix D for implementation details)
 
-   *  *AES-XTS* (see Section 6.2 for usage)
+   *  *AES-XTS* (see Section 6.4 for usage)
 
    Implementers MUST choose a cipher that meets the required security
    properties and provides robust resistance against related-tweak and
@@ -352,6 +354,35 @@ IPv4 Address:    192.0.2.1
    together with a random tweak.  For implementation details, see
    Appendix A.
 
+6.1.  Encryption Process
+
+   The encryption process for non-deterministic modes consists of the
+   following steps:
+
+   1.  Generate a random tweak using a cryptographically secure random
+       number generator
+
+   2.  Convert the IP address to its 16-byte representation
+
+   3.  Encrypt the 16-byte representation using the key and the tweak
+
+   4.  Concatenate the tweak with the encrypted output to form the final
+       ciphertext
+
+   The tweak is not considered secret and is included in the ciphertext.
+   This allows the same tweak to be used for decryption.
+
+6.2.  Decryption Process
+
+   The decryption process consists of the following steps:
+
+   1.  Split the ciphertext into the tweak and the encrypted IP
+
+   2.  Decrypt the encrypted IP using the key and the tweak
+
+   3.  Convert the resulting 16-byte representation back to an IP
+       address
+
    Although the tweak is generated uniformly at random (and thus may
    occasionally collide per birthday bounds), such collisions are benign
    when they occur with different inputs.  An (input, tweak) collision
@@ -377,14 +408,14 @@ IPv4 Address:    192.0.2.1
 
    For test vectors, see Appendix C.2 and Appendix C.3.
 
-6.1.  ipcrypt-nd (KIASU-BC)
+6.3.  ipcrypt-nd (KIASU-BC)
 
    *  *Tweak:* 8 bytes (64 bits).
 
    *  *Output:* 24 bytes total (8-byte tweak concatenated with a 16-byte
       ciphertext).
 
-6.1.1.  Usage Considerations
+6.3.1.  Usage Considerations
 
    Random sampling of an 8-byte tweak yields an expected collision for a
    specific tweak value after about 2^(64/2) = 2^32 operations.
@@ -398,7 +429,7 @@ IPv4 Address:    192.0.2.1
    Ultimately, the effective security is determined by the underlying
    block cipher’s strength (≈2^128 for AES-128).
 
-6.2.  ipcrypt-ndx (AES-XTS)
+6.4.  ipcrypt-ndx (AES-XTS)
 
    *  *Tweak:* 16 bytes (128 bits).
 
@@ -427,7 +458,7 @@ IPv4 Address:    192.0.2.1
        // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
        return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
 
-6.2.1.  Usage Considerations
+6.4.1.  Usage Considerations
 
    Independent sampling of a 16-byte tweak results in an expected
    collision after about 2^(128/2) = 2^64 operations.
@@ -439,7 +470,7 @@ IPv4 Address:    192.0.2.1
    usage.  The effective security is governed by the strength of AES-128
    (approximately 2^128 operations).
 
-6.3.  Comparison of Modes
+6.5.  Comparison of Modes
 
    *  *Deterministic (ipcrypt-deterministic):* Produces a 16-byte
       output; preserves format but reveals repeated inputs.
@@ -462,7 +493,7 @@ IPv4 Address:    192.0.2.1
 
    *  Section 5 for deterministic mode security considerations
 
-   *  Section 6.1 and Section 6.2 for non-deterministic mode security
+   *  Section 6.3 and Section 6.4 for non-deterministic mode security
       considerations
 
    *  *Deterministic Mode:* AES-128’s permutation behavior ensures
@@ -632,24 +663,60 @@ A.4.  Deterministic Encryption (ipcrypt-deterministic)
 
 A.5.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
 
-   function ipcrypt_nd(ip_address, key):
+   function ipcrypt_nd_encrypt(ip_address, key):
+       // Step 1: Generate random tweak
+       tweak = random_bytes(8)  // MUST be uniformly random
+
+       // Step 2: Convert IP to 16-byte representation
        bytes16 = convertTo16Bytes(ip_address)
-       // Generate an 8-byte random tweak (MUST be uniformly random)
-       tweak = random_bytes(8)
+
+       // Step 3: Encrypt using key and tweak
        ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
+
+       // Step 4: Concatenate tweak and ciphertext
        result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
        return result
 
+   function ipcrypt_nd_decrypt(ciphertext, key):
+       // Step 1: Split ciphertext into tweak and encrypted IP
+       tweak = ciphertext[0:8]  // First 8 bytes
+       encrypted_ip = ciphertext[8:24]  // Remaining 16 bytes
+
+       // Step 2: Decrypt using key and tweak
+       bytes16 = KIASU_BC_decrypt(key, tweak, encrypted_ip)
+
+       // Step 3: Convert back to IP address
+       ip_address = Bytes16ToIP(bytes16)
+       return ip_address
+
 A.6.  Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
 
-   function ipcrypt_ndx(ip_address, key):
+   function ipcrypt_ndx_encrypt(ip_address, key):
+       // Step 1: Generate random tweak
+       tweak = random_bytes(16)  // MUST be uniformly random
+
+       // Step 2: Convert IP to 16-byte representation
        bytes16 = convertTo16Bytes(ip_address)
-       // Generate a 16-byte random tweak (MUST be uniformly random)
-       tweak = random_bytes(16)
+
+       // Step 3: Encrypt using key and tweak
        // Since only a single block is encrypted, only the first tweak needs to be computed
        ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
+
+       // Step 4: Concatenate tweak and ciphertext
        result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
        return result
+
+   function ipcrypt_ndx_decrypt(ciphertext, key):
+       // Step 1: Split ciphertext into tweak and encrypted IP
+       tweak = ciphertext[0:16]  // First 16 bytes
+       encrypted_ip = ciphertext[16:32]  // Remaining 16 bytes
+
+       // Step 2: Decrypt using key and tweak
+       bytes16 = AES_XTS_decrypt(key, tweak, encrypted_ip)
+
+       // Step 3: Convert back to IP address
+       ip_address = Bytes16ToIP(bytes16)
+       return ip_address
 
 Appendix B.  Diagrams
 
