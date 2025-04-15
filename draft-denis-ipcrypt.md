@@ -34,6 +34,31 @@ normative:
     seriesinfo:
       NIST: SP 800-38G
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
+  DEOXYS-BC:
+    title: "Deoxys-BC: A Highly Secure Tweakable Block Cipher"
+    author:
+      - ins: J. Jean
+      - ins: I. Nikolić
+      - ins: T. Peyrin
+    date: 2014
+    seriesinfo:
+      Cryptology ePrint Archive: Paper 2014/427
+    target: https://eprint.iacr.org/2014/427
+    eprint: 2014/427
+  SKINNY:
+    title: "The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"
+    author:
+      - ins: C. Beierle
+      - ins: A. Biryukov
+      - ins: L. Perrin
+      - ins: A. Udovenko
+      - ins: V. Velichkov
+      - ins: Q. Wang
+    date: 2016
+    seriesinfo:
+      CRYPTO: 2016
+    target: https://eprint.iacr.org/2016/660
+    eprint: 2016/660
 
 informative:
   LRW2002:
@@ -200,8 +225,8 @@ This specification defines two generic cryptographic constructions:
 
 Valid options for implementing a tweakable block cipher include, but are not limited to:
 
-- **SKINNY**
-- **DEOXYS-BC**
+- **SKINNY** (see {{SKINNY}})
+- **DEOXYS-BC** (see {{DEOXYS-BC}})
 - **KIASU-BC** (see {{implementing-kiasu-bc}} for implementation details)
 - **AES-XTS** (see {{ipcrypt-ndx}} for usage)
 
