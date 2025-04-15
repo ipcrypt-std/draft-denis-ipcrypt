@@ -112,18 +112,22 @@ Deterministic mode produces a 16‑byte ciphertext (enabling format preservation
 
 # Introduction
 
-This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information, addressing concerns raised in {{!RFC7624}} regarding confidentiality in the face of pervasive surveillance.
+This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information.
 
-For a detailed discussion of the security properties of these methods, see {{security-considerations}}.
+This work addresses concerns raised in {{!RFC7624}} regarding confidentiality in the face of pervasive surveillance. For a detailed discussion of the security properties of these methods, see {{security-considerations}}.
 
 ## Use Cases and Motivations
 
 The main motivations include:
 
 - **Privacy Protection:** Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured, as discussed in {{!RFC6973}}.
+
 - **Format Preservation:** Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification. See {{format-preservation}} for details.
+
 - **Mitigation of Correlation Attacks:** Deterministic encryption reveals repeated inputs; non‑deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential. See {{non-deterministic-encryption}} for implementation details.
+
 - **Privacy-Preserving Analytics:** Many common operations like counting unique clients or implementing rate limiting can be performed using encrypted IP addresses without ever accessing the original values. This enables privacy-preserving analytics while maintaining functionality.
+
 - **Third-Party Service Integration:** IP addresses are private information that should not be sent in cleartext to potentially untrusted third-party services or cloud providers. Using encrypted IP addresses as keys or identifiers allows integration with external services while protecting user privacy.
 
 For implementation examples, see {{pseudocode-and-examples}}.
@@ -303,23 +307,19 @@ For test vectors, see {{ipcrypt-nd-test-vectors}} and {{ipcrypt-ndx-test-vectors
 
 ### ipcrypt-nd (KIASU‑BC) {#ipcrypt-nd}
 
-- **Tweak:** 8 bytes (64 bits).
-- **Output:** 24 bytes total (8‑byte tweak concatenated with a 16‑byte ciphertext).
+The `ipcrypt-nd` instantiation uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak. The output is 24 bytes total, consisting of an 8‑byte tweak concatenated with a 16‑byte ciphertext.
 
-#### Usage Considerations
+Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations. If an `(input, tweak)` collision occurs, it indicates that the same input was processed with that tweak without revealing the input's value.
 
-Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations.
-
-If an `(input, tweak)` collision occurs, it indicates that the same input was processed with that tweak without revealing the input's value. These collision bounds apply per cryptographic key; by rotating keys regularly, secure usage can be extended well beyond these bounds.
-
-Ultimately, the effective security is determined by the underlying block cipher's strength (≈2^128 for AES‑128).
+These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher's strength (≈2^128 for AES‑128).
 
 ### ipcrypt-ndx (AES‑XTS) {#ipcrypt-ndx}
 
-- **Tweak:** 16 bytes (128 bits).
-- **Output:** 32 bytes total (16‑byte tweak concatenated with a 16‑byte ciphertext).
-- **Optimization:** Since only a single block is encrypted, only the first tweak needs to be
-  computed, avoiding the need for a full key schedule.
+The `ipcrypt-ndx` instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32 bytes total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.
+
+Since only a single block is encrypted, only the first tweak needs to be computed, avoiding the need for a full key schedule. Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.
+
+As with ipcrypt-nd, an `(input, tweak)` collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).
 
 > **Technical Note:**
 > For a single block of AES-XTS, the key is split into two halves (K1, K2). The tweak is
@@ -340,14 +340,6 @@ function AES_XTS_encrypt(key, tweak, block):
     return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
 ~~~
 
-#### Usage Considerations
-
-Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.
-
-As with ipcrypt-nd, an `(input, tweak)` collision reveals repetition without compromising the input value.
-
-These limits are per key; regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).
-
 ### Comparison of Modes
 
 - **Deterministic (`ipcrypt-deterministic`):**
@@ -365,7 +357,9 @@ For a detailed discussion of the security properties of each mode, see:
 
 ### Deterministic Mode Security
 
-A permutation ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition. This property makes deterministic encryption suitable for applications where format preservation is required, but linkability of repeated inputs is acceptable.
+A permutation ensures distinct inputs yield distinct outputs. However, repeated inputs result in identical ciphertexts, thereby revealing repetition.
+
+This property makes deterministic encryption suitable for applications where format preservation is required, but linkability of repeated inputs is acceptable.
 
 ### Non-Deterministic Mode Security
 
