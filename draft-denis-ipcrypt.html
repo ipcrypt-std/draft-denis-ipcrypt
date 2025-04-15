@@ -1355,8 +1355,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information, addressing concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality in the face of pervasive surveillance.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">For a detailed discussion of the security properties of these methods, see <a href="#security-considerations" class="auto internal xref">Section 6.5</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-1">This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This work addresses concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality in the face of pervasive surveillance. For a detailed discussion of the security properties of these methods, see <a href="#security-considerations" class="auto internal xref">Section 6.5</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="use-cases-and-motivations">
 <section id="section-1.1">
         <h3 id="name-use-cases-and-motivations">
@@ -1703,24 +1703,9 @@ needs to be computed, avoiding the need for a full key schedule.<a href="#sectio
           <h4 id="name-ipcrypt-nd-kiasubc">
 <a href="#section-6.4.1" class="section-number selfRef">6.4.1. </a><a href="#name-ipcrypt-nd-kiasubc" class="section-name selfRef">ipcrypt-nd (KIASU‑BC)</a>
           </h4>
-<ul class="normal">
-<li class="normal" id="section-6.4.1-1.1">
-              <p id="section-6.4.1-1.1.1"><strong>Tweak:</strong> 8 bytes (64 bits).<a href="#section-6.4.1-1.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.4.1-1.2">
-              <p id="section-6.4.1-1.2.1"><strong>Output:</strong> 24 bytes total (8‑byte tweak concatenated with a 16‑byte ciphertext).<a href="#section-6.4.1-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<div id="usage-considerations">
-<section id="section-6.4.1.1">
-            <h5 id="name-usage-considerations">
-<a href="#section-6.4.1.1" class="section-number selfRef">6.4.1.1. </a><a href="#name-usage-considerations" class="section-name selfRef">Usage Considerations</a>
-            </h5>
-<p id="section-6.4.1.1-1">Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations.<a href="#section-6.4.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.4.1.1-2">If an <code>(input, tweak)</code> collision occurs, it indicates that the same input was processed with that tweak without revealing the input’s value. These collision bounds apply per cryptographic key; by rotating keys regularly, secure usage can be extended well beyond these bounds.<a href="#section-6.4.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.4.1.1-3">Ultimately, the effective security is determined by the underlying block cipher’s strength (≈2^128 for AES‑128).<a href="#section-6.4.1.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-6.4.1-1">The <code>ipcrypt-nd</code> instantiation uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak. The output is 24 bytes total, consisting of an 8‑byte tweak concatenated with a 16‑byte ciphertext.<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.4.1-2">Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations. If an <code>(input, tweak)</code> collision occurs, it indicates that the same input was processed with that tweak without revealing the input’s value.<a href="#section-6.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.4.1-3">These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher’s strength (≈2^128 for AES‑128).<a href="#section-6.4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ipcrypt-ndx">
@@ -1728,29 +1713,20 @@ needs to be computed, avoiding the need for a full key schedule.<a href="#sectio
           <h4 id="name-ipcrypt-ndx-aesxts">
 <a href="#section-6.4.2" class="section-number selfRef">6.4.2. </a><a href="#name-ipcrypt-ndx-aesxts" class="section-name selfRef">ipcrypt-ndx (AES‑XTS)</a>
           </h4>
-<ul class="normal">
-<li class="normal" id="section-6.4.2-1.1">
-              <p id="section-6.4.2-1.1.1"><strong>Tweak:</strong> 16 bytes (128 bits).<a href="#section-6.4.2-1.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.4.2-1.2">
-              <p id="section-6.4.2-1.2.1"><strong>Output:</strong> 32 bytes total (16‑byte tweak concatenated with a 16‑byte ciphertext).<a href="#section-6.4.2-1.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.4.2-1.3">
-              <p id="section-6.4.2-1.3.1"><strong>Optimization:</strong> Since only a single block is encrypted, only the first tweak needs to be
-computed, avoiding the need for a full key schedule.<a href="#section-6.4.2-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
+<p id="section-6.4.2-1">The <code>ipcrypt-ndx</code> instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32 bytes total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.<a href="#section-6.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.4.2-2">Since only a single block is encrypted, only the first tweak needs to be computed, avoiding the need for a full key schedule. Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.<a href="#section-6.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.4.2-3">As with ipcrypt-nd, an <code>(input, tweak)</code> collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.4.2-2.1">
-              <p id="section-6.4.2-2.1.1"><strong>Technical Note:</strong>
+<li class="normal ulEmpty" id="section-6.4.2-4.1">
+              <p id="section-6.4.2-4.1.1"><strong>Technical Note:</strong>
 For a single block of AES-XTS, the key is split into two halves (K1, K2). The tweak is
 first encrypted using AES128 with K2 to produce an encrypted tweak (ET). The IP address
 is then encrypted as: AES128(IP ⊕ ET, K1) ⊕ ET (where ⊕ denotes the bitwise XOR operation).
 This construction provides the security properties of XTS while only requiring two AES
-operations per block.<a href="#section-6.4.2-2.1.1" class="pilcrow">¶</a></p>
+operations per block.<a href="#section-6.4.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<div class="lang-pseudocode sourcecode" id="section-6.4.2-3">
+<div class="lang-pseudocode sourcecode" id="section-6.4.2-5">
 <pre>
 function AES_XTS_encrypt(key, tweak, block):
     // Split the key into two halves
@@ -1761,17 +1737,7 @@ function AES_XTS_encrypt(key, tweak, block):
 
     // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
     return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
-</pre><a href="#section-6.4.2-3" class="pilcrow">¶</a>
-</div>
-<div id="usage-considerations-1">
-<section id="section-6.4.2.1">
-            <h5 id="name-usage-considerations-2">
-<a href="#section-6.4.2.1" class="section-number selfRef">6.4.2.1. </a><a href="#name-usage-considerations-2" class="section-name selfRef">Usage Considerations</a>
-            </h5>
-<p id="section-6.4.2.1-1">Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.<a href="#section-6.4.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.4.2.1-2">As with ipcrypt-nd, an <code>(input, tweak)</code> collision reveals repetition without compromising the input value.<a href="#section-6.4.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.4.2.1-3">These limits are per key; regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.4.2.1-3" class="pilcrow">¶</a></p>
-</section>
+</pre><a href="#section-6.4.2-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1820,7 +1786,8 @@ Produces a 16‑byte output; preserves format but reveals repeated inputs.<a hre
           <h4 id="name-deterministic-mode-security">
 <a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-deterministic-mode-security" class="section-name selfRef">Deterministic Mode Security</a>
           </h4>
-<p id="section-6.5.1-1">A permutation ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition. This property makes deterministic encryption suitable for applications where format preservation is required, but linkability of repeated inputs is acceptable.<a href="#section-6.5.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.5.1-1">A permutation ensures distinct inputs yield distinct outputs. However, repeated inputs result in identical ciphertexts, thereby revealing repetition.<a href="#section-6.5.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.5.1-2">This property makes deterministic encryption suitable for applications where format preservation is required, but linkability of repeated inputs is acceptable.<a href="#section-6.5.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="non-deterministic-mode-security">
