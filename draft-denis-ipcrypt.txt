@@ -4,7 +4,7 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                                April 2025
+Intended status: Informational                             15 April 2025
 Expires: 17 October 2025
 
 
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 October 2025.
+   This Internet-Draft will expire on 17 October 2025.
 
 Copyright Notice
 
