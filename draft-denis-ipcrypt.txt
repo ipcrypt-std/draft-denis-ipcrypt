@@ -96,7 +96,7 @@ Table of Contents
      6.1.  Encryption Process
      6.2.  Decryption Process
      6.3.  Output Format and Encoding
-     6.4.  ipcrypt-nd and ipcrypt-ndx
+     6.4.  Concrete Instantiations
        6.4.1.  ipcrypt-nd (KIASU-BC)
        6.4.2.  ipcrypt-ndx (AES-XTS)
        6.4.3.  Comparison of Modes
@@ -402,7 +402,7 @@ IPv4 Address:    192.0.2.1
    of this specification.  However, implementations SHOULD document
    their chosen encoding method clearly.
 
-6.4.  ipcrypt-nd and ipcrypt-ndx
+6.4.  Concrete Instantiations
 
    This document defines two concrete instantiations:
 
