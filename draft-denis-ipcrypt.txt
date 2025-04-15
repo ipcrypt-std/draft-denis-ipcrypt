@@ -124,6 +124,13 @@ Table of Contents
        B.3.1.  ipcrypt-deterministic Test Vectors
        B.3.2.  ipcrypt-nd Test Vectors
        B.3.3.  ipcrypt-ndx Test Vectors
+     B.4.  Appendix D.  Implementing KIASU-BC
+       B.4.1.  Overview
+       B.4.2.  Tweak Padding
+       B.4.3.  Round Structure
+       B.4.4.  Key Schedule
+       B.4.5.  Implementation Steps
+       B.4.6.  Example Implementation
    Author's Address
 
 1.  Introduction
@@ -780,6 +787,132 @@ Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 
    Implementations SHOULD verify their correctness against these test
    vectors before deployment.
+
+B.4.  Appendix D.  Implementing KIASU-BC
+
+   This appendix provides a detailed guide for implementing the KIASU-BC
+   tweakable block cipher.  KIASU-BC is based on AES-128 with
+   modifications to incorporate a tweak.
+
+B.4.1.  Overview
+
+   KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each
+   round.  The tweak is padded to 16 bytes and XORed with the round key
+   at each round of the cipher.
+
+B.4.2.  Tweak Padding
+
+   The 8-byte tweak is padded to 16 bytes using the following method:
+
+   1.  Split the 8-byte tweak into four 2-byte pairs
+
+   2.  Place each 2-byte pair at the start of each 4-byte group
+
+   3.  Fill the remaining 2 bytes of each group with zeros
+
+   Example: ~~~ 8-byte tweak: [T0 T1 T2 T3 T4 T5 T6 T7] 16-byte padded:
+   [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00] ~~~
+
+B.4.3.  Round Structure
+
+   Each round of KIASU-BC consists of the following standard AES
+   operations:
+
+   1.  *SubBytes:* Apply the AES S-box to each byte of the state
+
+   2.  *ShiftRows:* Rotate each row of the state matrix
+
+   3.  *MixColumns:* Mix the columns of the state matrix (except in the
+       final round)
+
+   4.  *AddRoundKey:* XOR the state with the round key and padded tweak
+
+B.4.4.  Key Schedule
+
+   The key schedule follows the standard AES-128 key expansion:
+
+   1.  The initial key is expanded into 11 round keys
+
+   2.  Each round key is XORed with the padded tweak before use
+
+   3.  The first round key is used in the initial AddRoundKey operation
+
+B.4.5.  Implementation Steps
+
+   1.  *Key Expansion:*
+
+       *  Expand the 16-byte key into 11 round keys using the standard
+          AES key schedule
+
+       *  Each round key is 16 bytes
+
+   2.  *Tweak Processing:*
+
+       *  Pad the 8-byte tweak to 16 bytes as described above
+
+       *  XOR the padded tweak with each round key before use
+
+   3.  *Encryption Process:*
+
+       *  Perform initial AddRoundKey with the first round key
+
+       *  For rounds 1-9:
+
+          -  SubBytes
+
+          -  ShiftRows
+
+          -  MixColumns
+
+          -  AddRoundKey (with tweaked round key)
+
+       *  For round 10 (final round):
+
+          -  SubBytes
+
+          -  ShiftRows
+
+          -  AddRoundKey (with tweaked round key)
+
+B.4.6.  Example Implementation
+
+   The following pseudocode illustrates the core operations of KIASU-BC:
+
+   function pad_tweak(tweak):
+       // Input: 8-byte tweak
+       // Output: 16-byte padded tweak
+       padded = [0] * 16
+       for i in range(0, 8, 2):
+           padded[i*2] = tweak[i]
+           padded[i*2+1] = tweak[i+1]
+       return padded
+
+   function kiasu_bc_encrypt(key, tweak, plaintext):
+       // Input: 16-byte key, 8-byte tweak, 16-byte plaintext
+       // Output: 16-byte ciphertext
+
+       // Expand key and pad tweak
+       round_keys = expand_key(key)
+       padded_tweak = pad_tweak(tweak)
+
+       // Initial round
+       state = plaintext
+       state = add_round_key(state, round_keys[0] ^ padded_tweak)
+
+       // Main rounds
+       for round in range(1, 10):
+           state = sub_bytes(state)
+           state = shift_rows(state)
+           if round < 9:
+               state = mix_columns(state)
+           state = add_round_key(state, round_keys[round] ^ padded_tweak)
+
+       // Final round
+       state = sub_bytes(state)
+       state = shift_rows(state)
+       state = add_round_key(state, round_keys[10] ^ padded_tweak)
+
+       return state
 
 Author's Address
 
