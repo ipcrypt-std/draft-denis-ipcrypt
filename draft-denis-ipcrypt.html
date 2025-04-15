@@ -1705,7 +1705,7 @@ needs to be computed, avoiding the need for a full key schedule.<a href="#sectio
           </h4>
 <p id="section-6.4.1-1">The <code>ipcrypt-nd</code> instantiation uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak. The output is 24 bytes total, consisting of an 8‑byte tweak concatenated with a 16‑byte ciphertext.<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.4.1-2">Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations. If an <code>(input, tweak)</code> collision occurs, it indicates that the same input was processed with that tweak without revealing the input’s value.<a href="#section-6.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.4.1-3">These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher’s strength (≈2^128 for AES‑128).<a href="#section-6.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.4.1-3">These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher’s strength.<a href="#section-6.4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ipcrypt-ndx">

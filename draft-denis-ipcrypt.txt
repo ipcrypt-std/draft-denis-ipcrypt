@@ -437,7 +437,7 @@ IPv4 Address:    192.0.2.1
    These collision bounds apply per cryptographic key.  By rotating keys
    regularly, secure usage can be extended well beyond these bounds.
    Ultimately, the effective security is determined by the underlying
-   block cipher’s strength (≈2^128 for AES-128).
+   block cipher’s strength.
 
 6.4.2.  ipcrypt-ndx (AES-XTS)
 
