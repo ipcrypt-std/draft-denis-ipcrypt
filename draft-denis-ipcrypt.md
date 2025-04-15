@@ -260,6 +260,25 @@ For test vectors, see {{ipcrypt-deterministic-test-vectors}}.
 
 Non‑deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see {{pseudocode-and-examples}}.
 
+## Encryption Process
+
+The encryption process for non-deterministic modes consists of the following steps:
+
+1. Generate a random tweak using a cryptographically secure random number generator
+2. Convert the IP address to its 16-byte representation
+3. Encrypt the 16-byte representation using the key and the tweak
+4. Concatenate the tweak with the encrypted output to form the final ciphertext
+
+The tweak is not considered secret and is included in the ciphertext. This allows the same tweak to be used for decryption.
+
+## Decryption Process
+
+The decryption process consists of the following steps:
+
+1. Split the ciphertext into the tweak and the encrypted IP
+2. Decrypt the encrypted IP using the key and the tweak
+3. Convert the resulting 16-byte representation back to an IP address
+
 Although the tweak is generated uniformly at random (and thus may occasionally collide per birthday bounds), such collisions are benign when they occur with different inputs. An `(input, tweak)` collision reveals that the same input was encrypted with the same tweak but does not disclose the input's value.
 
 The usage limits discussed below apply per cryptographic key; rotating keys can extend secure usage beyond these bounds.
@@ -436,26 +455,62 @@ function ipcrypt_deterministic(ip_address, key):
 ## Non‑Deterministic Encryption using KIASU‑BC (ipcrypt-nd)
 
 ~~~pseudocode
-function ipcrypt_nd(ip_address, key):
+function ipcrypt_nd_encrypt(ip_address, key):
+    // Step 1: Generate random tweak
+    tweak = random_bytes(8)  // MUST be uniformly random
+
+    // Step 2: Convert IP to 16-byte representation
     bytes16 = convertTo16Bytes(ip_address)
-    // Generate an 8-byte random tweak (MUST be uniformly random)
-    tweak = random_bytes(8)
+
+    // Step 3: Encrypt using key and tweak
     ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
+
+    // Step 4: Concatenate tweak and ciphertext
     result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
     return result
+
+function ipcrypt_nd_decrypt(ciphertext, key):
+    // Step 1: Split ciphertext into tweak and encrypted IP
+    tweak = ciphertext[0:8]  // First 8 bytes
+    encrypted_ip = ciphertext[8:24]  // Remaining 16 bytes
+
+    // Step 2: Decrypt using key and tweak
+    bytes16 = KIASU_BC_decrypt(key, tweak, encrypted_ip)
+
+    // Step 3: Convert back to IP address
+    ip_address = Bytes16ToIP(bytes16)
+    return ip_address
 ~~~
 
 ## Non‑Deterministic Encryption using AES‑XTS (ipcrypt-ndx)
 
 ~~~pseudocode
-function ipcrypt_ndx(ip_address, key):
+function ipcrypt_ndx_encrypt(ip_address, key):
+    // Step 1: Generate random tweak
+    tweak = random_bytes(16)  // MUST be uniformly random
+
+    // Step 2: Convert IP to 16-byte representation
     bytes16 = convertTo16Bytes(ip_address)
-    // Generate a 16-byte random tweak (MUST be uniformly random)
-    tweak = random_bytes(16)
+
+    // Step 3: Encrypt using key and tweak
     // Since only a single block is encrypted, only the first tweak needs to be computed
     ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
+
+    // Step 4: Concatenate tweak and ciphertext
     result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
     return result
+
+function ipcrypt_ndx_decrypt(ciphertext, key):
+    // Step 1: Split ciphertext into tweak and encrypted IP
+    tweak = ciphertext[0:16]  // First 16 bytes
+    encrypted_ip = ciphertext[16:32]  // Remaining 16 bytes
+
+    // Step 2: Decrypt using key and tweak
+    bytes16 = AES_XTS_decrypt(key, tweak, encrypted_ip)
+
+    // Step 3: Convert back to IP address
+    ip_address = Bytes16ToIP(bytes16)
+    return ip_address
 ~~~
 
 # Diagrams {#diagrams}
