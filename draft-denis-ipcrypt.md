@@ -610,7 +610,7 @@ This appendix provides a detailed guide for implementing the KIASU-BC tweakable 
 
 ### Overview
 
-KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the `ipcrypt-nd` instantiation described in {{ipcrypt-nd}}.
+KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the `ipcrypt-nd` instantiation.
 
 ### Tweak Padding
 
@@ -622,8 +622,8 @@ The 8-byte tweak is padded to 16 bytes using the following method:
 
 Example:
 ~~~
-8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
-16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
+8-byte tweak:    T0 T1 T2 T3 T4 T5 T6 T7
+16-byte padded:  T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00
 ~~~
 
 ### Round Structure
@@ -666,8 +666,6 @@ The key schedule follows the standard AES-128 key expansion:
      - SubBytes
      - ShiftRows
      - AddRoundKey (with tweaked round key)
-
-For test vectors to verify the implementation, see {{test-vectors}}.
 
 ### Example Implementation
 
