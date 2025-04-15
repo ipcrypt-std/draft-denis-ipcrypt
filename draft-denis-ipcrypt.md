@@ -283,9 +283,7 @@ The usage limits discussed below apply per cryptographic key; rotating keys can 
 
 ## Output Format and Encoding
 
-The output of non-deterministic encryption is binary data.
-
-For applications that require text representation (e.g., logging, JSON encoding, or text-based protocols), the binary output MUST be encoded. Common encoding options include hexadecimal and Base64.
+The output of non-deterministic encryption is binary data. For applications that require text representation (e.g., logging, JSON encoding, or text-based protocols), the binary output MUST be encoded. Common encoding options include hexadecimal and Base64.
 
 The choice of encoding is application-specific and outside the scope of this specification. However, implementations SHOULD document their chosen encoding method clearly.
 
@@ -365,15 +363,23 @@ For a detailed discussion of the security properties of each mode, see:
 - {{deterministic-encryption}} for deterministic mode security considerations
 - {{ipcrypt-nd}} and {{ipcrypt-ndx}} for non-deterministic mode security considerations
 
-- **Deterministic Mode:**
-  A permutation ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition.
+### Deterministic Mode Security
 
-- **Non‑Deterministic Mode:**
-  The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs.
+A permutation ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition. This property makes deterministic encryption suitable for applications where format preservation is required, but linkability of repeated inputs is acceptable.
 
-  In cases where an `(input, tweak)` collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself. Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis.
+### Non-Deterministic Mode Security
 
-  Key rotation is recommended to extend secure usage beyond the per-key collision bounds.
+The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs. In cases where an `(input, tweak)` collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself.
+
+Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.
+
+### Implementation Security
+
+Implementations MUST ensure that:
+1. Keys are generated using a cryptographically secure random number generator
+2. Tweak values are uniformly random for non-deterministic modes
+3. Side-channel attacks are mitigated through constant-time operations
+4. Error handling does not leak sensitive information
 
 # IANA Considerations
 
