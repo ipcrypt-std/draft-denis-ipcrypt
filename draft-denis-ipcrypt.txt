@@ -96,11 +96,13 @@ Table of Contents
    6.  Non-Deterministic Encryption
      6.1.  Encryption Process
      6.2.  Decryption Process
-     6.3.  ipcrypt-nd (KIASU-BC)
-       6.3.1.  Usage Considerations
-     6.4.  ipcrypt-ndx (AES-XTS)
-       6.4.1.  Usage Considerations
-     6.5.  Comparison of Modes
+     6.3.  Output Format and Encoding
+     6.4.  ipcrypt-nd and ipcrypt-ndx
+     6.5.  ipcrypt-nd (KIASU-BC)
+       6.5.1.  Usage Considerations
+     6.6.  ipcrypt-ndx (AES-XTS)
+       6.6.1.  Usage Considerations
+     6.7.  Comparison of Modes
    7.  Security Considerations
    8.  IANA Considerations
    9.  References
@@ -282,7 +284,7 @@ IPv4 Address:    192.0.2.1
 
    *  *KIASU-BC* (see Appendix D for implementation details)
 
-   *  *AES-XTS* (see Section 6.4 for usage)
+   *  *AES-XTS* (see Section 6.6 for usage)
 
    Implementers MUST choose a cipher that meets the required security
    properties and provides robust resistance against related-tweak and
@@ -392,6 +394,20 @@ IPv4 Address:    192.0.2.1
    The usage limits discussed below apply per cryptographic key;
    rotating keys can extend secure usage beyond these bounds.
 
+6.3.  Output Format and Encoding
+
+   The output of non-deterministic encryption is binary data.
+
+   For applications that require text representation (e.g., logging,
+   JSON encoding, or text-based protocols), the binary output MUST be
+   encoded.  Common encoding options include hexadecimal and Base64.
+
+   The choice of encoding is application-specific and outside the scope
+   of this specification.  However, implementations SHOULD document
+   their chosen encoding method clearly.
+
+6.4.  ipcrypt-nd and ipcrypt-ndx
+
    This document defines two instantiations:
 
    *  *ipcrypt-nd:* Uses the KIASU-BC tweakable block cipher with an
@@ -408,14 +424,14 @@ IPv4 Address:    192.0.2.1
 
    For test vectors, see Appendix C.2 and Appendix C.3.
 
-6.3.  ipcrypt-nd (KIASU-BC)
+6.5.  ipcrypt-nd (KIASU-BC)
 
    *  *Tweak:* 8 bytes (64 bits).
 
    *  *Output:* 24 bytes total (8-byte tweak concatenated with a 16-byte
       ciphertext).
 
-6.3.1.  Usage Considerations
+6.5.1.  Usage Considerations
 
    Random sampling of an 8-byte tweak yields an expected collision for a
    specific tweak value after about 2^(64/2) = 2^32 operations.
@@ -429,7 +445,7 @@ IPv4 Address:    192.0.2.1
    Ultimately, the effective security is determined by the underlying
    block cipher’s strength (≈2^128 for AES-128).
 
-6.4.  ipcrypt-ndx (AES-XTS)
+6.6.  ipcrypt-ndx (AES-XTS)
 
    *  *Tweak:* 16 bytes (128 bits).
 
@@ -458,7 +474,7 @@ IPv4 Address:    192.0.2.1
        // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
        return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
 
-6.4.1.  Usage Considerations
+6.6.1.  Usage Considerations
 
    Independent sampling of a 16-byte tweak results in an expected
    collision after about 2^(128/2) = 2^64 operations.
@@ -470,7 +486,7 @@ IPv4 Address:    192.0.2.1
    usage.  The effective security is governed by the strength of AES-128
    (approximately 2^128 operations).
 
-6.5.  Comparison of Modes
+6.7.  Comparison of Modes
 
    *  *Deterministic (ipcrypt-deterministic):* Produces a 16-byte
       output; preserves format but reveals repeated inputs.
@@ -493,7 +509,7 @@ IPv4 Address:    192.0.2.1
 
    *  Section 5 for deterministic mode security considerations
 
-   *  Section 6.3 and Section 6.4 for non-deterministic mode security
+   *  Section 6.5 and Section 6.6 for non-deterministic mode security
       considerations
 
    *  *Deterministic Mode:* AES-128’s permutation behavior ensures
