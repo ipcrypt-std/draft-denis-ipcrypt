@@ -354,10 +354,6 @@ This document does not require any IANA actions.
 
 --- back
 
-# Acknowledgments
-
-The author gratefully acknowledges the contributions and insightful comments from members of the IETF independent stream community and the broader cryptographic community that have helped shape this specification.
-
 # Pseudocode and Examples {#pseudocode-and-examples}
 
 This appendix provides detailed pseudocode for key operations described in this document. For a visual representation of these operations, see {{diagrams}}.
@@ -723,3 +719,7 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 
     return state
 ~~~
+
+# Acknowledgments
+
+The author gratefully acknowledges the contributions and insightful comments from members of the IETF independent stream community and the broader cryptographic community that have helped shape this specification.
