@@ -1837,11 +1837,21 @@ Produces a 16‑byte output; preserves format but reveals repeated inputs.<a hre
           <h4 id="name-implementation-security">
 <a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-implementation-security" class="section-name selfRef">Implementation Security</a>
           </h4>
-<p id="section-6.5.3-1">Implementations MUST ensure that:
-1. Keys are generated using a cryptographically secure random number generator
-2. Tweak values are uniformly random for non-deterministic modes
-3. Side-channel attacks are mitigated through constant-time operations
-4. Error handling does not leak sensitive information<a href="#section-6.5.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.5.3-1">Implementations MUST ensure that:<a href="#section-6.5.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.5.3-2">
+<li id="section-6.5.3-2.1">
+              <p id="section-6.5.3-2.1.1">Keys are generated using a cryptographically secure random number generator<a href="#section-6.5.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-6.5.3-2.2">
+              <p id="section-6.5.3-2.2.1">Tweak values are uniformly random for non-deterministic modes<a href="#section-6.5.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-6.5.3-2.3">
+              <p id="section-6.5.3-2.3.1">Side-channel attacks are mitigated through constant-time operations<a href="#section-6.5.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-6.5.3-2.4">
+              <p id="section-6.5.3-2.4.1">Error handling does not leak sensitive information<a href="#section-6.5.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
 </section>
 </div>
 </section>

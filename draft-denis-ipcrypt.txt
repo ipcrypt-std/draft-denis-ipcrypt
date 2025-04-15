@@ -532,11 +532,17 @@ IPv4 Address:    192.0.2.1
 
 6.5.3.  Implementation Security
 
-   Implementations MUST ensure that: 1.  Keys are generated using a
-   cryptographically secure random number generator 2.  Tweak values are
-   uniformly random for non-deterministic modes 3.  Side-channel attacks
-   are mitigated through constant-time operations 4.  Error handling
-   does not leak sensitive information
+   Implementations MUST ensure that:
+
+   1.  Keys are generated using a cryptographically secure random number
+       generator
+
+   2.  Tweak values are uniformly random for non-deterministic modes
+
+   3.  Side-channel attacks are mitigated through constant-time
+       operations
+
+   4.  Error handling does not leak sensitive information
 
 7.  IANA Considerations
 
