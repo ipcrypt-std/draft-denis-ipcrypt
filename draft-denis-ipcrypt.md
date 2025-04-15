@@ -686,7 +686,7 @@ The key schedule follows the standard AES-128 key expansion:
    - XOR the padded tweak with each round key before use
 
 3. **Encryption Process:**
-   - Perform initial AddRoundKey with the first round key
+   - Perform initial AddRoundKey with the first tweaked round key
    - For rounds 1-9:
      - SubBytes
      - ShiftRows
