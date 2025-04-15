@@ -2216,13 +2216,13 @@ Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
         <h3 id="name-appendix-d-implementing-kia">
 <a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-appendix-d-implementing-kia" class="section-name selfRef">Appendix D. Implementing KIASU-BC</a>
         </h3>
-<p id="appendix-B.4-1">This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak.<a href="#appendix-B.4-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.4-1">This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak. For more information about the security properties of KIASU-BC, see <span>[<a href="#KIASU-BC" class="cite xref">KIASU-BC</a>]</span>.<a href="#appendix-B.4-1" class="pilcrow">¶</a></p>
 <div id="overview">
 <section id="appendix-B.4.1">
           <h4 id="name-overview">
 <a href="#appendix-B.4.1" class="section-number selfRef">B.4.1. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
           </h4>
-<p id="appendix-B.4.1-1">KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher.<a href="#appendix-B.4.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.4.1-1">KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the <code>ipcrypt-nd</code> instantiation.<a href="#appendix-B.4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="tweak-padding">
@@ -2244,8 +2244,8 @@ Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
           </ol>
 <p id="appendix-B.4.2-3">Example:
 ~~~
-8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
-16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
+8-byte tweak:    T0 T1 T2 T3 T4 T5 T6 T7
+16-byte padded:  T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00
 ~~~<a href="#appendix-B.4.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2269,6 +2269,7 @@ Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
               <p id="appendix-B.4.3-2.4.1"><strong>AddRoundKey:</strong> XOR the state with the round key and padded tweak<a href="#appendix-B.4.3-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
+<p id="appendix-B.4.3-3">For details about these operations, see <span>[<a href="#FIPS-197" class="cite xref">FIPS-197</a>]</span>.<a href="#appendix-B.4.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-schedule">
