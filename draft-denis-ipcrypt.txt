@@ -603,7 +603,7 @@ IPv4 Address:    192.0.2.1
               December 2007,
               <https://standards.ieee.org/ieee/1619/2041/>.
 
-   [IPCrypt2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
+   [IPCRYPT2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
               tool", 2025, <https://github.com/jedisct1/ipcrypt2>.
 
    [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
