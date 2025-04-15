@@ -279,9 +279,9 @@ IPv4 Address:    192.0.2.1
    Valid options for implementing a tweakable block cipher include, but
    are not limited to:
 
-   *  *SKINNY*
+   *  *SKINNY* (see [SKINNY])
 
-   *  *DEOXYS-BC*
+   *  *DEOXYS-BC* (see [DEOXYS-BC])
 
    *  *KIASU-BC* (see Appendix C for implementation details)
 
@@ -591,6 +591,12 @@ IPv4 Address:    192.0.2.1
               Preserving Encryption", CRYPTO 2005, 2005,
               <https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf>.
 
+   [DEOXYS-BC]
+              Jean, J., Nikolić, I., and T. Peyrin, "Deoxys-BC: A Highly
+              Secure Tweakable Block Cipher", Cryptology ePrint
+              Archive Paper 2014/427, 2014,
+              <https://eprint.iacr.org/2014/427>.
+
    [IEEE-P1619]
               IEEE, "IEEE Standard for Cryptographic Protection of Data
               on Block-Oriented Storage Devices", IEEE 1619-2007, 18
@@ -609,6 +615,11 @@ IPv4 Address:    192.0.2.1
               Ciphers", Fast Software Encryption 2002, 2002,
               <https://www.cs.berkeley.edu/~daw/papers/tweak-
               crypto02.pdf>.
+
+   [SKINNY]   Beierle, C., Biryukov, A., Perrin, L., Udovenko, A.,
+              Velichkov, V., and Q. Wang, "The SKINNY Family of Block
+              Ciphers and its Low-Latency Variant MANTIS", CRYPTO 2016,
+              2016, <https://eprint.iacr.org/2016/660>.
 
    [XTS-AES]  Black, J., Dawson, E., Gueron, S., and P. Rogaway, "The
               XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 2010.
