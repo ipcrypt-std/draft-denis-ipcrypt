@@ -347,7 +347,7 @@ The `ipcrypt-ndx` instantiation uses the AES‑XTS tweakable block cipher with a
 
 Since only a single block is encrypted, only the first tweak needs to be computed, avoiding the need for a full key schedule. Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.
 
-As with ipcrypt-nd, an `(input, tweak)` collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).
+As with `ipcrypt-nd`, an `(input, tweak)` collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).
 
 > **Technical Note:**
 > For a single block of AES-XTS, the key is split into two halves (K1, K2). The tweak is
@@ -744,7 +744,7 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 
 # Test Vectors {#test-vectors}
 
-This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak value is also included.
+This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak value is also included.
 
 ## ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
 
@@ -809,7 +809,7 @@ Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
 Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 ~~~
 
-Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
+Note: For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
 
 Implementations SHOULD verify their correctness against these test vectors before deployment.
 
