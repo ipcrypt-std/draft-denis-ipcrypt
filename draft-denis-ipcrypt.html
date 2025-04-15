@@ -1235,6 +1235,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
                 <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5.2.1">
+                    <p id="section-toc.1-1.6.2.5.2.1.1"><a href="#section-6.5.1" class="auto internal xref">6.5.1</a>.  <a href="#name-deterministic-mode-security" class="internal xref">Deterministic Mode Security</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5.2.2">
+                    <p id="section-toc.1-1.6.2.5.2.2.1"><a href="#section-6.5.2" class="auto internal xref">6.5.2</a>.  <a href="#name-non-deterministic-mode-secu" class="internal xref">Non-Deterministic Mode Security</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5.2.3">
+                    <p id="section-toc.1-1.6.2.5.2.3.1"><a href="#section-6.5.3" class="auto internal xref">6.5.3</a>.  <a href="#name-implementation-security" class="internal xref">Implementation Security</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1664,9 +1675,8 @@ To ensure IPv4 format preservation, implementers <strong>MUST</strong> consider 
         <h3 id="name-output-format-and-encoding">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-output-format-and-encoding" class="section-name selfRef">Output Format and Encoding</a>
         </h3>
-<p id="section-6.3-1">The output of non-deterministic encryption is binary data.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.3-2">For applications that require text representation (e.g., logging, JSON encoding, or text-based protocols), the binary output MUST be encoded. Common encoding options include hexadecimal and Base64.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.3-3">The choice of encoding is application-specific and outside the scope of this specification. However, implementations SHOULD document their chosen encoding method clearly.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">The output of non-deterministic encryption is binary data. For applications that require text representation (e.g., logging, JSON encoding, or text-based protocols), the binary output MUST be encoded. Common encoding options include hexadecimal and Base64.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">The choice of encoding is application-specific and outside the scope of this specification. However, implementations SHOULD document their chosen encoding method clearly.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="concrete-instantiations">
@@ -1804,19 +1814,36 @@ Produces a 16‑byte output; preserves format but reveals repeated inputs.<a hre
           <li class="normal" id="section-6.5-2.2">
             <p id="section-6.5-2.2.1"><a href="#ipcrypt-nd" class="auto internal xref">Section 6.4.1</a> and <a href="#ipcrypt-ndx" class="auto internal xref">Section 6.4.2</a> for non-deterministic mode security considerations<a href="#section-6.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.5-2.3">
-            <p id="section-6.5-2.3.1"><strong>Deterministic Mode:</strong>
-A permutation ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition.<a href="#section-6.5-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.5-2.4">
-            <p id="section-6.5-2.4.1"><strong>Non‑Deterministic Mode:</strong>
-The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs.<a href="#section-6.5-2.4.1" class="pilcrow">¶</a></p>
-<p id="section-6.5-2.4.2">
-In cases where an <code>(input, tweak)</code> collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself. Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis.<a href="#section-6.5-2.4.2" class="pilcrow">¶</a></p>
-<p id="section-6.5-2.4.3">
-Key rotation is recommended to extend secure usage beyond the per-key collision bounds.<a href="#section-6.5-2.4.3" class="pilcrow">¶</a></p>
-</li>
         </ul>
+<div id="deterministic-mode-security">
+<section id="section-6.5.1">
+          <h4 id="name-deterministic-mode-security">
+<a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-deterministic-mode-security" class="section-name selfRef">Deterministic Mode Security</a>
+          </h4>
+<p id="section-6.5.1-1">A permutation ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition. This property makes deterministic encryption suitable for applications where format preservation is required, but linkability of repeated inputs is acceptable.<a href="#section-6.5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="non-deterministic-mode-security">
+<section id="section-6.5.2">
+          <h4 id="name-non-deterministic-mode-secu">
+<a href="#section-6.5.2" class="section-number selfRef">6.5.2. </a><a href="#name-non-deterministic-mode-secu" class="section-name selfRef">Non-Deterministic Mode Security</a>
+          </h4>
+<p id="section-6.5.2-1">The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs. In cases where an <code>(input, tweak)</code> collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself.<a href="#section-6.5.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.5.2-2">Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.<a href="#section-6.5.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="implementation-security">
+<section id="section-6.5.3">
+          <h4 id="name-implementation-security">
+<a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-implementation-security" class="section-name selfRef">Implementation Security</a>
+          </h4>
+<p id="section-6.5.3-1">Implementations MUST ensure that:
+1. Keys are generated using a cryptographically secure random number generator
+2. Tweak values are uniformly random for non-deterministic modes
+3. Side-channel attacks are mitigated through constant-time operations
+4. Error handling does not leak sensitive information<a href="#section-6.5.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
