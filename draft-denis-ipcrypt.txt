@@ -91,7 +91,6 @@ Table of Contents
    4.  Generic Constructions
    5.  Deterministic Encryption
      5.1.  Specific Instantiation: ipcrypt-deterministic
-       5.1.1.  Operation Flow Diagram
      5.2.  Format Preservation
    6.  Non-Deterministic Encryption
      6.1.  Encryption Process
@@ -309,8 +308,6 @@ IPv4 Address:    192.0.2.1
 
    For test vectors, see Appendix D.1.
 
-5.1.1.  Operation Flow Diagram
-
          +---------------------+
          |      IP Address     |
          |    (IPv4 or IPv6)   |
@@ -406,7 +403,7 @@ IPv4 Address:    192.0.2.1
 
 6.4.  ipcrypt-nd and ipcrypt-ndx
 
-   This document defines two instantiations:
+   This document defines two concrete instantiations:
 
    *  *ipcrypt-nd:* Uses the KIASU-BC tweakable block cipher with an
       8-byte (64-bit) tweak.  See [KIASU-BC] for details.
