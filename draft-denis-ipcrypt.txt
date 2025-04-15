@@ -226,8 +226,8 @@ IPv6 Address:    2001:0db8:85a3:0000:0000:8a2e:0370:7334
 
 3.1.2.  IPv4 Addresses
 
-   IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6
-   format:
+   IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6 format
+   as specified in [RFC4291]:
 
 IPv4 Address:    192.0.2.1
 16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
