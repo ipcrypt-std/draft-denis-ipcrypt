@@ -376,6 +376,7 @@ Security is determined by the underlying block cipher (≈2^128 for AES‑128) o
 ### Implementation Security
 
 Implementations MUST ensure that:
+
 1. Keys are generated using a cryptographically secure random number generator
 2. Tweak values are uniformly random for non-deterministic modes
 3. Side-channel attacks are mitigated through constant-time operations
