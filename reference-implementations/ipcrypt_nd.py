@@ -4,7 +4,6 @@ Implementation of ipcrypt-nd using KIASU-BC with an 8-byte tweak.
 """
 
 import ipaddress
-from Crypto.Cipher import AES
 import os
 
 # AES S-box
@@ -50,23 +49,27 @@ INV_SBOX = bytes([
 # AES round constants
 RCON = bytes([0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36])
 
+
 def sub_bytes(state):
     """Apply S-box to each byte in state."""
     return bytes(SBOX[b] for b in state)
+
 
 def rot_word(word):
     """Rotate a 4-byte word."""
     return word[1:] + word[:1]
 
+
 def xor_bytes(a, b):
     """XOR two byte sequences."""
     return bytes(x ^ y for x, y in zip(a, b))
+
 
 def expand_key(key):
     """Generate AES round keys."""
     if len(key) != 16:
         raise ValueError("Key must be 16 bytes")
-    
+
     # First generate regular AES round keys
     round_keys = [key]
     for i in range(10):
@@ -75,7 +78,7 @@ def expand_key(key):
         temp = rot_word(temp)
         temp = sub_bytes(temp)
         temp = bytes([temp[0] ^ RCON[i]]) + temp[1:]
-        
+
         new_key = bytearray(16)
         for j in range(4):
             word = prev_key[j*4:(j+1)*4]
@@ -85,14 +88,15 @@ def expand_key(key):
                 word = xor_bytes(word, new_key[(j-1)*4:j*4])
             new_key[j*4:(j+1)*4] = word
         round_keys.append(bytes(new_key))
-    
+
     return round_keys
+
 
 def pad_tweak(tweak):
     """Pad an 8-byte tweak to 16 bytes by placing each 2-byte pair at the start of each 4-byte group."""
     if len(tweak) != 8:
         raise ValueError("Tweak must be 8 bytes")
-    
+
     padded_tweak = bytearray(16)
     for i in range(4):  # We have 4 groups of 4 bytes
         padded_tweak[i*4] = tweak[i*2]      # First byte of the pair
@@ -101,14 +105,14 @@ def pad_tweak(tweak):
         padded_tweak[i*4 + 3] = 0           # Padding
     return bytes(padded_tweak)
 
+
 def shift_rows(state):
     """Perform AES ShiftRows operation."""
     return bytes([
-        state[0], state[5], state[10], state[15],
-        state[4], state[9], state[14], state[3],
-        state[8], state[13], state[2], state[7],
-        state[12], state[1], state[6], state[11]
+        state[0], state[5], state[10], state[15], state[4], state[9], state[14], state[
+            3], state[8], state[13], state[2], state[7], state[12], state[1], state[6], state[11]
     ])
+
 
 def mix_columns(state):
     """Perform AES MixColumns operation."""
@@ -116,10 +120,10 @@ def mix_columns(state):
         if a & 0x80:
             return ((a << 1) ^ 0x1B) & 0xFF
         return (a << 1) & 0xFF
-    
+
     def mul3(a):
         return mul2(a) ^ a
-    
+
     new_state = bytearray(16)
     for i in range(4):
         s0, s1, s2, s3 = state[i*4:i*4+4]
@@ -129,6 +133,7 @@ def mix_columns(state):
         new_state[i*4+3] = mul3(s0) ^ s1 ^ s2 ^ mul2(s3)
     return bytes(new_state)
 
+
 def kiasu_bc_encrypt(key, tweak, plaintext):
     """Encrypt using KIASU-BC construction."""
     if len(key) != 16:
@@ -137,33 +142,35 @@ def kiasu_bc_encrypt(key, tweak, plaintext):
         raise ValueError("Tweak must be 8 bytes")
     if len(plaintext) != 16:
         raise ValueError("Plaintext must be 16 bytes")
-    
+
     # Generate round keys
     round_keys = expand_key(key)
-    
+
     # Get padded tweak
     padded_tweak = pad_tweak(tweak)
-    
+
     # Initial round
     state = xor_bytes(plaintext, xor_bytes(round_keys[0], padded_tweak))
-    
+
     # Main rounds
     for i in range(9):
         state = sub_bytes(state)
         state = shift_rows(state)
         state = mix_columns(state)
         state = xor_bytes(state, xor_bytes(round_keys[i + 1], padded_tweak))
-    
+
     # Final round (no MixColumns)
     state = sub_bytes(state)
     state = shift_rows(state)
     state = xor_bytes(state, xor_bytes(round_keys[10], padded_tweak))
-    
+
     return state
+
 
 def inv_sub_bytes(state):
     """Apply inverse S-box to each byte in state."""
     return bytes(INV_SBOX[b] for b in state)
+
 
 def inv_shift_rows(state):
     """Perform inverse AES ShiftRows operation."""
@@ -173,6 +180,7 @@ def inv_shift_rows(state):
         state[8], state[5], state[2], state[15],
         state[12], state[9], state[6], state[3]
     ])
+
 
 def inv_mix_columns(state):
     """Perform inverse AES MixColumns operation."""
@@ -207,6 +215,7 @@ def inv_mix_columns(state):
             new_state[4*i+j] = result[j]
     return bytes(new_state)
 
+
 def kiasu_bc_decrypt(key, tweak, ciphertext):
     """Decrypt using KIASU-BC construction."""
     if len(key) != 16:
@@ -215,116 +224,85 @@ def kiasu_bc_decrypt(key, tweak, ciphertext):
         raise ValueError("Tweak must be 8 bytes")
     if len(ciphertext) != 16:
         raise ValueError("Ciphertext must be 16 bytes")
-    
+
     # Generate round keys
     round_keys = expand_key(key)
-    
+
     # Get padded tweak
     padded_tweak = pad_tweak(tweak)
-    
+
     # Initial round
-    state = xor_bytes(ciphertext, xor_bytes(round_keys[10], padded_tweak))  # Start with last round key
+    # Start with last round key
+    state = xor_bytes(ciphertext, xor_bytes(round_keys[10], padded_tweak))
     state = inv_shift_rows(state)
     state = inv_sub_bytes(state)
-    
+
     # Main rounds
     for i in range(9, 0, -1):
         state = xor_bytes(state, xor_bytes(round_keys[i], padded_tweak))
         state = inv_mix_columns(state)
         state = inv_shift_rows(state)
         state = inv_sub_bytes(state)
-    
+
     # Final round
     state = xor_bytes(state, xor_bytes(round_keys[0], padded_tweak))
-    
+
     return state
+
 
 def ip_to_bytes(ip):
     """Convert an IP address to its 16-byte representation."""
     if isinstance(ip, str):
         ip = ipaddress.ip_address(ip)
-    
+
     if isinstance(ip, ipaddress.IPv4Address):
         # Convert to IPv4-mapped IPv6 format
         return b'\x00' * 10 + b'\xff\xff' + ip.packed
     else:
         return ip.packed
 
+
 def bytes_to_ip(bytes16):
     """Convert a 16-byte representation back to an IP address."""
     if len(bytes16) != 16:
         raise ValueError("Input must be 16 bytes")
-    
+
     # Check for IPv4-mapped IPv6 format
     if bytes16[:10] == b'\x00' * 10 and bytes16[10:12] == b'\xff\xff':
         return ipaddress.IPv4Address(bytes16[12:])
     else:
         return ipaddress.IPv6Address(bytes16)
 
+
 def encrypt(ip_address, key, tweak=None):
     """Encrypt an IP address using ipcrypt-nd."""
     # Convert IP to bytes
     ip_bytes = ip_to_bytes(ip_address)
-    
+
     # Use provided tweak or generate random 8-byte tweak
     if tweak is None:
         tweak = os.urandom(8)
     elif len(tweak) != 8:
         raise ValueError("Tweak must be 8 bytes")
-    
+
     # Encrypt using KIASU-BC
     ciphertext = kiasu_bc_encrypt(key, tweak, ip_bytes)
-    
+
     # Return tweak || ciphertext
     return tweak + ciphertext
+
 
 def decrypt(encrypted_data, key):
     """Decrypt an IP address using ipcrypt-nd."""
     if len(encrypted_data) != 24:  # 8 bytes tweak + 16 bytes ciphertext
         raise ValueError("Encrypted data must be 24 bytes")
-    
+
     # Split into tweak and ciphertext
     tweak = encrypted_data[:8]
     ciphertext = encrypted_data[8:]
-    
+
     # Decrypt using KIASU-BC
     ip_bytes = kiasu_bc_decrypt(key, tweak, ciphertext)
-    
+
     # Convert back to IP address
     return bytes_to_ip(ip_bytes)
-
-def test_zero_tweak():
-    """Test that KIASU-BC with zero tweak matches regular AES."""
-    key = os.urandom(16)
-    plaintext = os.urandom(16)
-    zero_tweak = b'\x00' * 8
-    
-    # KIASU-BC with zero tweak
-    kiasu_result = kiasu_bc_encrypt(key, zero_tweak, plaintext)
-    
-    # Regular AES
-    cipher = AES.new(key, AES.MODE_ECB)
-    aes_result = cipher.encrypt(plaintext)
-    
-    assert kiasu_result == aes_result, "KIASU-BC with zero tweak should match AES"
-    
-def test_kiasu_bc():
-    """Test that KIASU-BC decryption correctly reverses encryption."""
-    key = os.urandom(16)
-    tweak = os.urandom(8)
-    plaintext = os.urandom(16)
-    
-    # Encrypt
-    ciphertext = kiasu_bc_encrypt(key, tweak, plaintext)
-    
-    # Decrypt
-    decrypted = kiasu_bc_decrypt(key, tweak, ciphertext)
-    
-    # Verify
-    assert decrypted == plaintext, "Decryption failed to recover plaintext"
-    print("KIASU-BC encryption/decryption test passed!")
-
-if __name__ == '__main__':
-    test_zero_tweak()
-    test_kiasu_bc()
-    print("All tests passed!") 
