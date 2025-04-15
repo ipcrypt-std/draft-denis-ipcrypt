@@ -9,7 +9,7 @@ author:
   - name: "Frank Denis"
     organization: "Fastly Inc."
     email: fde@00f.net
-date: "2025-04-14"
+date: "2025"
 v: 3
 stand_alone: yes
 smart_quotes: yes
