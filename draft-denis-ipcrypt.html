@@ -1721,7 +1721,7 @@ needs to be computed, avoiding the need for a full key schedule.<a href="#sectio
           </h4>
 <p id="section-6.4.2-1">The <code>ipcrypt-ndx</code> instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32 bytes total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.<a href="#section-6.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.4.2-2">Since only a single block is encrypted, only the first tweak needs to be computed, avoiding the need for a full key schedule. Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.<a href="#section-6.4.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.4.2-3">As with ipcrypt-nd, an <code>(input, tweak)</code> collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.4.2-3">As with <code>ipcrypt-nd</code>, an <code>(input, tweak)</code> collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-6.4.2-4.1">
               <p id="section-6.4.2-4.1.1"><strong>Technical Note:</strong>
@@ -2426,7 +2426,7 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
       <h2 id="name-test-vectors">
 <a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
       </h2>
-<p id="appendix-D-1">This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak value is also included.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (<code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code>), the tweak value is also included.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <div id="ipcrypt-deterministic-test-vectors">
 <section id="appendix-D.1">
         <h3 id="name-ipcrypt-deterministic-test-">
@@ -2506,7 +2506,7 @@ Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
 Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 </pre><a href="#appendix-D.3-1" class="pilcrow">¶</a>
 </div>
-<p id="appendix-D.3-2">Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.<a href="#appendix-D.3-2" class="pilcrow">¶</a></p>
+<p id="appendix-D.3-2">Note: For non-deterministic variants (<code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code>), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.<a href="#appendix-D.3-2" class="pilcrow">¶</a></p>
 <p id="appendix-D.3-3">Implementations SHOULD verify their correctness against these test vectors before deployment.<a href="#appendix-D.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
