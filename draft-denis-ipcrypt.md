@@ -305,12 +305,12 @@ In both cases, if a tweak is generated randomly, it **MUST be uniformly random**
 
 For test vectors, see {{ipcrypt-nd-test-vectors}} and {{ipcrypt-ndx-test-vectors}}.
 
-## ipcrypt-nd (KIASU‑BC) {#ipcrypt-nd}
+### ipcrypt-nd (KIASU‑BC) {#ipcrypt-nd}
 
 - **Tweak:** 8 bytes (64 bits).
 - **Output:** 24 bytes total (8‑byte tweak concatenated with a 16‑byte ciphertext).
 
-### Usage Considerations
+#### Usage Considerations
 
 Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations.
 
@@ -318,7 +318,7 @@ If an `(input, tweak)` collision occurs, it indicates that the same input was pr
 
 Ultimately, the effective security is determined by the underlying block cipher's strength (≈2^128 for AES‑128).
 
-## ipcrypt-ndx (AES‑XTS) {#ipcrypt-ndx}
+### ipcrypt-ndx (AES‑XTS) {#ipcrypt-ndx}
 
 - **Tweak:** 16 bytes (128 bits).
 - **Output:** 32 bytes total (16‑byte tweak concatenated with a 16‑byte ciphertext).
@@ -344,7 +344,7 @@ function AES_XTS_encrypt(key, tweak, block):
     return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
 ~~~
 
-### Usage Considerations
+#### Usage Considerations
 
 Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.
 
@@ -352,7 +352,7 @@ As with ipcrypt-nd, an `(input, tweak)` collision reveals repetition without com
 
 These limits are per key; regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).
 
-## Comparison of Modes
+### Comparison of Modes
 
 - **Deterministic (`ipcrypt-deterministic`):**
   Produces a 16‑byte output; preserves format but reveals repeated inputs.
@@ -360,7 +360,7 @@ These limits are per key; regular key rotation further extends secure usage. The
   - **`ipcrypt-nd` (KIASU‑BC):** Produces a 24‑byte output using an 8‑byte tweak; `(input, tweak)` collisions reveal repeated inputs (with the same tweak) but not their values.
   - **`ipcrypt-ndx` (AES‑XTS):** Produces a 32‑byte output using a 16‑byte tweak; supports higher secure operation counts per key. Since only a single block is encrypted, it avoids the need for a full key schedule.
 
-# Security Considerations
+## Security Considerations
 
 For a detailed discussion of the security properties of each mode, see:
 
@@ -368,7 +368,7 @@ For a detailed discussion of the security properties of each mode, see:
 - {{ipcrypt-nd}} and {{ipcrypt-ndx}} for non-deterministic mode security considerations
 
 - **Deterministic Mode:**
-  AES‑128's permutation behavior ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition.
+  A permutation ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition.
 
 - **Non‑Deterministic Mode:**
   The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs.
@@ -382,6 +382,92 @@ For a detailed discussion of the security properties of each mode, see:
 This document does not require any IANA actions.
 
 --- back
+
+# Diagrams {#diagrams}
+
+This appendix provides visual representations of the key operations described in this document. For implementation details, see {{pseudocode-and-examples}}.
+
+## IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
+
+~~~
+       IPv4: 192.0.2.1
+           |
+           v
+  Octets:  C0  00  02  01
+           |
+           v
+   16-Byte Array:
+[00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
+~~~
+
+## Deterministic Encryption Flow
+
+~~~
+            IP Address
+                |
+                v
+       [Convert to 16 Bytes]
+                |
+                v
+    [AES128 Single-Block Encrypt]
+                |
+                v
+       16-Byte Ciphertext
+                |
+                v
+     [Convert to IP Format]
+                |
+                v
+       Encrypted IP Address
+~~~
+
+## Non‑Deterministic Encryption Flow (ipcrypt-nd)
+
+~~~
+              IP Address
+                  |
+                  v
+      [Convert to 16 Bytes] ---> 16-Byte Representation
+                  |
+                  v
+    [Generate Random 8-Byte Tweak]
+                  |
+                  v
+       [KIASU-BC Tweakable Encrypt]
+                  |
+                  v
+          16-Byte Ciphertext
+                  |
+                  v
+    [Concatenate Tweak || Ciphertext]
+                  |
+                  v
+       24-Byte Output (ipcrypt-nd)
+~~~
+
+## Non‑Deterministic Encryption Flow (ipcrypt-ndx)
+
+~~~
+              IP Address
+                  |
+                  v
+      [Convert to 16 Bytes] ---> 16-Byte Representation
+                  |
+                  v
+    [Generate Random 16-Byte Tweak]
+                  |
+                  v
+       [AES-XTS Tweakable Encrypt]
+                  |
+                  v
+          16-Byte Ciphertext
+                  |
+                  v
+    [Concatenate Tweak || Ciphertext]
+                  |
+                  v
+       32-Byte Output (ipcrypt-ndx)
+~~~
 
 # Pseudocode and Examples {#pseudocode-and-examples}
 
@@ -521,92 +607,6 @@ function ipcrypt_ndx_decrypt(ciphertext, key):
     // Step 3: Convert back to IP address
     ip_address = Bytes16ToIP(bytes16)
     return ip_address
-~~~
-
-# Diagrams {#diagrams}
-
-This appendix provides visual representations of the key operations described in this document. For implementation details, see {{pseudocode-and-examples}}.
-
-## IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
-
-~~~
-       IPv4: 192.0.2.1
-           |
-           v
-  Octets:  C0  00  02  01
-           |
-           v
-   16-Byte Array:
-[00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
-~~~
-
-## Deterministic Encryption Flow
-
-~~~
-            IP Address
-                |
-                v
-       [Convert to 16 Bytes]
-                |
-                v
-    [AES128 Single-Block Encrypt]
-                |
-                v
-       16-Byte Ciphertext
-                |
-                v
-     [Convert to IP Format]
-                |
-                v
-       Encrypted IP Address
-~~~
-
-## Non‑Deterministic Encryption Flow (ipcrypt-nd)
-
-~~~
-              IP Address
-                  |
-                  v
-      [Convert to 16 Bytes] ---> 16-Byte Representation
-                  |
-                  v
-    [Generate Random 8-Byte Tweak]
-                  |
-                  v
-       [KIASU-BC Tweakable Encrypt]
-                  |
-                  v
-          16-Byte Ciphertext
-                  |
-                  v
-    [Concatenate Tweak || Ciphertext]
-                  |
-                  v
-       24-Byte Output (ipcrypt-nd)
-~~~
-
-## Non‑Deterministic Encryption Flow (ipcrypt-ndx)
-
-~~~
-              IP Address
-                  |
-                  v
-      [Convert to 16 Bytes] ---> 16-Byte Representation
-                  |
-                  v
-    [Generate Random 16-Byte Tweak]
-                  |
-                  v
-       [AES-XTS Tweakable Encrypt]
-                  |
-                  v
-          16-Byte Ciphertext
-                  |
-                  v
-    [Concatenate Tweak || Ciphertext]
-                  |
-                  v
-       32-Byte Output (ipcrypt-ndx)
 ~~~
 
 # Implementing KIASU-BC {#implementing-kiasu-bc}
