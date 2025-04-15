@@ -34,6 +34,8 @@ normative:
     seriesinfo:
       NIST: SP 800-38G
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
+
+informative:
   DEOXYS-BC:
     title: "Deoxys-BC: A Highly Secure Tweakable Block Cipher"
     author:
@@ -59,8 +61,6 @@ normative:
       CRYPTO: 2016
     target: https://eprint.iacr.org/2016/660
     eprint: 2016/660
-
-informative:
   LRW2002:
     title: "Tweakable Block Ciphers"
     author:
