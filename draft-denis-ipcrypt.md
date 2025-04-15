@@ -606,11 +606,11 @@ Implementations SHOULD verify their correctness against these test vectors befor
 
 ## Appendix D. Implementing KIASU-BC
 
-This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak.
+This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak. For more information about the security properties of KIASU-BC, see {{KIASU-BC}}.
 
 ### Overview
 
-KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher.
+KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the `ipcrypt-nd` instantiation described in {{ipcrypt-nd}}.
 
 ### Tweak Padding
 
@@ -634,6 +634,8 @@ Each round of KIASU-BC consists of the following standard AES operations:
 2. **ShiftRows:** Rotate each row of the state matrix
 3. **MixColumns:** Mix the columns of the state matrix (except in the final round)
 4. **AddRoundKey:** XOR the state with the round key and padded tweak
+
+For details about these operations, see {{FIPS-197}}.
 
 ### Key Schedule
 
@@ -664,6 +666,8 @@ The key schedule follows the standard AES-128 key expansion:
      - SubBytes
      - ShiftRows
      - AddRoundKey (with tweaked round key)
+
+For test vectors to verify the implementation, see {{test-vectors}}.
 
 ### Example Implementation
 
