@@ -283,6 +283,16 @@ Although the tweak is generated uniformly at random (and thus may occasionally c
 
 The usage limits discussed below apply per cryptographic key; rotating keys can extend secure usage beyond these bounds.
 
+## Output Format and Encoding
+
+The output of non-deterministic encryption is binary data.
+
+For applications that require text representation (e.g., logging, JSON encoding, or text-based protocols), the binary output MUST be encoded. Common encoding options include hexadecimal and Base64.
+
+The choice of encoding is application-specific and outside the scope of this specification. However, implementations SHOULD document their chosen encoding method clearly.
+
+## ipcrypt-nd and ipcrypt-ndx
+
 This document defines two instantiations:
 
 - **`ipcrypt-nd`:** Uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak.
