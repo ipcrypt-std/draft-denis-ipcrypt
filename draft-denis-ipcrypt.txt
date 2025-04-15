@@ -90,7 +90,7 @@ Table of Contents
      3.2.  Converting from a 16-Byte Representation to an IP Address
    4.  Generic Constructions
    5.  Deterministic Encryption
-     5.1.  Specific Instantiation: ipcrypt-deterministic
+     5.1.  ipcrypt-deterministic
      5.2.  Format Preservation
    6.  Non-Deterministic Encryption
      6.1.  Encryption Process
@@ -300,11 +300,12 @@ IPv4 Address:    192.0.2.1
       the tweak must be preserved along with the ciphertext to enable
       decryption.
 
-5.1.  Specific Instantiation: ipcrypt-deterministic
+5.1.  ipcrypt-deterministic
 
-   This instantiation employs AES128 in a single-block operation.  Since
-   AES128 is a permutation, every distinct 16-byte input maps to a
-   unique 16-byte ciphertext, preserving the IP address format.
+   The ipcrypt-deterministic instantiation employs AES128 in a
+   single-block operation.  Since AES128 is a permutation, every
+   distinct 16-byte input maps to a unique 16-byte ciphertext,
+   preserving the IP address format.
 
    For test vectors, see Appendix D.1.
 
