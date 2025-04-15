@@ -905,7 +905,7 @@ C.5.  Implementation Steps
 
    3.  *Encryption Process:*
 
-       *  Perform initial AddRoundKey with the first round key
+       *  Perform initial AddRoundKey with the first tweaked round key
 
        *  For rounds 1-9:
 
