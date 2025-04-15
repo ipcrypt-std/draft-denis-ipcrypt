@@ -113,7 +113,7 @@ informative:
     seriesinfo:
       IEEE: 1619-2007
     doi: 10.1109/TC.2010.58
-  IPCrypt2:
+  IPCRYPT2:
     title: "ipcrypt2: IP address encryption/obfuscation tool"
     author:
       - ins: F. Denis
