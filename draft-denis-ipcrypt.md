@@ -177,7 +177,7 @@ The conversion algorithm is as follows:
 3. Otherwise:
    - Interpret the 16 bytes as an IPv6 address in colon‑hexadecimal notation
 
-(For additional illustration, see Appendix B.)
+(For additional illustration, see {{diagrams}})
 
 # Generic Constructions
 
@@ -632,9 +632,10 @@ The 8-byte tweak is padded to 16 bytes using the following method:
 3. Fill the remaining 2 bytes of each group with zeros
 
 Example:
+
 ~~~
-8-byte tweak:    T0 T1 T2 T3 T4 T5 T6 T7
-16-byte padded:  T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00
+8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
+16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
 ~~~
 
 ## Round Structure
