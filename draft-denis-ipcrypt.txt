@@ -120,17 +120,17 @@ Table of Contents
      B.2.  Deterministic Encryption Flow
      B.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
      B.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
-   Appendix C.  Test Vectors
-     C.1.  ipcrypt-deterministic Test Vectors
-     C.2.  ipcrypt-nd Test Vectors
-     C.3.  ipcrypt-ndx Test Vectors
-   Appendix D.  Implementing KIASU-BC
-     D.1.  Overview
-     D.2.  Tweak Padding
-     D.3.  Round Structure
-     D.4.  Key Schedule
-     D.5.  Implementation Steps
-     D.6.  Example Implementation
+   Appendix C.  Implementing KIASU-BC
+     C.1.  Overview
+     C.2.  Tweak Padding
+     C.3.  Round Structure
+     C.4.  Key Schedule
+     C.5.  Implementation Steps
+     C.6.  Example Implementation
+   Appendix D.  Test Vectors
+     D.1.  ipcrypt-deterministic Test Vectors
+     D.2.  ipcrypt-nd Test Vectors
+     D.3.  ipcrypt-ndx Test Vectors
    Appendix E.  Acknowledgments
    Author's Address
 
@@ -282,7 +282,7 @@ IPv4 Address:    192.0.2.1
 
    *  *DEOXYS-BC*
 
-   *  *KIASU-BC* (see Appendix D for implementation details)
+   *  *KIASU-BC* (see Appendix C for implementation details)
 
    *  *AES-XTS* (see Section 6.6 for usage)
 
@@ -309,7 +309,7 @@ IPv4 Address:    192.0.2.1
    AES128 is a permutation, every distinct 16-byte input maps to a
    unique 16-byte ciphertext, preserving the IP address format.
 
-   For test vectors, see Appendix C.1.
+   For test vectors, see Appendix D.1.
 
 5.1.1.  Operation Flow Diagram
 
@@ -422,7 +422,7 @@ IPv4 Address:    192.0.2.1
    uniformly random*. Reusing the same randomly generated tweak on
    different inputs is acceptable from a confidentiality standpoint.
 
-   For test vectors, see Appendix C.2 and Appendix C.3.
+   For test vectors, see Appendix D.2 and Appendix D.3.
 
 6.5.  ipcrypt-nd (KIASU-BC)
 
@@ -814,92 +814,21 @@ B.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
                      v
           32-Byte Output (ipcrypt-ndx)
 
-Appendix C.  Test Vectors
-
-   This appendix provides test vectors for all three variants of
-   ipcrypt.  Each test vector includes the key, input IP address, and
-   encrypted output.  For non-deterministic variants (ipcrypt-nd and
-   ipcrypt-ndx), the tweak value is also included.
-
-C.1.  ipcrypt-deterministic Test Vectors
-
-   # Test vector 1
-   Key:          0123456789abcdeffedcba9876543210
-   Input IP:     0.0.0.0
-   Encrypted IP: bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb
-
-   # Test vector 2
-   Key:          1032547698badcfeefcdab8967452301
-   Input IP:     255.255.255.255
-   Encrypted IP: aed2:92f6:ea23:58c3:48fd:8b8:74e8:45d8
-
-   # Test vector 3
-   Key:          2b7e151628aed2a6abf7158809cf4f3c
-   Input IP:     192.0.2.1
-   Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
-
-C.2.  ipcrypt-nd Test Vectors
-
-   # Test vector 1
-   Key:          0123456789abcdeffedcba9876543210
-   Input IP:     0.0.0.0
-   Tweak:        08e0c289bff23b7c
-   Output:       08e0c289bff23b7cb349aadfe3bcef56221c384c7c217b16
-
-   # Test vector 2
-   Key:          1032547698badcfeefcdab8967452301
-   Input IP:     192.0.2.1
-   Tweak:        21bd1834bc088cd2
-   Output:       21bd1834bc088cd2e5e1fe55f95876e639faae2594a0caad
-
-   # Test vector 3
-   Key:          2b7e151628aed2a6abf7158809cf4f3c
-   Input IP:     2001:db8::1
-   Tweak:        b4ecbe30b70898d7
-   Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
-
-C.3.  ipcrypt-ndx Test Vectors
-
-# Test vector 1
-Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
-Input IP:     0.0.0.0
-Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Output:       21bd1834bc088cd2b4ecbe30b70898d782db0d4125fdace61db35b8339f20ee5
-
-# Test vector 2
-Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
-Input IP:     192.0.2.1
-Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
-Output:       08e0c289bff23b7cb4ecbe30b70898d7766a533392a69edf1ad0d3ce362ba98a
-
-# Test vector 3
-Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
-Input IP:     2001:db8::1
-Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
-
-   Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx),
-   the tweak values shown are examples.  In practice, tweaks MUST be
-   randomly generated for each encryption operation.
-
-   Implementations SHOULD verify their correctness against these test
-   vectors before deployment.
-
-Appendix D.  Implementing KIASU-BC
+Appendix C.  Implementing KIASU-BC
 
    This appendix provides a detailed guide for implementing the KIASU-BC
    tweakable block cipher.  KIASU-BC is based on AES-128 with
    modifications to incorporate a tweak.  For more information about the
    security properties of KIASU-BC, see [KIASU-BC].
 
-D.1.  Overview
+C.1.  Overview
 
    KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each
    round.  The tweak is padded to 16 bytes and XORed with the round key
    at each round of the cipher.  This construction is used in the
    ipcrypt-nd instantiation.
 
-D.2.  Tweak Padding
+C.2.  Tweak Padding
 
    The 8-byte tweak is padded to 16 bytes using the following method:
 
@@ -914,7 +843,7 @@ D.2.  Tweak Padding
    8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
    16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
 
-D.3.  Round Structure
+C.3.  Round Structure
 
    Each round of KIASU-BC consists of the following standard AES
    operations:
@@ -930,7 +859,7 @@ D.3.  Round Structure
 
    For details about these operations, see [FIPS-197].
 
-D.4.  Key Schedule
+C.4.  Key Schedule
 
    The key schedule follows the standard AES-128 key expansion:
 
@@ -940,7 +869,7 @@ D.4.  Key Schedule
 
    3.  The first round key is used in the initial AddRoundKey operation
 
-D.5.  Implementation Steps
+C.5.  Implementation Steps
 
    1.  *Key Expansion:*
 
@@ -977,7 +906,7 @@ D.5.  Implementation Steps
 
           -  AddRoundKey (with tweaked round key)
 
-D.6.  Example Implementation
+C.6.  Example Implementation
 
    The following pseudocode illustrates the core operations of KIASU-BC:
 
@@ -1016,6 +945,77 @@ D.6.  Example Implementation
        state = add_round_key(state, round_keys[10] ^ padded_tweak)
 
        return state
+
+Appendix D.  Test Vectors
+
+   This appendix provides test vectors for all three variants of
+   ipcrypt.  Each test vector includes the key, input IP address, and
+   encrypted output.  For non-deterministic variants (ipcrypt-nd and
+   ipcrypt-ndx), the tweak value is also included.
+
+D.1.  ipcrypt-deterministic Test Vectors
+
+   # Test vector 1
+   Key:          0123456789abcdeffedcba9876543210
+   Input IP:     0.0.0.0
+   Encrypted IP: bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb
+
+   # Test vector 2
+   Key:          1032547698badcfeefcdab8967452301
+   Input IP:     255.255.255.255
+   Encrypted IP: aed2:92f6:ea23:58c3:48fd:8b8:74e8:45d8
+
+   # Test vector 3
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+   Input IP:     192.0.2.1
+   Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
+
+D.2.  ipcrypt-nd Test Vectors
+
+   # Test vector 1
+   Key:          0123456789abcdeffedcba9876543210
+   Input IP:     0.0.0.0
+   Tweak:        08e0c289bff23b7c
+   Output:       08e0c289bff23b7cb349aadfe3bcef56221c384c7c217b16
+
+   # Test vector 2
+   Key:          1032547698badcfeefcdab8967452301
+   Input IP:     192.0.2.1
+   Tweak:        21bd1834bc088cd2
+   Output:       21bd1834bc088cd2e5e1fe55f95876e639faae2594a0caad
+
+   # Test vector 3
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+   Input IP:     2001:db8::1
+   Tweak:        b4ecbe30b70898d7
+   Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
+
+D.3.  ipcrypt-ndx Test Vectors
+
+# Test vector 1
+Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Input IP:     0.0.0.0
+Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
+Output:       21bd1834bc088cd2b4ecbe30b70898d782db0d4125fdace61db35b8339f20ee5
+
+# Test vector 2
+Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
+Input IP:     192.0.2.1
+Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
+Output:       08e0c289bff23b7cb4ecbe30b70898d7766a533392a69edf1ad0d3ce362ba98a
+
+# Test vector 3
+Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
+Input IP:     2001:db8::1
+Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
+Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
+
+   Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx),
+   the tweak values shown are examples.  In practice, tweaks MUST be
+   randomly generated for each encryption operation.
+
+   Implementations SHOULD verify their correctness against these test
+   vectors before deployment.
 
 Appendix E.  Acknowledgments
 
