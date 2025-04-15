@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Implementation of ipcrypt-ndx using AES-XTS with a 16-byte tweak.
-"""
+"""Implementation of ipcrypt-ndx using AES-XTS with a 16-byte tweak."""
 
 import ipaddress
 import os
@@ -14,7 +12,7 @@ def ip_to_bytes(ip):
         ip = ipaddress.ip_address(ip)
 
     if isinstance(ip, ipaddress.IPv4Address):
-        # Convert to IPv4-mapped IPv6 format
+        # Convert IPv4 to IPv4-mapped IPv6 format (::ffff:0:0/96)
         return b'\x00' * 10 + b'\xff\xff' + ip.packed
     else:
         return ip.packed
@@ -41,7 +39,7 @@ def aes_xts_encrypt(key, tweak, plaintext):
     if len(plaintext) != 16:
         raise ValueError("Plaintext must be 16 bytes")
 
-    # Split key into two halves
+    # Split key into two 16-byte keys
     k1 = key[:16]
     k2 = key[16:]
 
@@ -69,7 +67,7 @@ def aes_xts_decrypt(key, tweak, ciphertext):
     if len(ciphertext) != 16:
         raise ValueError("Ciphertext must be 16 bytes")
 
-    # Split key into two halves
+    # Split key into two 16-byte keys
     k1 = key[:16]
     k2 = key[16:]
 
@@ -96,13 +94,11 @@ def encrypt(ip, key):
     # Generate random 16-byte tweak
     tweak = os.urandom(16)
 
-    # Convert IP to 16 bytes
+    # Convert IP to bytes and encrypt
     plaintext = ip_to_bytes(ip)
-
-    # Encrypt using AES-XTS
     ciphertext = aes_xts_encrypt(key, tweak, plaintext)
 
-    # Return tweak and ciphertext concatenated as hex string
+    # Return tweak || ciphertext
     return tweak + ciphertext
 
 
@@ -110,15 +106,13 @@ def decrypt(binary_output, key):
     """Decrypt a binary output using AES-XTS."""
     if len(key) != 32:
         raise ValueError("Key must be 32 bytes")
-    if len(binary_output) != 32:  # 16 bytes tweak + 16 bytes ciphertext
+    if len(binary_output) != 32:
         raise ValueError("Binary output must be 32 bytes")
 
     # Split into tweak and ciphertext
     tweak = binary_output[:16]
     ciphertext = binary_output[16:]
 
-    # Decrypt using AES-XTS
+    # Decrypt and convert back to IP
     plaintext = aes_xts_decrypt(key, tweak, ciphertext)
-
-    # Convert back to IP address
     return bytes_to_ip(plaintext)

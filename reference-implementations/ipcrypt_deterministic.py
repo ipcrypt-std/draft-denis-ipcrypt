@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Implementation of ipcrypt-deterministic using AES-128.
-"""
+"""Implementation of ipcrypt-deterministic using AES-128."""
 
 import ipaddress
 import os
@@ -12,9 +10,8 @@ def ip_to_bytes(ip):
     """Convert an IP address to its 16-byte representation."""
     if isinstance(ip, str):
         ip = ipaddress.ip_address(ip)
-
     if isinstance(ip, ipaddress.IPv4Address):
-        # Convert to IPv4-mapped IPv6 format
+        # Convert IPv4 to IPv4-mapped IPv6 format (::ffff:0:0/96)
         return b'\x00' * 10 + b'\xff\xff' + ip.packed
     else:
         return ip.packed
@@ -37,17 +34,10 @@ def encrypt(ip, key):
     if len(key) != 16:
         raise ValueError("Key must be 16 bytes")
 
-    # Convert IP to 16 bytes
     plaintext = ip_to_bytes(ip)
-    print(f"Key: {binascii.hexlify(key).decode()}")
-    print(f"Plaintext: {binascii.hexlify(plaintext).decode()}")
-
-    # Encrypt using AES-128
     cipher = AES.new(key, AES.MODE_ECB)
     ciphertext = cipher.encrypt(plaintext)
-    print(f"Ciphertext: {binascii.hexlify(ciphertext).decode()}")
 
-    # Convert back to IP address
     return bytes_to_ip(ciphertext)
 
 
@@ -56,15 +46,16 @@ def decrypt(ip, key):
     if len(key) != 16:
         raise ValueError("Key must be 16 bytes")
 
-    # Convert IP to 16 bytes
     ciphertext = ip_to_bytes(ip)
-    print(f"Key: {binascii.hexlify(key).decode()}")
-    print(f"Ciphertext: {binascii.hexlify(ciphertext).decode()}")
-
-    # Decrypt using AES-128
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
-    print(f"Plaintext: {binascii.hexlify(plaintext).decode()}")
 
-    # Convert back to IP address
     return bytes_to_ip(plaintext)
+
+
+if __name__ == '__main__':
+    key = os.urandom(16)
+    ip = "192.0.2.1"
+    encrypted = encrypt(ip, key)
+    decrypted = decrypt(encrypted, key)
+    assert str(decrypted) == ip, "AES-128 encryption/decryption test failed"
