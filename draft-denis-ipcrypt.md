@@ -287,6 +287,9 @@ For test vectors, see {{ipcrypt-deterministic-test-vectors}}.
 
 Non‑deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see {{pseudocode-and-examples}}.
 
+> **Alternatives to Random Tweaks:**
+> While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, other approaches are possible. For example, a monotonic counter could be used as a tweak, but this is difficult to maintain in distributed systems and, if the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks. Another alternative is to use UUIDs (such as UUIDv6 or UUIDv7) as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective. Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.
+
 ## Encryption Process
 
 The encryption process for non-deterministic modes consists of the following steps:
