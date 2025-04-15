@@ -289,7 +289,7 @@ For applications that require text representation (e.g., logging, JSON encoding,
 
 The choice of encoding is application-specific and outside the scope of this specification. However, implementations SHOULD document their chosen encoding method clearly.
 
-## ipcrypt-nd and ipcrypt-ndx
+## Concrete Instantiations
 
 This document defines two concrete instantiations:
 
