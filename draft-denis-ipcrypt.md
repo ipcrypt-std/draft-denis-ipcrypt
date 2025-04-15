@@ -336,7 +336,7 @@ The `ipcrypt-nd` instantiation uses the KIASU‑BC tweakable block cipher with a
 
 Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations. If an `(input, tweak)` collision occurs, it indicates that the same input was processed with that tweak without revealing the input's value.
 
-These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher's strength (≈2^128 for AES‑128).
+These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher's strength.
 
 ### ipcrypt-ndx (AES‑XTS) {#ipcrypt-ndx}
 
