@@ -1351,6 +1351,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information, addressing concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality in the face of pervasive surveillance.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">For a detailed discussion of the security properties of these methods, see <a href="#security-considerations" class="auto internal xref">Section 7</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="use-cases-and-motivations">
 <section id="section-1.1">
         <h3 id="name-use-cases-and-motivations">
@@ -1362,10 +1363,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-1.1-2.1.1"><strong>Privacy Protection:</strong> Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured, as discussed in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.2">
-            <p id="section-1.1-2.2.1"><strong>Format Preservation:</strong> Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.2.1"><strong>Format Preservation:</strong> Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification. See <a href="#format-preservation" class="auto internal xref">Section 5.2</a> for details.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.3">
-            <p id="section-1.1-2.3.1"><strong>Mitigation of Correlation Attacks:</strong> Deterministic encryption reveals repeated inputs; non‑deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.3.1"><strong>Mitigation of Correlation Attacks:</strong> Deterministic encryption reveals repeated inputs; non‑deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential. See <a href="#non-deterministic-encryption" class="auto internal xref">Section 6</a> for implementation details.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.4">
             <p id="section-1.1-2.4.1"><strong>Privacy-Preserving Analytics:</strong> Many common operations like counting unique clients or implementing rate limiting can be performed using encrypted IP addresses without ever accessing the original values. This enables privacy-preserving analytics while maintaining functionality.<a href="#section-1.1-2.4.1" class="pilcrow">¶</a></p>
@@ -1374,6 +1375,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-1.1-2.5.1"><strong>Third-Party Service Integration:</strong> IP addresses are private information that should not be sent in cleartext to potentially untrusted third-party services or cloud providers. Using encrypted IP addresses as keys or identifiers allows integration with external services while protecting user privacy.<a href="#section-1.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-1.1-3">For implementation examples, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B.1</a>.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1492,7 +1494,7 @@ IPv4 Address:    192.0.2.1
           <p id="section-4-2.1.1"><strong>128-bit Block Cipher Construction:</strong><a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-2.1.2.1">
-              <p id="section-4-2.1.2.1.1">Used in deterministic encryption<a href="#section-4-2.1.2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-4-2.1.2.1.1">Used in deterministic encryption (see <a href="#deterministic-encryption" class="auto internal xref">Section 5</a>)<a href="#section-4-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4-2.1.2.2">
               <p id="section-4-2.1.2.2.1">Operates on a single 16-byte block<a href="#section-4-2.1.2.2.1" class="pilcrow">¶</a></p>
@@ -1506,7 +1508,7 @@ IPv4 Address:    192.0.2.1
           <p id="section-4-2.2.1"><strong>128-bit Tweakable Block Cipher (TBC) Construction:</strong><a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-2.2.2.1">
-              <p id="section-4-2.2.2.1.1">Used in non‑deterministic encryption<a href="#section-4-2.2.2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-4-2.2.2.1.1">Used in non‑deterministic encryption (see <a href="#non-deterministic-encryption" class="auto internal xref">Section 6</a>)<a href="#section-4-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4-2.2.2.2">
               <p id="section-4-2.2.2.2.1">Accepts a key, a tweak, and a message<a href="#section-4-2.2.2.2.1" class="pilcrow">¶</a></p>
@@ -1529,10 +1531,10 @@ IPv4 Address:    192.0.2.1
           <p id="section-4-4.2.1"><strong>DEOXYS-BC</strong><a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-4.3">
-          <p id="section-4-4.3.1"><strong>KIASU-BC</strong><a href="#section-4-4.3.1" class="pilcrow">¶</a></p>
+          <p id="section-4-4.3.1"><strong>KIASU-BC</strong> (see <a href="#implementing-kiasu-bc" class="auto internal xref">Appendix B.4</a> for implementation details)<a href="#section-4-4.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-4.4">
-          <p id="section-4-4.4.1"><strong>AES-XTS</strong><a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-4.4.1"><strong>AES-XTS</strong> (see <a href="#ipcrypt-ndx" class="auto internal xref">Section 6.2</a> for usage)<a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-4-5">Implementers MUST choose a cipher that meets the required security properties and provides robust resistance against related-tweak and other cryptographic attacks.<a href="#section-4-5" class="pilcrow">¶</a></p>
@@ -1543,7 +1545,7 @@ IPv4 Address:    192.0.2.1
       <h2 id="name-deterministic-encryption">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-deterministic-encryption" class="section-name selfRef">Deterministic Encryption</a>
       </h2>
-<p id="section-5-1">Deterministic encryption applies a 128‑bit block cipher directly to the 16‑byte representation of an IP address.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Deterministic encryption applies a 128‑bit block cipher directly to the 16‑byte representation of an IP address. For implementation details, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B.1</a>.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-5-2.1">
           <p id="section-5-2.1.1"><strong>Note:</strong>
@@ -1558,6 +1560,7 @@ For non-deterministic modes, the tweak must be preserved along with the cipherte
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-specific-instantiation-ipcr" class="section-name selfRef">Specific Instantiation: ipcrypt-deterministic</a>
         </h3>
 <p id="section-5.1-1">This instantiation employs AES128 in a single‑block operation. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">For test vectors, see <a href="#ipcrypt-deterministic-test-vectors" class="auto internal xref">Appendix B.3.1</a>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <div id="operation-flow-diagram">
 <section id="section-5.1.1">
           <h4 id="name-operation-flow-diagram">
@@ -1619,12 +1622,12 @@ To ensure IPv4 format preservation, implementers <strong>MUST</strong> consider 
 </div>
 </section>
 </div>
-<div id="nondeterministic-encryption">
+<div id="non-deterministic-encryption">
 <section id="section-6">
       <h2 id="name-nondeterministic-encryption">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-nondeterministic-encryption" class="section-name selfRef">Non‑Deterministic Encryption</a>
       </h2>
-<p id="section-6-1">Non‑deterministic encryption leverages a tweakable block cipher together with a random tweak.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">Non‑deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B.1</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">Although the tweak is generated uniformly at random (and thus may occasionally collide per birthday bounds), such collisions are benign when they occur with different inputs. An <code>(input, tweak)</code> collision reveals that the same input was encrypted with the same tweak but does not disclose the input’s value.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">The usage limits discussed below apply per cryptographic key; rotating keys can extend secure usage beyond these bounds.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <p id="section-6-4">This document defines two instantiations:<a href="#section-6-4" class="pilcrow">¶</a></p>
@@ -1640,7 +1643,8 @@ needs to be computed, avoiding the need for a full key schedule.<a href="#sectio
 </li>
       </ul>
 <p id="section-6-6">In both cases, if a tweak is generated randomly, it <strong>MUST be uniformly random</strong>. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.<a href="#section-6-6" class="pilcrow">¶</a></p>
-<div id="ipcrypt-nd-kiasubc">
+<p id="section-6-7">For test vectors, see <a href="#ipcrypt-nd-test-vectors" class="auto internal xref">Appendix B.3.2</a> and <a href="#ipcrypt-ndx-test-vectors" class="auto internal xref">Appendix B.3.3</a>.<a href="#section-6-7" class="pilcrow">¶</a></p>
+<div id="ipcrypt-nd">
 <section id="section-6.1">
         <h3 id="name-ipcrypt-nd-kiasubc">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-ipcrypt-nd-kiasubc" class="section-name selfRef">ipcrypt-nd (KIASU‑BC)</a>
@@ -1665,7 +1669,7 @@ needs to be computed, avoiding the need for a full key schedule.<a href="#sectio
 </div>
 </section>
 </div>
-<div id="ipcrypt-ndx-aesxts">
+<div id="ipcrypt-ndx">
 <section id="section-6.2">
         <h3 id="name-ipcrypt-ndx-aesxts">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-ipcrypt-ndx-aesxts" class="section-name selfRef">ipcrypt-ndx (AES‑XTS)</a>
@@ -1748,18 +1752,25 @@ Produces a 16‑byte output; preserves format but reveals repeated inputs.<a hre
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
+<p id="section-7-1">For a detailed discussion of the security properties of each mode, see:<a href="#section-7-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7-1.1">
-          <p id="section-7-1.1.1"><strong>Deterministic Mode:</strong>
-AES‑128’s permutation behavior ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition.<a href="#section-7-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7-2.1">
+          <p id="section-7-2.1.1"><a href="#deterministic-encryption" class="auto internal xref">Section 5</a> for deterministic mode security considerations<a href="#section-7-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-1.2">
-          <p id="section-7-1.2.1"><strong>Non‑Deterministic Mode:</strong>
-The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs.<a href="#section-7-1.2.1" class="pilcrow">¶</a></p>
-<p id="section-7-1.2.2">
-In cases where an <code>(input, tweak)</code> collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself. Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis.<a href="#section-7-1.2.2" class="pilcrow">¶</a></p>
-<p id="section-7-1.2.3">
-Key rotation is recommended to extend secure usage beyond the per-key collision bounds.<a href="#section-7-1.2.3" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-7-2.2">
+          <p id="section-7-2.2.1"><a href="#ipcrypt-nd" class="auto internal xref">Section 6.1</a> and <a href="#ipcrypt-ndx" class="auto internal xref">Section 6.2</a> for non-deterministic mode security considerations<a href="#section-7-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.3">
+          <p id="section-7-2.3.1"><strong>Deterministic Mode:</strong>
+AES‑128’s permutation behavior ensures distinct inputs yield distinct outputs; however, repeated inputs result in identical ciphertexts, thereby revealing repetition.<a href="#section-7-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.4">
+          <p id="section-7-2.4.1"><strong>Non‑Deterministic Mode:</strong>
+The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs.<a href="#section-7-2.4.1" class="pilcrow">¶</a></p>
+<p id="section-7-2.4.2">
+In cases where an <code>(input, tweak)</code> collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself. Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis.<a href="#section-7-2.4.2" class="pilcrow">¶</a></p>
+<p id="section-7-2.4.3">
+Key rotation is recommended to extend secure usage beyond the per-key collision bounds.<a href="#section-7-2.4.3" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -1866,18 +1877,19 @@ Key rotation is recommended to extend secure usage beyond the per-key collision 
       <h2 id="name-appendices">
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-appendices" class="section-name selfRef">Appendices</a>
       </h2>
-<div id="appendix-a-pseudocode-and-examples">
+<div id="pseudocode-and-examples">
 <section id="appendix-B.1">
         <h3 id="name-appendix-a-pseudocode-and-e">
 <a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-appendix-a-pseudocode-and-e" class="section-name selfRef">Appendix A. Pseudocode and Examples</a>
         </h3>
-<p id="appendix-B.1-1">This appendix provides detailed pseudocode for key operations described in this document.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-1">This appendix provides detailed pseudocode for key operations described in this document. For a visual representation of these operations, see <a href="#diagrams" class="auto internal xref">Appendix B.2</a>.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <div id="ipv4-address-conversion">
 <section id="appendix-B.1.1">
           <h4 id="name-ipv4-address-conversion">
 <a href="#appendix-B.1.1" class="section-number selfRef">B.1.1. </a><a href="#name-ipv4-address-conversion" class="section-name selfRef">IPv4 Address Conversion</a>
           </h4>
-<div class="lang-pseudocode sourcecode" id="appendix-B.1.1-1">
+<p id="appendix-B.1.1-1">For a diagram of this conversion process, see <a href="#ipv4-address-conversion-diagram" class="auto internal xref">Appendix B.2.1</a>.<a href="#appendix-B.1.1-1" class="pilcrow">¶</a></p>
+<div class="lang-pseudocode sourcecode" id="appendix-B.1.1-2">
 <pre>
 function IPv4To16Bytes(ipv4_address):
     // Split the IPv4 address into its octets
@@ -1892,13 +1904,13 @@ function IPv4To16Bytes(ipv4_address):
     for part in parts:
          bytes16.append(int(part))
     return bytes16
-</pre><a href="#appendix-B.1.1-1" class="pilcrow">¶</a>
+</pre><a href="#appendix-B.1.1-2" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B.1.1-2"><em>Example:</em> For <code>"192.0.2.1"</code>, the function returns<a href="#appendix-B.1.1-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="appendix-B.1.1-3">
+<p id="appendix-B.1.1-3"><em>Example:</em> For <code>"192.0.2.1"</code>, the function returns<a href="#appendix-B.1.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.1.1-4">
 <pre>
 [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
-</pre><a href="#appendix-B.1.1-3" class="pilcrow">¶</a>
+</pre><a href="#appendix-B.1.1-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2007,11 +2019,12 @@ function ipcrypt_ndx(ip_address, key):
 </div>
 </section>
 </div>
-<div id="appendix-b-diagrams">
+<div id="diagrams">
 <section id="appendix-B.2">
         <h3 id="name-appendix-b-diagrams">
 <a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-appendix-b-diagrams" class="section-name selfRef">Appendix B. Diagrams</a>
         </h3>
+<p id="appendix-B.2-1">This appendix provides visual representations of the key operations described in this document. For implementation details, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B.1</a>.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
 <div id="ipv4-address-conversion-diagram">
 <section id="appendix-B.2.1">
           <h4 id="name-ipv4-address-conversion-dia">
@@ -2120,7 +2133,7 @@ function ipcrypt_ndx(ip_address, key):
 </div>
 </section>
 </div>
-<div id="appendix-c-test-vectors">
+<div id="test-vectors">
 <section id="appendix-B.3">
         <h3 id="name-appendix-c-test-vectors">
 <a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-appendix-c-test-vectors" class="section-name selfRef">Appendix C. Test Vectors</a>
@@ -2211,7 +2224,7 @@ Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 </div>
 </section>
 </div>
-<div id="appendix-d-implementing-kiasu-bc">
+<div id="implementing-kiasu-bc">
 <section id="appendix-B.4">
         <h3 id="name-appendix-d-implementing-kia">
 <a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-appendix-d-implementing-kia" class="section-name selfRef">Appendix D. Implementing KIASU-BC</a>

@@ -142,6 +142,9 @@ Table of Contents
    information, addressing concerns raised in [RFC7624] regarding
    confidentiality in the face of pervasive surveillance.
 
+   For a detailed discussion of the security properties of these
+   methods, see Section 7.
+
 1.1.  Use Cases and Motivations
 
    The main motivations include:
@@ -152,12 +155,12 @@ Table of Contents
 
    *  *Format Preservation:* Ensuring that the encrypted output remains
       a valid IP address allows network devices to process the data
-      without modification.
+      without modification.  See Section 5.2 for details.
 
    *  *Mitigation of Correlation Attacks:* Deterministic encryption
       reveals repeated inputs; non-deterministic modes use a random
       tweak to obscure linkability while keeping the underlying input
-      confidential.
+      confidential.  See Section 6 for implementation details.
 
    *  *Privacy-Preserving Analytics:* Many common operations like
       counting unique clients or implementing rate limiting can be
@@ -170,6 +173,8 @@ Table of Contents
       untrusted third-party services or cloud providers.  Using
       encrypted IP addresses as keys or identifiers allows integration
       with external services while protecting user privacy.
+
+   For implementation examples, see Appendix B.1.
 
 2.  Terminology
 
@@ -251,7 +256,7 @@ IPv4 Address:    192.0.2.1
 
    1.  *128-bit Block Cipher Construction:*
 
-       *  Used in deterministic encryption
+       *  Used in deterministic encryption (see Section 5)
 
        *  Operates on a single 16-byte block
 
@@ -259,7 +264,7 @@ IPv4 Address:    192.0.2.1
 
    2.  *128-bit Tweakable Block Cipher (TBC) Construction:*
 
-       *  Used in non-deterministic encryption
+       *  Used in non-deterministic encryption (see Section 6)
 
        *  Accepts a key, a tweak, and a message
 
@@ -276,9 +281,9 @@ IPv4 Address:    192.0.2.1
 
    *  *DEOXYS-BC*
 
-   *  *KIASU-BC*
+   *  *KIASU-BC* (see Appendix B.4 for implementation details)
 
-   *  *AES-XTS*
+   *  *AES-XTS* (see Section 6.2 for usage)
 
    Implementers MUST choose a cipher that meets the required security
    properties and provides robust resistance against related-tweak and
@@ -287,7 +292,8 @@ IPv4 Address:    192.0.2.1
 5.  Deterministic Encryption
 
    Deterministic encryption applies a 128-bit block cipher directly to
-   the 16-byte representation of an IP address.
+   the 16-byte representation of an IP address.  For implementation
+   details, see Appendix B.1.
 
       *Note:* All instantiations documented in this specification
       (ipcrypt-deterministic, ipcrypt-nd, and ipcrypt-ndx) are
@@ -301,6 +307,8 @@ IPv4 Address:    192.0.2.1
    This instantiation employs AES128 in a single-block operation.  Since
    AES128 is a permutation, every distinct 16-byte input maps to a
    unique 16-byte ciphertext, preserving the IP address format.
+
+   For test vectors, see Appendix B.3.1.
 
 5.1.1.  Operation Flow Diagram
 
@@ -344,7 +352,8 @@ IPv4 Address:    192.0.2.1
 6.  Non-Deterministic Encryption
 
    Non-deterministic encryption leverages a tweakable block cipher
-   together with a random tweak.
+   together with a random tweak.  For implementation details, see
+   Appendix B.1.
 
    Although the tweak is generated uniformly at random (and thus may
    occasionally collide per birthday bounds), such collisions are benign
@@ -368,6 +377,8 @@ IPv4 Address:    192.0.2.1
    In both cases, if a tweak is generated randomly, it *MUST be
    uniformly random*. Reusing the same randomly generated tweak on
    different inputs is acceptable from a confidentiality standpoint.
+
+   For test vectors, see Appendix B.3.2 and Appendix B.3.3.
 
 6.1.  ipcrypt-nd (KIASU-BC)
 
@@ -448,6 +459,14 @@ IPv4 Address:    192.0.2.1
          a full key schedule.
 
 7.  Security Considerations
+
+   For a detailed discussion of the security properties of each mode,
+   see:
+
+   *  Section 5 for deterministic mode security considerations
+
+   *  Section 6.1 and Section 6.2 for non-deterministic mode security
+      considerations
 
    *  *Deterministic Mode:* AES-128’s permutation behavior ensures
       distinct inputs yield distinct outputs; however, repeated inputs
@@ -554,9 +573,12 @@ Appendix B.  Appendices
 B.1.  Appendix A.  Pseudocode and Examples
 
    This appendix provides detailed pseudocode for key operations
-   described in this document.
+   described in this document.  For a visual representation of these
+   operations, see Appendix B.2.
 
 B.1.1.  IPv4 Address Conversion
+
+   For a diagram of this conversion process, see Appendix B.2.1.
 
    function IPv4To16Bytes(ipv4_address):
        // Split the IPv4 address into its octets
@@ -642,6 +664,10 @@ B.1.6.  Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
        return result
 
 B.2.  Appendix B.  Diagrams
+
+   This appendix provides visual representations of the key operations
+   described in this document.  For implementation details, see
+   Appendix B.1.
 
 B.2.1.  IPv4 Address Conversion Diagram
 
