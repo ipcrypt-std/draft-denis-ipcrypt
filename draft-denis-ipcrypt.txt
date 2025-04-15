@@ -245,7 +245,7 @@ IPv4 Address:    192.0.2.1
        *  Interpret the 16 bytes as an IPv6 address in colon-hexadecimal
           notation
 
-   (For additional illustration, see Appendix B.)
+   (For additional illustration, see Appendix B)
 
 4.  Generic Constructions
 
@@ -826,8 +826,10 @@ D.2.  Tweak Padding
 
    3.  Fill the remaining 2 bytes of each group with zeros
 
-   Example: ~~~ 8-byte tweak: T0 T1 T2 T3 T4 T5 T6 T7 16-byte padded: T0
-   T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00 ~~~
+   Example:
+
+   8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
+   16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
 
 D.3.  Round Structure
 
