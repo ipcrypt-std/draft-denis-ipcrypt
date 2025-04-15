@@ -609,77 +609,6 @@ This appendix provides visual representations of the key operations described in
        32-Byte Output (ipcrypt-ndx)
 ~~~
 
-# Test Vectors {#test-vectors}
-
-This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak value is also included.
-
-## ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
-
-~~~
-# Test vector 1
-Key:          0123456789abcdeffedcba9876543210
-Input IP:     0.0.0.0
-Encrypted IP: bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb
-
-# Test vector 2
-Key:          1032547698badcfeefcdab8967452301
-Input IP:     255.255.255.255
-Encrypted IP: aed2:92f6:ea23:58c3:48fd:8b8:74e8:45d8
-
-# Test vector 3
-Key:          2b7e151628aed2a6abf7158809cf4f3c
-Input IP:     192.0.2.1
-Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
-~~~
-
-## ipcrypt-nd Test Vectors {#ipcrypt-nd-test-vectors}
-
-~~~
-# Test vector 1
-Key:          0123456789abcdeffedcba9876543210
-Input IP:     0.0.0.0
-Tweak:        08e0c289bff23b7c
-Output:       08e0c289bff23b7cb349aadfe3bcef56221c384c7c217b16
-
-# Test vector 2
-Key:          1032547698badcfeefcdab8967452301
-Input IP:     192.0.2.1
-Tweak:        21bd1834bc088cd2
-Output:       21bd1834bc088cd2e5e1fe55f95876e639faae2594a0caad
-
-# Test vector 3
-Key:          2b7e151628aed2a6abf7158809cf4f3c
-Input IP:     2001:db8::1
-Tweak:        b4ecbe30b70898d7
-Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
-~~~
-
-## ipcrypt-ndx Test Vectors {#ipcrypt-ndx-test-vectors}
-
-~~~
-# Test vector 1
-Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
-Input IP:     0.0.0.0
-Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Output:       21bd1834bc088cd2b4ecbe30b70898d782db0d4125fdace61db35b8339f20ee5
-
-# Test vector 2
-Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
-Input IP:     192.0.2.1
-Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
-Output:       08e0c289bff23b7cb4ecbe30b70898d7766a533392a69edf1ad0d3ce362ba98a
-
-# Test vector 3
-Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
-Input IP:     2001:db8::1
-Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
-~~~
-
-Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
-
-Implementations SHOULD verify their correctness against these test vectors before deployment.
-
 # Implementing KIASU-BC {#implementing-kiasu-bc}
 
 This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak. For more information about the security properties of KIASU-BC, see {{KIASU-BC}}.
@@ -785,6 +714,77 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 
     return state
 ~~~
+
+# Test Vectors {#test-vectors}
+
+This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak value is also included.
+
+## ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
+
+~~~
+# Test vector 1
+Key:          0123456789abcdeffedcba9876543210
+Input IP:     0.0.0.0
+Encrypted IP: bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb
+
+# Test vector 2
+Key:          1032547698badcfeefcdab8967452301
+Input IP:     255.255.255.255
+Encrypted IP: aed2:92f6:ea23:58c3:48fd:8b8:74e8:45d8
+
+# Test vector 3
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+Input IP:     192.0.2.1
+Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
+~~~
+
+## ipcrypt-nd Test Vectors {#ipcrypt-nd-test-vectors}
+
+~~~
+# Test vector 1
+Key:          0123456789abcdeffedcba9876543210
+Input IP:     0.0.0.0
+Tweak:        08e0c289bff23b7c
+Output:       08e0c289bff23b7cb349aadfe3bcef56221c384c7c217b16
+
+# Test vector 2
+Key:          1032547698badcfeefcdab8967452301
+Input IP:     192.0.2.1
+Tweak:        21bd1834bc088cd2
+Output:       21bd1834bc088cd2e5e1fe55f95876e639faae2594a0caad
+
+# Test vector 3
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+Input IP:     2001:db8::1
+Tweak:        b4ecbe30b70898d7
+Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
+~~~
+
+## ipcrypt-ndx Test Vectors {#ipcrypt-ndx-test-vectors}
+
+~~~
+# Test vector 1
+Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Input IP:     0.0.0.0
+Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
+Output:       21bd1834bc088cd2b4ecbe30b70898d782db0d4125fdace61db35b8339f20ee5
+
+# Test vector 2
+Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
+Input IP:     192.0.2.1
+Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
+Output:       08e0c289bff23b7cb4ecbe30b70898d7766a533392a69edf1ad0d3ce362ba98a
+
+# Test vector 3
+Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
+Input IP:     2001:db8::1
+Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
+Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
+~~~
+
+Note: For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
+
+Implementations SHOULD verify their correctness against these test vectors before deployment.
 
 # Acknowledgments
 
