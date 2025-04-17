@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                             15 April 2025
-Expires: 17 October 2025
+Intended status: Informational                             17 April 2025
+Expires: 19 October 2025
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 October 2025.
+   This Internet-Draft will expire on 19 October 2025.
 
 Copyright Notice
 
@@ -104,10 +104,11 @@ Table of Contents
        6.5.1.  Deterministic Mode Security
        6.5.2.  Non-Deterministic Mode Security
        6.5.3.  Implementation Security
-   7.  IANA Considerations
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   7.  Implementation Status
+   8.  IANA Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Appendix A.  Diagrams
      A.1.  IPv4 Address Conversion Diagram
      A.2.  Deterministic Encryption Flow
@@ -551,13 +552,25 @@ IPv4 Address:    192.0.2.1
 
    4.  Error handling does not leak sensitive information
 
-7.  IANA Considerations
+7.  Implementation Status
+
+   _This note is to be removed before publishing as an RFC._
+
+   Multiple implementations of the schemes described in this document
+   have been developed and verified for interoperability.
+
+   A comprehensive list of known implementations and integrations can be
+   found at https://github.com/jedisct1/draft-denis-ipcrypt, which
+   includes reference implementations closely aligned with the
+   pseudocode provided in this document.
+
+8.  IANA Considerations
 
    This document does not require any IANA actions.
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
               26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
@@ -600,7 +613,7 @@ IPv4 Address:    192.0.2.1
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [BRW2005]  Bellare, M., Rogaway, P., and D. Wagner, "Format-
               Preserving Encryption", CRYPTO 2005, 2005,
