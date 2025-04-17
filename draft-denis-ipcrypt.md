@@ -583,6 +583,10 @@ function Bytes16ToIP(bytes16):
 
 ~~~pseudocode
 function ipcrypt_deterministic(ip_address, key):
+    // The key MUST be exactly 16 bytes (128 bits) in length
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+
     bytes16 = convertTo16Bytes(ip_address)
     ciphertext = AES128_encrypt(key, bytes16)
     encrypted_ip = Bytes16ToIP(ciphertext)
@@ -596,6 +600,7 @@ function ipcrypt_nd_encrypt(ip_address, key):
     // The key MUST be exactly 16 bytes (128 bits) in length
     if length(key) != 16:
         raise Error("Key must be 16 bytes")
+
     // Step 1: Generate random tweak (MUST be exactly 8 bytes)
     tweak = random_bytes(8)  // MUST be uniformly random
 
@@ -629,6 +634,7 @@ function ipcrypt_ndx_encrypt(ip_address, key):
     // The key MUST be exactly 32 bytes (256 bits) in length, consisting of two 16-byte AES-128 keys
     if length(key) != 32:
         raise Error("Key must be 32 bytes (two AES-128 keys)")
+
     // Step 1: Generate random tweak (MUST be exactly 16 bytes)
     tweak = random_bytes(16)  // MUST be uniformly random
 
