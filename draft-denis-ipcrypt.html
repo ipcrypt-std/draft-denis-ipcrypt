@@ -1632,7 +1632,10 @@ To ensure IPv4 format preservation, implementers <strong>MUST</strong> consider 
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-6-2.1">
           <p id="section-6-2.1.1"><strong>Alternatives to Random Tweaks:</strong>
-While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, other approaches are possible. For example, a monotonic counter could be used as a tweak, but this is difficult to maintain in distributed systems and, if the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks. Another alternative is to use UUIDs (such as UUIDv6 or UUIDv7) as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective. Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
+While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, other approaches are possible.
+For example, a monotonic counter could be used as a tweak, but this is difficult to maintain in distributed systems and, if the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.
+Another alternative is to use UUIDs (such as UUIDv6 or UUIDv7) as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.
+Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="encryption-process">
