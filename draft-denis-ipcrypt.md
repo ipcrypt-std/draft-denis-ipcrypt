@@ -773,13 +773,13 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak value is also included.
 
 Note: The key and tweak sizes are:
-- `ipcrypt-deterministic`: 
+- `ipcrypt-deterministic`:
   - Key: 16 bytes (128 bits)
   - No tweak used
-- `ipcrypt-nd`: 
+- `ipcrypt-nd`:
   - Key: 16 bytes (128 bits)
   - Tweak: 8 bytes (64 bits)
-- `ipcrypt-ndx`: 
+- `ipcrypt-ndx`:
   - Key: 32 bytes (256 bits, two AES-128 keys)
   - Tweak: 16 bytes (128 bits)
 
