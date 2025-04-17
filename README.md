@@ -19,6 +19,7 @@ This is the working area for the individual Internet-Draft, "Methods for IP Addr
 | [rust-ipcrypt2](https://github.com/jedisct1/rust-ipcrypt2)                                             | Rust       |
 | [ipcrypt-js](https://www.npmjs.com/package/ipcrypt)                                                    | JavaScript |
 | [go-ipcrypt](https://github.com/jedisct1/go-ipcrypt)                                                   | Go         |
+| [zig-ipcrypt](https://github.com/jedisct1/zig-ipcrypt)                                                 | Zig        |
 
 ## Contributing
 
