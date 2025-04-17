@@ -404,6 +404,14 @@ Implementations MUST ensure that:
 3. Side-channel attacks are mitigated through constant-time operations
 4. Error handling does not leak sensitive information
 
+# Implementation Status
+
+_This note is to be removed before publishing as an RFC._
+
+Multiple implementations of the schemes described in this document have been developed and verified for interoperability.
+
+A comprehensive list of known implementations and integrations can be found at [](https://github.com/jedisct1/draft-denis-ipcrypt), which includes reference implementations closely aligned with the pseudocode provided in this document.
+
 # IANA Considerations
 
 This document does not require any IANA actions.
