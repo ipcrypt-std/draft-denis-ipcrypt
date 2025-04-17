@@ -243,7 +243,7 @@ Deterministic encryption applies a 128‑bit block cipher directly to the 16‑b
 
 ## ipcrypt-deterministic
 
-The `ipcrypt-deterministic` instantiation employs AES128 in a single‑block operation. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.
+The `ipcrypt-deterministic` instantiation employs AES128 in a single‑block operation. The key MUST be exactly 16 bytes (128 bits) in length. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.
 
 For test vectors, see {{ipcrypt-deterministic-test-vectors}}.
 
@@ -343,7 +343,7 @@ These collision bounds apply per cryptographic key. By rotating keys regularly, 
 
 ### ipcrypt-ndx (AES‑XTS) {#ipcrypt-ndx}
 
-The `ipcrypt-ndx` instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32 bytes total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.
+The `ipcrypt-ndx` instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32‑byte total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.
 
 Since only a single block is encrypted, only the first tweak needs to be computed, avoiding the need for a full key schedule. Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.
 
@@ -382,6 +382,12 @@ For a detailed discussion of the security properties of each mode, see:
 
 - {{deterministic-encryption}} for deterministic mode security considerations
 - {{ipcrypt-nd}} and {{ipcrypt-ndx}} for non-deterministic mode security considerations
+
+The ipcrypt constructions focus solely on confidentiality and do not provide integrity. This means that IP addresses in an ordered sequence can be partially removed, duplicated, reordered, or blindly altered by an active adversary.
+
+Applications that require sequences of encrypted IP addresses that cannot be modified must apply an authentication scheme over the entire sequence, such as a HMAC construction or a keyed hash function, or a public key signature.
+
+This is outside the scope of this specification, but implementers should be aware that additional authentication mechanisms are required if protection against active adversaries is needed.
 
 ### Deterministic Mode Security
 
@@ -587,7 +593,10 @@ function ipcrypt_deterministic(ip_address, key):
 
 ~~~pseudocode
 function ipcrypt_nd_encrypt(ip_address, key):
-    // Step 1: Generate random tweak
+    // The key MUST be exactly 16 bytes (128 bits) in length
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+    // Step 1: Generate random tweak (MUST be exactly 8 bytes)
     tweak = random_bytes(8)  // MUST be uniformly random
 
     // Step 2: Convert IP to 16-byte representation
@@ -617,7 +626,10 @@ function ipcrypt_nd_decrypt(ciphertext, key):
 
 ~~~pseudocode
 function ipcrypt_ndx_encrypt(ip_address, key):
-    // Step 1: Generate random tweak
+    // The key MUST be exactly 32 bytes (256 bits) in length, consisting of two 16-byte AES-128 keys
+    if length(key) != 32:
+        raise Error("Key must be 32 bytes (two AES-128 keys)")
+    // Step 1: Generate random tweak (MUST be exactly 16 bytes)
     tweak = random_bytes(16)  // MUST be uniformly random
 
     // Step 2: Convert IP to 16-byte representation
@@ -753,6 +765,17 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 # Test Vectors {#test-vectors}
 
 This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak value is also included.
+
+Note: The key and tweak sizes are:
+- `ipcrypt-deterministic`: 
+  - Key: 16 bytes (128 bits)
+  - No tweak used
+- `ipcrypt-nd`: 
+  - Key: 16 bytes (128 bits)
+  - Tweak: 8 bytes (64 bits)
+- `ipcrypt-ndx`: 
+  - Key: 32 bytes (256 bits, two AES-128 keys)
+  - Tweak: 16 bytes (128 bits)
 
 ## ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
 
