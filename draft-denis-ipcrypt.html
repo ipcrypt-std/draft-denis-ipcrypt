@@ -1567,7 +1567,7 @@ For non-deterministic modes, the tweak must be preserved along with the cipherte
         <h3 id="name-ipcrypt-deterministic">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-ipcrypt-deterministic" class="section-name selfRef">ipcrypt-deterministic</a>
         </h3>
-<p id="section-5.1-1">The <code>ipcrypt-deterministic</code> instantiation employs AES128 in a single‑block operation. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">The <code>ipcrypt-deterministic</code> instantiation employs AES128 in a single‑block operation. The key MUST be exactly 16 bytes (128 bits) in length. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">For test vectors, see <a href="#ipcrypt-deterministic-test-vectors" class="auto internal xref">Appendix D.1</a>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1-3">
 <pre>
@@ -1722,7 +1722,7 @@ needs to be computed, avoiding the need for a full key schedule.<a href="#sectio
           <h4 id="name-ipcrypt-ndx-aesxts">
 <a href="#section-6.4.2" class="section-number selfRef">6.4.2. </a><a href="#name-ipcrypt-ndx-aesxts" class="section-name selfRef">ipcrypt-ndx (AES‑XTS)</a>
           </h4>
-<p id="section-6.4.2-1">The <code>ipcrypt-ndx</code> instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32 bytes total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.<a href="#section-6.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.4.2-1">The <code>ipcrypt-ndx</code> instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32‑byte total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.<a href="#section-6.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.4.2-2">Since only a single block is encrypted, only the first tweak needs to be computed, avoiding the need for a full key schedule. Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.<a href="#section-6.4.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.4.2-3">As with <code>ipcrypt-nd</code>, an <code>(input, tweak)</code> collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
@@ -1790,6 +1790,9 @@ Produces a 16‑byte output; preserves format but reveals repeated inputs.<a hre
             <p id="section-6.5-2.2.1"><a href="#ipcrypt-nd" class="auto internal xref">Section 6.4.1</a> and <a href="#ipcrypt-ndx" class="auto internal xref">Section 6.4.2</a> for non-deterministic mode security considerations<a href="#section-6.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-6.5-3">The ipcrypt constructions focus solely on confidentiality and do not provide integrity. This means that IP addresses in an ordered sequence can be partially removed, duplicated, reordered, or blindly altered by an active adversary.<a href="#section-6.5-3" class="pilcrow">¶</a></p>
+<p id="section-6.5-4">Applications that require sequences of encrypted IP addresses that cannot be modified must apply an authentication scheme over the entire sequence, such as a HMAC construction or a keyed hash function, or a public key signature.<a href="#section-6.5-4" class="pilcrow">¶</a></p>
+<p id="section-6.5-5">This is outside the scope of this specification, but implementers should be aware that additional authentication mechanisms are required if protection against active adversaries is needed.<a href="#section-6.5-5" class="pilcrow">¶</a></p>
 <div id="deterministic-mode-security">
 <section id="section-6.5.1">
           <h4 id="name-deterministic-mode-security">
@@ -2150,6 +2153,10 @@ function Bytes16ToIP(bytes16):
 <div class="lang-pseudocode sourcecode" id="appendix-B.4-1">
 <pre>
 function ipcrypt_deterministic(ip_address, key):
+    // The key MUST be exactly 16 bytes (128 bits) in length
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+
     bytes16 = convertTo16Bytes(ip_address)
     ciphertext = AES128_encrypt(key, bytes16)
     encrypted_ip = Bytes16ToIP(ciphertext)
@@ -2166,7 +2173,11 @@ function ipcrypt_deterministic(ip_address, key):
 <div class="lang-pseudocode sourcecode" id="appendix-B.5-1">
 <pre>
 function ipcrypt_nd_encrypt(ip_address, key):
-    // Step 1: Generate random tweak
+    // The key MUST be exactly 16 bytes (128 bits) in length
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+
+    // Step 1: Generate random tweak (MUST be exactly 8 bytes)
     tweak = random_bytes(8)  // MUST be uniformly random
 
     // Step 2: Convert IP to 16-byte representation
@@ -2202,7 +2213,11 @@ function ipcrypt_nd_decrypt(ciphertext, key):
 <div class="lang-pseudocode sourcecode" id="appendix-B.6-1">
 <pre>
 function ipcrypt_ndx_encrypt(ip_address, key):
-    // Step 1: Generate random tweak
+    // The key MUST be exactly 32 bytes (256 bits) in length, consisting of two 16-byte AES-128 keys
+    if length(key) != 32:
+        raise Error("Key must be 32 bytes (two AES-128 keys)")
+
+    // Step 1: Generate random tweak (MUST be exactly 16 bytes)
     tweak = random_bytes(16)  // MUST be uniformly random
 
     // Step 2: Convert IP to 16-byte representation
@@ -2440,6 +2455,16 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
       </h2>
 <p id="appendix-D-1">This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (<code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code>), the tweak value is also included.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-2">Note: The key and tweak sizes are:
+- <code>ipcrypt-deterministic</code>:
+  - Key: 16 bytes (128 bits)
+  - No tweak used
+- <code>ipcrypt-nd</code>:
+  - Key: 16 bytes (128 bits)
+  - Tweak: 8 bytes (64 bits)
+- <code>ipcrypt-ndx</code>:
+  - Key: 32 bytes (256 bits, two AES-128 keys)
+  - Tweak: 16 bytes (128 bits)<a href="#appendix-D-2" class="pilcrow">¶</a></p>
 <div id="ipcrypt-deterministic-test-vectors">
 <section id="appendix-D.1">
         <h3 id="name-ipcrypt-deterministic-test-">
