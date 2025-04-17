@@ -335,11 +335,13 @@ For test vectors, see {{ipcrypt-nd-test-vectors}} and {{ipcrypt-ndx-test-vectors
 
 ### ipcrypt-nd (KIASU‑BC) {#ipcrypt-nd}
 
-The `ipcrypt-nd` instantiation uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak. The output is 24 bytes total, consisting of an 8‑byte tweak concatenated with a 16‑byte ciphertext.
+The `ipcrypt-nd` instantiation uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak. For implementation details, see {{implementing-kiasu-bc}}. The output is 24 bytes total, consisting of an 8‑byte tweak concatenated with a 16‑byte ciphertext.
 
 Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations. If an `(input, tweak)` collision occurs, it indicates that the same input was processed with that tweak without revealing the input's value.
 
 These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher's strength.
+
+For test vectors, see {{ipcrypt-nd-test-vectors}}.
 
 ### ipcrypt-ndx (AES‑XTS) {#ipcrypt-ndx}
 
@@ -563,6 +565,7 @@ _Example:_ For `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"`, the output is the co
 function Bytes16ToIP(bytes16):
     if length(bytes16) != 16:
          raise Error("Invalid byte array")
+
     // Check for the IPv4-mapped prefix
     if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11] == 0xFF:
          ipv4_parts = []
