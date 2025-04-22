@@ -10,3 +10,6 @@
 [submodule "implementations/javascript"]
 	path = implementations/javascript
 	url = https://github.com/jedisct1/ipcrypt-js.git
+[submodule "implementations/php"]
+	path = implementations/php
+	url = https://github.com/jedisct1/php-ipcrypt.git
