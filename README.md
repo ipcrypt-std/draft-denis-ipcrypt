@@ -20,6 +20,7 @@ This is the working area for the individual Internet-Draft, "Methods for IP Addr
 | [ipcrypt-js](https://www.npmjs.com/package/ipcrypt)                                                             | JavaScript |
 | [go-ipcrypt](https://github.com/jedisct1/go-ipcrypt)                                                            | Go         |
 | [zig-ipcrypt](https://github.com/jedisct1/zig-ipcrypt)                                                          | Zig        |
+| [php-ipcrypt](https://github.com/jedisct1/php-ipcrypt)                                                          | PHP        |
 
 ## Contributing
 
