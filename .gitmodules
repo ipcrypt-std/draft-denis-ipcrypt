@@ -1,0 +1,12 @@
+[submodule "implementations/c"]
+	path = implementations/c
+	url = https://github.com/jedisct1/ipcrypt2.git
+[submodule "implementations/zig"]
+	path = implementations/zig
+	url = https://github.com/jedisct1/zig-ipcrypt.git
+[submodule "implementations/go"]
+	path = implementations/go
+	url = https://github.com/jedisct1/go-ipcrypt.git
+[submodule "implementations/javascript"]
+	path = implementations/javascript
+	url = https://github.com/jedisct1/ipcrypt-js.git
