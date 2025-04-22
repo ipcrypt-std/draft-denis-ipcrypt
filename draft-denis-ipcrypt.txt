@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                             17 April 2025
-Expires: 19 October 2025
+Intended status: Informational                             22 April 2025
+Expires: 24 October 2025
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 October 2025.
+   This Internet-Draft will expire on 24 October 2025.
 
 Copyright Notice
 
