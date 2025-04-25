@@ -9,18 +9,9 @@ This is the working area for the individual Internet-Draft, "Methods for IP Addr
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-denis-ipcrypt)
 * [Compare Editor's Copy to Individual Draft](https://jedisct1.github.io/draft-denis-ipcrypt/#go.draft-denis-ipcrypt.diff)
 
-
 ## Known Implementations
 
-| Name                                                                                                            | Language   |
-| --------------------------------------------------------------------------------------------------------------- | ---------- |
-| [Reference implementation](https://github.com/jedisct1/draft-denis-ipcrypt/tree/main/implementations/python)    | Python     |
-| [ipcrypt2](https://github.com/jedisct1/ipcrypt2)                                                                | C          |
-| [rust-ipcrypt2](https://github.com/jedisct1/rust-ipcrypt2)                                                      | Rust       |
-| [ipcrypt-js](https://www.npmjs.com/package/ipcrypt)                                                             | JavaScript |
-| [go-ipcrypt](https://github.com/jedisct1/go-ipcrypt)                                                            | Go         |
-| [zig-ipcrypt](https://github.com/jedisct1/zig-ipcrypt)                                                          | Zig        |
-| [php-ipcrypt](https://github.com/jedisct1/php-ipcrypt)                                                          | PHP        |
+The project website maintains a list of [known ipcrypt implementations](https://ipcrypt-std.github.io/implementations/).
 
 ## Contributing
 
@@ -29,7 +20,6 @@ See the
 
 Contributions can be made by creating pull requests.
 The GitHub interface supports creating pull requests using the Edit (✏) button.
-
 
 ## Command Line Usage
 
@@ -41,4 +31,3 @@ $ make
 
 Command line usage requires that you have the necessary software installed.  See
 [the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
-
