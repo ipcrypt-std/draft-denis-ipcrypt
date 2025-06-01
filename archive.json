@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-29T01:42:57.025513+00:00",
+  "timestamp": "2025-06-01T01:59:43.584079+00:00",
   "repo": "jedisct1/draft-denis-ipcrypt",
   "labels": [
     {
@@ -49,6 +49,38 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOOZKXcc65HlEL",
+      "title": "Add Dart implementation",
+      "url": "https://github.com/jedisct1/draft-denis-ipcrypt/issues/1",
+      "state": "CLOSED",
+      "author": "elliotwutingfeng",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I have ported ipcrypt over to Dart. It is most similar to the JavaScript and Go implementations. The Dart library is available at <https://pub.dev/packages/ipcrypt>.\n\nIt uses [pointycastle](https://pub.dev/packages/pointycastle) for its AES implementation in **ipcrypt-deterministic** and **ipcrypt-ndx**. \n\nFor **ipcrypt-nd**, KIASU-BC is directly ported from ipcrypt-js.",
+      "createdAt": "2025-05-31T16:59:22Z",
+      "updatedAt": "2025-05-31T17:50:03Z",
+      "closedAt": "2025-05-31T17:50:02Z",
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "OWNER",
+          "body": "Thank you!\n\nThis is great work!",
+          "createdAt": "2025-05-31T17:04:09Z",
+          "updatedAt": "2025-05-31T17:04:09Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "OWNER",
+          "body": "Your implementation has been added to the website. Thanks again!",
+          "createdAt": "2025-05-31T17:50:02Z",
+          "updatedAt": "2025-05-31T17:50:02Z"
+        }
+      ]
+    }
+  ],
   "pulls": []
 }
