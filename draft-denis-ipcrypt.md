@@ -762,8 +762,7 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
     for round in range(1, 10):
         state = sub_bytes(state)
         state = shift_rows(state)
-        if round < 9:
-            state = mix_columns(state)
+        state = mix_columns(state)
         state = add_round_key(state, round_keys[round] ^ padded_tweak)
 
     // Final round
