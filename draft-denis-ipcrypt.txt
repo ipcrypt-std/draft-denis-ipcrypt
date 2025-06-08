@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                             22 April 2025
-Expires: 24 October 2025
+Intended status: Informational                               8 June 2025
+Expires: 10 December 2025
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 October 2025.
+   This Internet-Draft will expire on 10 December 2025.
 
 Copyright Notice
 
@@ -1013,8 +1013,7 @@ C.6.  Example Implementation
        for round in range(1, 10):
            state = sub_bytes(state)
            state = shift_rows(state)
-           if round < 9:
-               state = mix_columns(state)
+           state = mix_columns(state)
            state = add_round_key(state, round_keys[round] ^ padded_tweak)
 
        // Final round
