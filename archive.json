@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-08T01:52:08.117208+00:00",
+  "timestamp": "2025-06-10T01:46:15.312643+00:00",
   "repo": "jedisct1/draft-denis-ipcrypt",
   "labels": [
     {
@@ -82,5 +82,42 @@
       ]
     }
   ],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 2,
+      "id": "PR_kwDOOZKXcc6Zj7Hi",
+      "title": "Remove erroneous condition statement",
+      "url": "https://github.com/jedisct1/draft-denis-ipcrypt/pull/2",
+      "state": "MERGED",
+      "author": "elliotwutingfeng",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This \"if-statement\" does not appear in any of the example implementations.",
+      "createdAt": "2025-06-08T05:44:51Z",
+      "updatedAt": "2025-06-08T08:01:55Z",
+      "baseRepository": "jedisct1/draft-denis-ipcrypt",
+      "baseRefName": "main",
+      "baseRefOid": "149d89ea12402b13877283a6f7a1e941f0fbf9a7",
+      "headRepository": "elliotwutingfeng/draft-denis-ipcrypt",
+      "headRefName": "patch-1",
+      "headRefOid": "51bce0db03f768c18b161173dbf703873500ae65",
+      "closedAt": "2025-06-08T06:57:56Z",
+      "mergedAt": "2025-06-08T06:57:56Z",
+      "mergedBy": "jedisct1",
+      "mergeCommit": {
+        "oid": "94fc9807be9b4d2427be63e4ba067268c23b4a82"
+      },
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "OWNER",
+          "body": "Indeed! Thank you!",
+          "createdAt": "2025-06-08T06:58:13Z",
+          "updatedAt": "2025-06-08T06:58:13Z"
+        }
+      ],
+      "reviews": []
+    }
+  ]
 }
