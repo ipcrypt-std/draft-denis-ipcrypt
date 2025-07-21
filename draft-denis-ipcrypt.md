@@ -366,7 +366,7 @@ Implementations MUST ensure that:
 
 _This note is to be removed before publishing as an RFC._
 
-Multiple implementations of the schemes described in this document have been developed and verified for interoperability. A comprehensive list of known implementations and integrations can be found at https://github.com/jedisct1/draft-denis-ipcrypt, which includes reference implementations closely aligned with the pseudocode provided in this document.
+Multiple implementations of the schemes described in this document have been developed and verified for interoperability. A comprehensive list of known implementations and integrations can be found at https://github.com/ipcrypt-std/draft-denis-ipcrypt, which includes reference implementations closely aligned with the pseudocode provided in this document.
 
 # IANA Considerations
 
