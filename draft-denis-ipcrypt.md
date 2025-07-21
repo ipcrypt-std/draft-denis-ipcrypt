@@ -123,15 +123,15 @@ informative:
 
 --- abstract
 
-This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format‑preserving and non‑deterministic constructions. These methods address privacy concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring and data collection.
+This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format-preserving and non-deterministic constructions. These methods address privacy concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring and data collection.
 
-The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16‑byte representation. Two generic constructions are defined—one using a 128‑bit block cipher and the other using a 128‑bit tweakable block cipher—along with three concrete instantiations:
+The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation. Two generic constructions are defined—one using a 128-bit block cipher and the other using a 128-bit tweakable block cipher—along with three concrete instantiations:
 
-- **`ipcrypt-deterministic`:** Deterministic encryption using AES128 (applied as a single‑block operation).
-- **`ipcrypt-nd`:** Non‑deterministic encryption using the KIASU‑BC tweakable block cipher with an 8‑byte tweak.
-- **`ipcrypt-ndx`:** Non‑deterministic encryption using the AES‑XTS tweakable block cipher with a 16‑byte tweak.
+- **`ipcrypt-deterministic`:** Deterministic encryption using AES-128 as a single-block operation.
+- **`ipcrypt-nd`:** Non-deterministic encryption using the KIASU-BC tweakable block cipher with an 8-byte tweak.
+- **`ipcrypt-ndx`:** Non-deterministic encryption using the AES-XTS tweakable block cipher with a 16-byte tweak.
 
-Deterministic mode produces a 16‑byte ciphertext (enabling format preservation), while non‑deterministic modes prepend a randomly sampled tweak (which MUST be uniformly random when generated, as specified in {{!RFC4086}}) to produce larger ciphertexts that resist correlation attacks.
+Deterministic mode produces a 16-byte ciphertext enabling format preservation. Non-deterministic modes prepend a randomly sampled tweak to produce larger ciphertexts that resist correlation attacks. When generated, tweaks MUST be uniformly random as specified in {{!RFC4086}}.
 
 --- middle
 
@@ -139,7 +139,7 @@ Deterministic mode produces a 16‑byte ciphertext (enabling format preservation
 
 This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information.
 
-This work addresses concerns raised in {{!RFC7624}} regarding confidentiality in the face of pervasive surveillance. For a detailed discussion of the security properties of these methods, see {{security-considerations}}.
+This work addresses concerns raised in {{!RFC7624}} regarding confidentiality in the face of pervasive surveillance. The security properties of these methods are discussed throughout this document and summarized in {{Security Considerations}}.
 
 ## Use Cases and Motivations
 
@@ -147,15 +147,15 @@ The main motivations include:
 
 - **Privacy Protection:** Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured, as discussed in {{!RFC6973}}.
 
-- **Format Preservation:** Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification. See {{format-preservation}} for details.
+- **Format Preservation:** Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification. See {{Format Preservation}} for details.
 
-- **Mitigation of Correlation Attacks:** Deterministic encryption reveals repeated inputs; non‑deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential. See {{non-deterministic-encryption}} for implementation details.
+- **Mitigation of Correlation Attacks:** Deterministic encryption reveals repeated inputs; non-deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential. See {{Non-Deterministic Encryption}} for implementation details.
 
 - **Privacy-Preserving Analytics:** Many common operations like counting unique clients or implementing rate limiting can be performed using encrypted IP addresses without ever accessing the original values. This enables privacy-preserving analytics while maintaining functionality.
 
 - **Third-Party Service Integration:** IP addresses are private information that should not be sent in cleartext to potentially untrusted third-party services or cloud providers. Using encrypted IP addresses as keys or identifiers allows integration with external services while protecting user privacy.
 
-For implementation examples, see {{pseudocode-and-examples}}.
+For implementation examples, see {{Pseudocode and Examples}}.
 
 # Terminology
 
@@ -164,21 +164,21 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Throughout this document, the following terms and conventions apply:
 
 - **IP Address:** An IPv4 or IPv6 address as defined in {{!RFC4291}}.
-- **16‑Byte Representation:** A fixed-length representation used for both IPv4 (via IPv4‑mapped IPv6) and IPv6 addresses.
+- **16-Byte Representation:** A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
 - **Tweak:** A non‑secret, additional input to a tweakable block cipher that further randomizes the output.
 - **Deterministic Encryption:** Encryption that always produces the same ciphertext for a given input and key.
-- **Non‑Deterministic Encryption:** Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.
-- **(Input, Tweak) Collision:** A scenario where the same input is encrypted with the same tweak; this reveals that the input was repeated but not the input's value.
+- **Non-Deterministic Encryption:** Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.
+- **(Input, Tweak) Collision:** A scenario where the same input is encrypted with the same tweak. This reveals that the input was repeated but not the input's value.
 
 # IP Address Conversion
 
-This section describes the conversion of IP addresses to and from a 16‑byte representation. This conversion is necessary to operate a 128‑bit cipher on both IPv4 and IPv6 addresses.
+This section describes the conversion of IP addresses to and from a 16-byte representation. This conversion is necessary to operate a 128-bit cipher on both IPv4 and IPv6 addresses.
 
 ## Converting to a 16‑Byte Representation
 
 ### IPv6 Addresses
 
-IPv6 addresses are natively 128 bits and are converted directly using network‑byte order (big‑endian) as specified in {{!RFC4291}}.
+IPv6 addresses are natively 128 bits and are converted directly using network byte order (big-endian) as specified in {{!RFC4291}}.
 
 _Example:_
 
@@ -189,63 +189,58 @@ IPv6 Address:    2001:0db8:85a3:0000:0000:8a2e:0370:7334
 
 ### IPv4 Addresses
 
-IPv4 addresses (32 bits) are mapped using the IPv4‑mapped IPv6 format as specified in {{!RFC4291}}:
+IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6 format as specified in {{!RFC4291}}:
 
 ~~~
 IPv4 Address:    192.0.2.1
 16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
 ~~~
 
-## Converting from a 16‑Byte Representation to an IP Address
+## Converting from a 16-Byte Representation to an IP Address
 
 The conversion algorithm is as follows:
 
 1. Examine the first 12 bytes of the 16-byte representation
-2. If they match the IPv4‑mapped prefix (10 bytes of `0x00` followed by `0xFF``, `0xFF``):
-   - Interpret the last 4 bytes as an IPv4 address in dotted‑decimal notation
+2. If they match the IPv4-mapped prefix (10 bytes of 0x00 followed by 0xFF, 0xFF):
+   - Interpret the last 4 bytes as an IPv4 address in dotted-decimal notation
 3. Otherwise:
-   - Interpret the 16 bytes as an IPv6 address in colon‑hexadecimal notation
-
-(For additional illustration, see {{diagrams}})
+   - Interpret the 16 bytes as an IPv6 address in colon-hexadecimal notation
 
 # Generic Constructions
 
 This specification defines two generic cryptographic constructions:
 
 1. **128-bit Block Cipher Construction:**
-   - Used in deterministic encryption (see {{deterministic-encryption}})
+   - Used in deterministic encryption (see {{Deterministic Encryption}})
    - Operates on a single 16-byte block
-   - Example: AES‑128 treated as a permutation
+   - Example: AES-128 treated as a permutation
 
 2. **128-bit Tweakable Block Cipher (TBC) Construction:**
-   - Used in non‑deterministic encryption (see {{non-deterministic-encryption}})
+   - Used in non-deterministic encryption (see {{Non-Deterministic Encryption}})
    - Accepts a key, a tweak, and a message
-   - The tweak is typically randomly sampled (and MUST be uniformly random when generated)
+   - The tweak must be uniformly random when generated
    - Reuse of the same tweak on different inputs does not compromise confidentiality
 
 Valid options for implementing a tweakable block cipher include, but are not limited to:
 
 - **SKINNY** (see {{SKINNY}})
 - **DEOXYS-BC** (see {{DEOXYS-BC}})
-- **KIASU-BC** (see {{implementing-kiasu-bc}} for implementation details)
-- **AES-XTS** (see {{ipcrypt-ndx}} for usage)
+- **KIASU-BC** (see {{Implementing KIASU-BC}} for implementation details)
+- **AES-XTS** (see {{ipcrypt-ndx (AES-XTS)}} for usage)
 
 Implementers MUST choose a cipher that meets the required security properties and provides robust resistance against related-tweak and other cryptographic attacks.
 
 # Deterministic Encryption
 
-Deterministic encryption applies a 128‑bit block cipher directly to the 16‑byte representation of an IP address. For implementation details, see {{pseudocode-and-examples}}.
+Deterministic encryption applies a 128-bit block cipher directly to the 16-byte representation of an IP address. All instantiations documented in this specification (`ipcrypt-deterministic`, `ipcrypt-nd`, and `ipcrypt-ndx`) are invertible - encrypted IP addresses can be decrypted back to their original values using the same key. For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.
 
-> **Note:**
-> All instantiations documented in this specification (`ipcrypt-deterministic`, `ipcrypt-nd`, and `ipcrypt-ndx`)
-> are invertible - encrypted IP addresses can be decrypted back to their original values using the same key.
-> For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.
+For implementation details, see {{Pseudocode and Examples}}.
 
 ## ipcrypt-deterministic
 
-The `ipcrypt-deterministic` instantiation employs AES128 in a single‑block operation. The key MUST be exactly 16 bytes (128 bits) in length. Since AES128 is a permutation, every distinct 16‑byte input maps to a unique 16‑byte ciphertext, preserving the IP address format.
+The `ipcrypt-deterministic` instantiation employs AES-128 in a single-block operation. The key MUST be exactly 16 bytes (128 bits) in length. Since AES-128 is a permutation, every distinct 16-byte input maps to a unique 16-byte ciphertext, preserving the IP address format.
 
-For test vectors, see {{ipcrypt-deterministic-test-vectors}}.
+For test vectors, see {{ipcrypt-deterministic Test Vectors}}.
 
 ~~~
       +---------------------+
@@ -277,21 +272,14 @@ For test vectors, see {{ipcrypt-deterministic-test-vectors}}.
 
 ## Format Preservation
 
-- If the 16‑byte ciphertext begins with an IPv4‑mapped prefix, it **MUST** be rendered as a dotted‑decimal IPv4 address.
+- If the 16-byte ciphertext begins with an IPv4-mapped prefix, it MUST be rendered as a dotted-decimal IPv4 address.
 - Otherwise, it is interpreted as an IPv6 address.
 
-> **Note:**
-> To ensure IPv4 format preservation, implementers **MUST** consider using cycle‑walking, a 32-bit random permutation, or an FPE mode if required.
+To ensure IPv4 format preservation, implementers MUST consider using cycle-walking (repeatedly encrypting until a valid IPv4-mapped address is obtained), a 32-bit random permutation, or a Format-Preserving Encryption (FPE) mode as specified in {{NIST-SP-800-38G}}.
 
-# Non‑Deterministic Encryption {#non-deterministic-encryption}
+# Non-Deterministic Encryption {#non-deterministic-encryption}
 
-Non‑deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see {{pseudocode-and-examples}}.
-
-> **Alternatives to Random Tweaks:**
-> While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, other approaches are possible.
-> For example, a monotonic counter could be used as a tweak, but this is difficult to maintain in distributed systems and, if the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.
-> Another alternative is to use UUIDs (such as UUIDv6 or UUIDv7) as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.
-> Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.
+Non-deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see {{Pseudocode and Examples}}.
 
 ## Encryption Process
 
@@ -312,101 +300,67 @@ The decryption process consists of the following steps:
 2. Decrypt the encrypted IP using the key and the tweak
 3. Convert the resulting 16-byte representation back to an IP address
 
-Although the tweak is generated uniformly at random (and thus may occasionally collide per birthday bounds), such collisions are benign when they occur with different inputs. An `(input, tweak)` collision reveals that the same input was encrypted with the same tweak but does not disclose the input's value.
-
-The usage limits discussed below apply per cryptographic key; rotating keys can extend secure usage beyond these bounds.
+Although the tweak is generated uniformly at random, occasional collisions may occur according to birthday bounds. Such collisions are benign when they occur with different inputs. An `(input, tweak)` collision reveals that the same input was encrypted with the same tweak but does not disclose the input's value. The usage limits discussed below apply per cryptographic key; rotating keys can extend secure usage beyond these bounds.
 
 ## Output Format and Encoding
 
-The output of non-deterministic encryption is binary data. For applications that require text representation (e.g., logging, JSON encoding, or text-based protocols), the binary output MUST be encoded. Common encoding options include hexadecimal and Base64.
-
-The choice of encoding is application-specific and outside the scope of this specification. However, implementations SHOULD document their chosen encoding method clearly.
+The output of non-deterministic encryption is binary data. For applications that require text representation (e.g., logging, JSON encoding, or text-based protocols), the binary output MUST be encoded. Common encoding options include hexadecimal and Base64. The choice of encoding is application-specific and outside the scope of this specification. However, implementations SHOULD document their chosen encoding method clearly.
 
 ## Concrete Instantiations
 
 This document defines two concrete instantiations:
 
-- **`ipcrypt-nd`:** Uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak.
-  See [KIASU-BC] for details.
-- **`ipcrypt-ndx`:** Uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak.
-  See [XTS-AES] for background. Since only a single block is encrypted, only the first tweak
-  needs to be computed, avoiding the need for a full key schedule.
+- **`ipcrypt-nd`:** Uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. See {{KIASU-BC}} for details.
+- **`ipcrypt-ndx`:** Uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. See {{XTS-AES}} for background.
 
-In both cases, if a tweak is generated randomly, it **MUST be uniformly random**. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.
+In both cases, if a tweak is generated randomly, it MUST be uniformly random. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.
 
 For test vectors, see {{ipcrypt-nd-test-vectors}} and {{ipcrypt-ndx-test-vectors}}.
 
-### ipcrypt-nd (KIASU‑BC) {#ipcrypt-nd}
+### ipcrypt-nd (KIASU-BC) {#ipcrypt-nd}
 
-The `ipcrypt-nd` instantiation uses the KIASU‑BC tweakable block cipher with an 8‑byte (64‑bit) tweak. For implementation details, see {{implementing-kiasu-bc}}. The output is 24 bytes total, consisting of an 8‑byte tweak concatenated with a 16‑byte ciphertext.
+The `ipcrypt-nd` instantiation uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. For implementation details, see {{Implementing KIASU-BC}}. The output is 24 bytes total, consisting of an 8-byte tweak concatenated with a 16-byte ciphertext.
 
-Random sampling of an 8‑byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations. If an `(input, tweak)` collision occurs, it indicates that the same input was processed with that tweak without revealing the input's value.
+Random sampling of an 8-byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations (approximately 4 billion operations). If an `(input, tweak)` collision occurs, it indicates that the same input was processed with that tweak without revealing the input's value.
 
-These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. Ultimately, the effective security is determined by the underlying block cipher's strength.
+These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. The effective security is determined by the underlying block cipher's strength.
 
-For test vectors, see {{ipcrypt-nd-test-vectors}}.
+For test vectors, see {{ipcrypt-nd Test Vectors}}.
 
-### ipcrypt-ndx (AES‑XTS) {#ipcrypt-ndx}
+### ipcrypt-ndx (AES-XTS) {#ipcrypt-ndx}
 
-The `ipcrypt-ndx` instantiation uses the AES‑XTS tweakable block cipher with a 16‑byte (128‑bit) tweak. The output is 32‑byte total, consisting of a 16‑byte tweak concatenated with a 16‑byte ciphertext.
+The `ipcrypt-ndx` instantiation uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. The output is 32 bytes total, consisting of a 16-byte tweak concatenated with a 16-byte ciphertext.
 
-Since only a single block is encrypted, only the first tweak needs to be computed, avoiding the need for a full key schedule. Independent sampling of a 16‑byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations.
+For AES-XTS encryption of a single block, the computation avoids the sequential tweak calculations required in full XTS mode. Independent sampling of a 16-byte tweak results in an expected collision after about 2^(128/2) = 2^64 operations (approximately 18 quintillion operations).
 
-As with `ipcrypt-nd`, an `(input, tweak)` collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES‑128 (approximately 2^128 operations).
+As with `ipcrypt-nd`, an `(input, tweak)` collision reveals repetition without compromising the input value. These limits are per key, and regular key rotation further extends secure usage. The effective security is governed by the strength of AES-128 (approximately 2^128 operations).
 
-> **Technical Note:**
-> For a single block of AES-XTS, the key is split into two halves (K1, K2). The tweak is
-> first encrypted using AES128 with K2 to produce an encrypted tweak (ET). The IP address
-> is then encrypted as: AES128(IP ⊕ ET, K1) ⊕ ET (where ⊕ denotes the bitwise XOR operation).
-> This construction provides the security properties of XTS while only requiring two AES
-> operations per block.
-
-~~~pseudocode
-function AES_XTS_encrypt(key, tweak, block):
-    // Split the key into two halves
-    K1, K2 = split_key(key)
-
-    // Encrypt the tweak with the second half of the key
-    ET = AES128_encrypt(K2, tweak)
-
-    // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
-    return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
-~~~
 
 ### Comparison of Modes
 
 - **Deterministic (`ipcrypt-deterministic`):**
-  Produces a 16‑byte output; preserves format but reveals repeated inputs.
-- **Non‑Deterministic:**
-  - **`ipcrypt-nd` (KIASU‑BC):** Produces a 24‑byte output using an 8‑byte tweak; `(input, tweak)` collisions reveal repeated inputs (with the same tweak) but not their values.
-  - **`ipcrypt-ndx` (AES‑XTS):** Produces a 32‑byte output using a 16‑byte tweak; supports higher secure operation counts per key. Since only a single block is encrypted, it avoids the need for a full key schedule.
+  Produces a 16-byte output; preserves format but reveals repeated inputs.
+- **Non-Deterministic:**
+  - **`ipcrypt-nd` (KIASU-BC):** Produces a 24-byte output using an 8-byte tweak; `(input, tweak)` collisions reveal repeated inputs (with the same tweak) but not their values. Expected collision after approximately 4 billion operations per key.
+  - **`ipcrypt-ndx` (AES-XTS):** Produces a 32-byte output using a 16-byte tweak; supports higher secure operation counts per key. Expected collision after approximately 18 quintillion operations per key.
 
-## Security Considerations
+# Security Considerations
 
-For a detailed discussion of the security properties of each mode, see:
+The ipcrypt constructions focus solely on confidentiality and do not provide integrity. This means that IP addresses in an ordered sequence can be partially removed, duplicated, reordered, or blindly altered by an active adversary. Applications that require sequences of encrypted IP addresses that cannot be modified must apply an authentication scheme over the entire sequence, such as an HMAC construction, a keyed hash function, or a public key signature. This is outside the scope of this specification, but implementers should be aware that additional authentication mechanisms are required if protection against active adversaries is needed.
 
-- {{deterministic-encryption}} for deterministic mode security considerations
-- {{ipcrypt-nd}} and {{ipcrypt-ndx}} for non-deterministic mode security considerations
-
-The ipcrypt constructions focus solely on confidentiality and do not provide integrity. This means that IP addresses in an ordered sequence can be partially removed, duplicated, reordered, or blindly altered by an active adversary.
-
-Applications that require sequences of encrypted IP addresses that cannot be modified must apply an authentication scheme over the entire sequence, such as a HMAC construction or a keyed hash function, or a public key signature.
-
-This is outside the scope of this specification, but implementers should be aware that additional authentication mechanisms are required if protection against active adversaries is needed.
-
-### Deterministic Mode Security
+## Deterministic Mode Security
 
 A permutation ensures distinct inputs yield distinct outputs. However, repeated inputs result in identical ciphertexts, thereby revealing repetition.
 
 This property makes deterministic encryption suitable for applications where format preservation is required, but linkability of repeated inputs is acceptable.
 
-### Non-Deterministic Mode Security
+## Non-Deterministic Mode Security
 
 The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs. In cases where an `(input, tweak)` collision occurs, an attacker learns only that the same input was processed with that tweak, not the value of the input itself.
 
-Security is determined by the underlying block cipher (≈2^128 for AES‑128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.
+Security is determined by the underlying block cipher (≈2^128 for AES-128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.
 
-### Implementation Security
+## Implementation Security
 
 Implementations MUST ensure that:
 
@@ -419,9 +373,7 @@ Implementations MUST ensure that:
 
 _This note is to be removed before publishing as an RFC._
 
-Multiple implementations of the schemes described in this document have been developed and verified for interoperability.
-
-A comprehensive list of known implementations and integrations can be found at [](https://github.com/jedisct1/draft-denis-ipcrypt), which includes reference implementations closely aligned with the pseudocode provided in this document.
+Multiple implementations of the schemes described in this document have been developed and verified for interoperability. A comprehensive list of known implementations and integrations can be found at https://github.com/jedisct1/draft-denis-ipcrypt, which includes reference implementations closely aligned with the pseudocode provided in this document.
 
 # IANA Considerations
 
@@ -431,7 +383,7 @@ This document does not require any IANA actions.
 
 # Diagrams {#diagrams}
 
-This appendix provides visual representations of the key operations described in this document. For implementation details, see {{pseudocode-and-examples}}.
+This appendix provides visual representations of the key operations described in this document. For implementation details, see {{Pseudocode and Examples}}.
 
 ## IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
 
@@ -455,7 +407,7 @@ This appendix provides visual representations of the key operations described in
        [Convert to 16 Bytes]
                 |
                 v
-    [AES128 Single-Block Encrypt]
+    [AES-128 Single-Block Encrypt]
                 |
                 v
        16-Byte Ciphertext
@@ -473,7 +425,7 @@ This appendix provides visual representations of the key operations described in
               IP Address
                   |
                   v
-      [Convert to 16 Bytes] ---> 16-Byte Representation
+       [Convert to 16 Bytes]
                   |
                   v
     [Generate Random 8-Byte Tweak]
@@ -497,7 +449,7 @@ This appendix provides visual representations of the key operations described in
               IP Address
                   |
                   v
-      [Convert to 16 Bytes] ---> 16-Byte Representation
+       [Convert to 16 Bytes]
                   |
                   v
     [Generate Random 16-Byte Tweak]
@@ -517,11 +469,11 @@ This appendix provides visual representations of the key operations described in
 
 # Pseudocode and Examples {#pseudocode-and-examples}
 
-This appendix provides detailed pseudocode for key operations described in this document. For a visual representation of these operations, see {{diagrams}}.
+This appendix provides detailed pseudocode for key operations described in this document. For a visual representation of these operations, see {{Diagrams}}.
 
 ## IPv4 Address Conversion
 
-For a diagram of this conversion process, see {{ipv4-address-conversion-diagram}}.
+For a diagram of this conversion process, see {{IPv4 Address Conversion Diagram}}.
 
 ~~~pseudocode
 function IPv4To16Bytes(ipv4_address):
@@ -588,7 +540,7 @@ function Bytes16ToIP(bytes16):
 ## Deterministic Encryption (ipcrypt-deterministic)
 
 ~~~pseudocode
-function ipcrypt_deterministic(ip_address, key):
+function ipcrypt_deterministic_encrypt(ip_address, key):
     // The key MUST be exactly 16 bytes (128 bits) in length
     if length(key) != 16:
         raise Error("Key must be 16 bytes")
@@ -597,17 +549,25 @@ function ipcrypt_deterministic(ip_address, key):
     ciphertext = AES128_encrypt(key, bytes16)
     encrypted_ip = Bytes16ToIP(ciphertext)
     return encrypted_ip
-~~~
 
-## Non‑Deterministic Encryption using KIASU‑BC (ipcrypt-nd)
-
-~~~pseudocode
-function ipcrypt_nd_encrypt(ip_address, key):
-    // The key MUST be exactly 16 bytes (128 bits) in length
+function ipcrypt_deterministic_decrypt(encrypted_ip, key):
     if length(key) != 16:
         raise Error("Key must be 16 bytes")
 
-    // Step 1: Generate random tweak (MUST be exactly 8 bytes)
+    bytes16 = convertTo16Bytes(encrypted_ip)
+    plaintext = AES128_decrypt(key, bytes16)
+    original_ip = Bytes16ToIP(plaintext)
+    return original_ip
+~~~
+
+## Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
+
+~~~pseudocode
+function ipcrypt_nd_encrypt(ip_address, key):
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+
+    // Step 1: Generate random tweak (8 bytes)
     tweak = random_bytes(8)  // MUST be uniformly random
 
     // Step 2: Convert IP to 16-byte representation
@@ -633,22 +593,32 @@ function ipcrypt_nd_decrypt(ciphertext, key):
     return ip_address
 ~~~
 
-## Non‑Deterministic Encryption using AES‑XTS (ipcrypt-ndx)
+## Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
+
+~~~pseudocode
+function AES_XTS_encrypt(key, tweak, block):
+    // Split the key into two halves
+    K1, K2 = split_key(key)
+
+    // Encrypt the tweak with the second half of the key
+    ET = AES128_encrypt(K2, tweak)
+
+    // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
+    return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
+~~~
 
 ~~~pseudocode
 function ipcrypt_ndx_encrypt(ip_address, key):
-    // The key MUST be exactly 32 bytes (256 bits) in length, consisting of two 16-byte AES-128 keys
     if length(key) != 32:
         raise Error("Key must be 32 bytes (two AES-128 keys)")
 
-    // Step 1: Generate random tweak (MUST be exactly 16 bytes)
+    // Step 1: Generate random tweak (16 bytes)
     tweak = random_bytes(16)  // MUST be uniformly random
 
     // Step 2: Convert IP to 16-byte representation
     bytes16 = convertTo16Bytes(ip_address)
 
     // Step 3: Encrypt using key and tweak
-    // Since only a single block is encrypted, only the first tweak needs to be computed
     ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
 
     // Step 4: Concatenate tweak and ciphertext
@@ -670,7 +640,7 @@ function ipcrypt_ndx_decrypt(ciphertext, key):
 
 # Implementing KIASU-BC {#implementing-kiasu-bc}
 
-This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak. For more information about the security properties of KIASU-BC, see {{KIASU-BC}}.
+This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak.
 
 ## Overview
 
@@ -777,16 +747,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 
 This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak value is also included.
 
-Note: The key and tweak sizes are:
-- `ipcrypt-deterministic`:
-  - Key: 16 bytes (128 bits)
-  - No tweak used
-- `ipcrypt-nd`:
-  - Key: 16 bytes (128 bits)
-  - Tweak: 8 bytes (64 bits)
-- `ipcrypt-ndx`:
-  - Key: 32 bytes (256 bits, two AES-128 keys)
-  - Tweak: 16 bytes (128 bits)
+Key and tweak sizes for each variant:
+- `ipcrypt-deterministic`: Key: 16 bytes (128 bits), no tweak
+- `ipcrypt-nd`: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)
+- `ipcrypt-ndx`: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits)
 
 ## ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
 
@@ -851,9 +815,19 @@ Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
 Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 ~~~
 
-Note: For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
+For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
 
 Implementations SHOULD verify their correctness against these test vectors before deployment.
+
+# Alternatives to Random Tweaks {#alternatives-to-random-tweaks}
+
+While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, implementers may consider alternative approaches:
+
+- **Monotonic Counter:** A counter could be used as a tweak, but this is difficult to maintain in distributed systems. If the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.
+
+- **UUIDs:** UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.
+
+Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.
 
 # Acknowledgments
 
