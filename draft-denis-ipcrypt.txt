@@ -530,7 +530,7 @@ IPv4 Address:    192.0.2.1
    Multiple implementations of the schemes described in this document
    have been developed and verified for interoperability.  A
    comprehensive list of known implementations and integrations can be
-   found at https://github.com/jedisct1/draft-denis-ipcrypt, which
+   found at https://github.com/ipcrypt-std/draft-denis-ipcrypt, which
    includes reference implementations closely aligned with the
    pseudocode provided in this document.
 
