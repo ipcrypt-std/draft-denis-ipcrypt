@@ -1,7 +1,7 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-10T01:46:15.312643+00:00",
-  "repo": "jedisct1/draft-denis-ipcrypt",
+  "timestamp": "2025-07-22T01:52:47.926920+00:00",
+  "repo": "ipcrypt-std/draft-denis-ipcrypt",
   "labels": [
     {
       "name": "bug",
@@ -54,10 +54,10 @@
       "number": 1,
       "id": "I_kwDOOZKXcc65HlEL",
       "title": "Add Dart implementation",
-      "url": "https://github.com/jedisct1/draft-denis-ipcrypt/issues/1",
+      "url": "https://github.com/ipcrypt-std/draft-denis-ipcrypt/issues/1",
       "state": "CLOSED",
       "author": "elliotwutingfeng",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "I have ported ipcrypt over to Dart. It is most similar to the JavaScript and Go implementations. The Dart library is available at <https://pub.dev/packages/ipcrypt>.\n\nIt uses [pointycastle](https://pub.dev/packages/pointycastle) for its AES implementation in **ipcrypt-deterministic** and **ipcrypt-ndx**. \n\nFor **ipcrypt-nd**, KIASU-BC is directly ported from ipcrypt-js.",
@@ -67,14 +67,14 @@
       "comments": [
         {
           "author": "jedisct1",
-          "authorAssociation": "OWNER",
+          "authorAssociation": "COLLABORATOR",
           "body": "Thank you!\n\nThis is great work!",
           "createdAt": "2025-05-31T17:04:09Z",
           "updatedAt": "2025-05-31T17:04:09Z"
         },
         {
           "author": "jedisct1",
-          "authorAssociation": "OWNER",
+          "authorAssociation": "COLLABORATOR",
           "body": "Your implementation has been added to the website. Thanks again!",
           "createdAt": "2025-05-31T17:50:02Z",
           "updatedAt": "2025-05-31T17:50:02Z"
@@ -87,7 +87,7 @@
       "number": 2,
       "id": "PR_kwDOOZKXcc6Zj7Hi",
       "title": "Remove erroneous condition statement",
-      "url": "https://github.com/jedisct1/draft-denis-ipcrypt/pull/2",
+      "url": "https://github.com/ipcrypt-std/draft-denis-ipcrypt/pull/2",
       "state": "MERGED",
       "author": "elliotwutingfeng",
       "authorAssociation": "CONTRIBUTOR",
@@ -96,7 +96,7 @@
       "body": "This \"if-statement\" does not appear in any of the example implementations.",
       "createdAt": "2025-06-08T05:44:51Z",
       "updatedAt": "2025-06-08T08:01:55Z",
-      "baseRepository": "jedisct1/draft-denis-ipcrypt",
+      "baseRepository": "ipcrypt-std/draft-denis-ipcrypt",
       "baseRefName": "main",
       "baseRefOid": "149d89ea12402b13877283a6f7a1e941f0fbf9a7",
       "headRepository": "elliotwutingfeng/draft-denis-ipcrypt",
@@ -111,7 +111,7 @@
       "comments": [
         {
           "author": "jedisct1",
-          "authorAssociation": "OWNER",
+          "authorAssociation": "COLLABORATOR",
           "body": "Indeed! Thank you!",
           "createdAt": "2025-06-08T06:58:13Z",
           "updatedAt": "2025-06-08T06:58:13Z"
