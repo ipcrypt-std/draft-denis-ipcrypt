@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                              21 July 2025
-Expires: 22 January 2026
+Intended status: Informational                             5 August 2025
+Expires: 6 February 2026
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 January 2026.
+   This Internet-Draft will expire on 6 February 2026.
 
 Copyright Notice
 
@@ -73,15 +73,14 @@ Copyright Notice
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
-   and restrictions with respect to this document.  Code Components
-   extracted from this document must include Revised BSD License text as
-   described in Section 4.e of the Trust Legal Provisions and are
-   provided without warranty as described in the Revised BSD License.
+   and restrictions with respect to this document.
 
 Table of Contents
 
    1.  Introduction
-     1.1.  Use Cases and Motivations
+     1.1.  Licensing
+     1.2.  Use Cases and Motivations
+     1.3.  Relationship to IETF Work
    2.  Terminology
    3.  IP Address Conversion
      3.1.  Converting to a 16-Byte Representation
@@ -104,6 +103,7 @@ Table of Contents
      7.1.  Deterministic Mode Security
      7.2.  Non-Deterministic Mode Security
      7.3.  Implementation Security
+     7.4.  Key Management Considerations
    8.  Implementation Status
    9.  IANA Considerations
    10. References
@@ -149,7 +149,17 @@ Table of Contents
    properties of these methods are discussed throughout this document
    and summarized in Section 7.
 
-1.1.  Use Cases and Motivations
+1.1.  Licensing
+
+   _This section is to be removed before publishing as an RFC._
+
+   Implementations of the ipcrypt methods are freely available under
+   permissive open source licenses (MIT, BSD, or Apache 2.0) at the
+   repository listed in the Implementation Status section.
+
+   There are no known patent claims on these methods.
+
+1.2.  Use Cases and Motivations
 
    The main motivations include:
 
@@ -179,6 +189,21 @@ Table of Contents
       with external services while protecting user privacy.
 
    For implementation examples, see Appendix B.
+
+1.3.  Relationship to IETF Work
+
+   _This section is to be removed before publishing as an RFC._
+
+   This document does not conflict with any active IETF working group
+   efforts.  While the IETF has produced several RFCs related to privacy
+   ([RFC6973], [RFC7258], [RFC7624]), there is no current
+   standardization effort for IP address encryption methods.  This
+   specification complements existing IETF privacy guidance by providing
+   concrete implementation methods.
+
+   The cryptographic primitives used (AES, format-preserving encryption)
+   align with IETF cryptographic recommendations, and the document
+   follows IETF formatting and terminology conventions where applicable.
 
 2.  Terminology
 
@@ -523,16 +548,73 @@ IPv4 Address:    192.0.2.1
 
    4.  Error handling does not leak sensitive information
 
+7.4.  Key Management Considerations
+
+   This specification focuses on the cryptographic transformations and
+   does not mandate specific key management practices.  However,
+   implementers MUST ensure:
+
+   1.  Keys are generated using cryptographically secure random number
+       generators (see [RFC4086])
+
+   2.  Keys are stored securely and access-controlled appropriately for
+       the deployment environment
+
+   3.  Key rotation policies are established based on usage volume and
+       security requirements
+
+   4.  Key compromise procedures are defined and tested
+
+   For high-volume deployments processing billions of IP addresses,
+   regular key rotation (e.g., monthly or quarterly) is RECOMMENDED to
+   stay well within the security bounds discussed in this document.
+
 8.  Implementation Status
 
-   _This note is to be removed before publishing as an RFC._
+   _This section is to be removed before publishing as an RFC._
 
-   Multiple implementations of the schemes described in this document
-   have been developed and verified for interoperability.  A
-   comprehensive list of known implementations and integrations can be
-   found at https://github.com/ipcrypt-std/draft-denis-ipcrypt, which
-   includes reference implementations closely aligned with the
-   pseudocode provided in this document.
+   This section records the status of known implementations of the
+   protocol defined by this specification at the time of posting of this
+   Internet-Draft, and is based on a proposal described in [RFC7942].
+   The description of implementations in this section is intended to
+   assist the Independent Submissions Editor in judging whether the
+   specification is suitable for publication.
+
+   Please note that the listing of any individual implementation here
+   does not imply endorsement.  Furthermore, no effort has been spent to
+   verify the information presented here that was supplied by
+   contributors.  This is not intended as, and must not be construed to
+   be, a catalog of available implementations or their features.
+
+   Multiple interoperable implementations of the schemes described in
+   this document have been developed:
+
+   *  C implementation
+
+   *  D implementation
+
+   *  Go implementation
+
+   *  Java implementation (maven package)
+
+   *  JavaScript/TypeScript implementation (npm package)
+
+   *  PHP implementation (Composer package)
+
+   *  Python reference implementation
+
+   *  Rust implementation (cargo package)
+
+   *  Zig implementation
+
+   *  Dart implementation (pub.dev package)
+
+   A comprehensive list of implementations and their test results can be
+   found at: https://ipcrypt-std.github.io/implementations/
+
+   All implementations pass the common test vectors specified in this
+   document, demonstrating interoperability across programming
+   languages.
 
 9.  IANA Considerations
 
@@ -545,6 +627,12 @@ IPv4 Address:    192.0.2.1
    [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
               26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
               NIST.FIPS.197.pdf>.
+
+   [IEEE-P1619]
+              IEEE, "IEEE Standard for Cryptographic Protection of Data
+              on Block-Oriented Storage Devices", IEEE 1619-2007, 18
+              December 2007,
+              <https://standards.ieee.org/ieee/1619/2041/>.
 
    [NIST-SP-800-38G]
               NIST, "Recommendation for Block Cipher Modes of Operation:
@@ -579,6 +667,11 @@ IPv4 Address:    192.0.2.1
               DOI 10.17487/RFC7624, August 2015,
               <https://www.rfc-editor.org/rfc/rfc7624>.
 
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, DOI 10.17487/RFC7942, July 2016,
+              <https://www.rfc-editor.org/rfc/rfc7942>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
@@ -594,12 +687,6 @@ IPv4 Address:    192.0.2.1
               Secure Tweakable Block Cipher", Cryptology ePrint
               Archive Paper 2014/427, 2014,
               <https://eprint.iacr.org/2014/427>.
-
-   [IEEE-P1619]
-              IEEE, "IEEE Standard for Cryptographic Protection of Data
-              on Block-Oriented Storage Devices", IEEE 1619-2007, 18
-              December 2007,
-              <https://standards.ieee.org/ieee/1619/2041/>.
 
    [IPCRYPT2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
               tool", 2025, <https://github.com/jedisct1/ipcrypt2>.
