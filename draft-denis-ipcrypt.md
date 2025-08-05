@@ -4,6 +4,7 @@ abbrev: "ipcrypt"
 docname: draft-denis-ipcrypt-latest
 category: info
 ipr: trust200902
+submissionType: independent
 keyword: Internet-Draft
 author:
   - name: "Frank Denis"
@@ -34,6 +35,14 @@ normative:
     seriesinfo:
       NIST: SP 800-38G
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
+  IEEE-P1619:
+    title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
+    author:
+      - ins: IEEE
+    date: 2007-12-18
+    seriesinfo:
+      IEEE: 1619-2007
+    target: https://standards.ieee.org/ieee/1619/2041/
 
 informative:
   DEOXYS-BC:
@@ -69,14 +78,6 @@ informative:
     seriesinfo:
       Fast Software Encryption: 2002
     target: https://www.cs.berkeley.edu/~daw/papers/tweak-crypto02.pdf
-  IEEE-P1619:
-    title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
-    author:
-      - ins: IEEE
-    date: 2007-12-18
-    seriesinfo:
-      IEEE: 1619-2007
-    target: https://standards.ieee.org/ieee/1619/2041/
   BRW2005:
     title: "Format-Preserving Encryption"
     author:
@@ -134,6 +135,14 @@ This document specifies methods for the encryption and obfuscation of IP address
 
 This work addresses concerns raised in {{!RFC7624}} regarding confidentiality in the face of pervasive surveillance. The security properties of these methods are discussed throughout this document and summarized in {{security-considerations}}.
 
+## Licensing
+
+*This section is to be removed before publishing as an RFC.*
+
+Implementations of the ipcrypt methods are freely available under permissive open source licenses (MIT, BSD, or Apache 2.0) at the repository listed in the Implementation Status section.
+
+There are no known patent claims on these methods.
+
 ## Use Cases and Motivations
 
 The main motivations include:
@@ -149,6 +158,14 @@ The main motivations include:
 - **Third-Party Service Integration:** IP addresses are private information that should not be sent in cleartext to potentially untrusted third-party services or cloud providers. Using encrypted IP addresses as keys or identifiers allows integration with external services while protecting user privacy.
 
 For implementation examples, see {{pseudocode-and-examples}}.
+
+## Relationship to IETF Work
+
+*This section is to be removed before publishing as an RFC.*
+
+This document does not conflict with any active IETF working group efforts. While the IETF has produced several RFCs related to privacy ({{!RFC6973}}, {{!RFC7258}}, {{!RFC7624}}), there is no current standardization effort for IP address encryption methods. This specification complements existing IETF privacy guidance by providing concrete implementation methods.
+
+The cryptographic primitives used (AES, format-preserving encryption) align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.
 
 # Terminology
 
@@ -362,11 +379,41 @@ Implementations MUST ensure that:
 3. Side-channel attacks are mitigated through constant-time operations
 4. Error handling does not leak sensitive information
 
+## Key Management Considerations
+
+This specification focuses on the cryptographic transformations and does not mandate specific key management practices. However, implementers MUST ensure:
+
+1. Keys are generated using cryptographically secure random number generators (see {{!RFC4086}})
+2. Keys are stored securely and access-controlled appropriately for the deployment environment
+3. Key rotation policies are established based on usage volume and security requirements
+4. Key compromise procedures are defined and tested
+
+For high-volume deployments processing billions of IP addresses, regular key rotation (e.g., monthly or quarterly) is RECOMMENDED to stay well within the security bounds discussed in this document.
+
 # Implementation Status
 
-_This note is to be removed before publishing as an RFC._
+*This section is to be removed before publishing as an RFC.*
 
-Multiple implementations of the schemes described in this document have been developed and verified for interoperability. A comprehensive list of known implementations and integrations can be found at https://github.com/ipcrypt-std/draft-denis-ipcrypt, which includes reference implementations closely aligned with the pseudocode provided in this document.
+This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in {{!RFC7942}}. The description of implementations in this section is intended to assist the Independent Submissions Editor in judging whether the specification is suitable for publication.
+
+Please note that the listing of any individual implementation here does not imply endorsement. Furthermore, no effort has been spent to verify the information presented here that was supplied by contributors. This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
+
+Multiple interoperable implementations of the schemes described in this document have been developed:
+
+- C implementation
+- D implementation
+- Go implementation
+- Java implementation (maven package)
+- JavaScript/TypeScript implementation (npm package)
+- PHP implementation (Composer package)
+- Python reference implementation
+- Rust implementation (cargo package)
+- Zig implementation
+- Dart implementation (pub.dev package)
+
+A comprehensive list of implementations and their test results can be found at: https://ipcrypt-std.github.io/implementations/
+
+All implementations pass the common test vectors specified in this document, demonstrating interoperability across programming languages.
 
 # IANA Considerations
 
