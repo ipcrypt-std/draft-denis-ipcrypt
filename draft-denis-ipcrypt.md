@@ -117,9 +117,9 @@ informative:
 
 --- abstract
 
-This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format-preserving and non-deterministic constructions. These methods address privacy concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring and data collection. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation.
+This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis and correlation while protecting user privacy, addressing concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation.
 
-Three concrete instantiations are defined: `ipcrypt-deterministic` uses AES-128 for deterministic encryption with format preservation; `ipcrypt-nd` uses KIASU-BC with an 8-byte random tweak for non-deterministic encryption; and `ipcrypt-ndx` uses AES-XTS with a 16-byte random tweak. Non-deterministic modes prepend the tweak to produce larger ciphertexts that resist correlation attacks.
+Three concrete instantiations are defined: `ipcrypt-deterministic` provides reversible deterministic encryption with format preservation, always producing the same output for a given input; `ipcrypt-nd` and `ipcrypt-ndx` provide non-deterministic encryption that produces different outputs for the same input by incorporating randomness. All methods are reversible with the encryption key. Non-deterministic modes produce larger outputs to prevent correlation of identical inputs while maintaining full reversibility.
 
 --- middle
 
