@@ -117,7 +117,7 @@ informative:
 
 --- abstract
 
-This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy, addressing concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses.
+This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy, addressing concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring.
 
 Three concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption, while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key.
 
