@@ -129,14 +129,6 @@ This document specifies methods for the encryption and obfuscation of IP address
 
 This work addresses concerns raised in {{!RFC7624}} regarding confidentiality in the face of pervasive surveillance. The security properties of these methods are discussed throughout this document and summarized in {{security-considerations}}.
 
-## Licensing
-
-*This section is to be removed before publishing as an RFC.*
-
-Implementations of the ipcrypt methods are freely available under permissive open source licenses (MIT, BSD, or Apache 2.0) at the repository listed in the Implementation Status section.
-
-There are no known patent claims on these methods.
-
 ## Use Cases and Motivations
 
 IP addresses are personally identifiable information (PII). While generic encryption systems can protect them, the specialized methods described here offer significant advantages with well-defined security guarantees:
@@ -793,6 +785,14 @@ Multiple interoperable implementations of the schemes described in this document
 A comprehensive list of implementations and their test results can be found at: https://ipcrypt-std.github.io/implementations/
 
 All implementations pass the common test vectors specified in this document, demonstrating interoperability across programming languages.
+
+# Licensing
+
+*This section is to be removed before publishing as an RFC.*
+
+Implementations of the ipcrypt methods are freely available under permissive open source licenses (MIT, BSD, or Apache 2.0) at the repository listed in the Implementation Status section.
+
+There are no known patent claims on these methods.
 
 --- back
 
