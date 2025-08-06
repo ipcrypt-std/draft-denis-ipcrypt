@@ -15,20 +15,15 @@ Abstract
 
    This document specifies methods for encrypting and obfuscating IP
    addresses for privacy-preserving storage, logging, and analytics.
-   These encrypted addresses enable data analysis and correlation while
-   protecting user privacy, addressing concerns raised in [RFC6973] and
-   [RFC7258] regarding pervasive monitoring.  The methods apply
-   uniformly to both IPv4 and IPv6 addresses by converting them into a
-   16-byte representation.
+   These encrypted addresses enable data analysis while protecting user
+   privacy, addressing concerns raised in [RFC6973] and [RFC7258]
+   regarding pervasive monitoring.  The methods apply uniformly to both
+   IPv4 and IPv6 addresses.
 
    Three concrete instantiations are defined: ipcrypt-deterministic
-   provides reversible deterministic encryption with format
-   preservation, always producing the same output for a given input;
-   ipcrypt-nd and ipcrypt-ndx provide non-deterministic encryption that
-   produces different outputs for the same input by incorporating
-   randomness.  All methods are reversible with the encryption key.
-   Non-deterministic modes produce larger outputs to prevent correlation
-   of identical inputs while maintaining full reversibility.
+   provides deterministic, format-preserving encryption, while ipcrypt-
+   nd and ipcrypt-ndx introduce randomness to prevent correlation.  All
+   methods are reversible with the encryption key.
 
 Discussion Venues
 
@@ -89,41 +84,41 @@ Table of Contents
        6.4.1.  ipcrypt-nd (KIASU-BC)
        6.4.2.  ipcrypt-ndx (AES-XTS)
        6.4.3.  Comparison of Modes
+     6.5.  Alternatives to Random Tweaks
    7.  Security Considerations
      7.1.  Deterministic Mode Security
      7.2.  Non-Deterministic Mode Security
      7.3.  Implementation Security
      7.4.  Key Management Considerations
-   8.  Implementation Status
-   9.  IANA Considerations
+   8.  Implementation Details
+     8.1.  Visual Diagrams
+       8.1.1.  IPv4 Address Conversion Diagram
+       8.1.2.  Deterministic Encryption Flow
+       8.1.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
+       8.1.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
+     8.2.  IPv4 Address Conversion
+     8.3.  IPv6 Address Conversion
+     8.4.  Conversion from a 16-Byte Array to an IP Address
+     8.5.  Deterministic Encryption (ipcrypt-deterministic)
+     8.6.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
+     8.7.  Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
+     8.8.  KIASU-BC Implementation Guide
+       8.8.1.  Overview
+       8.8.2.  Tweak Padding
+       8.8.3.  Round Structure
+       8.8.4.  Key Schedule
+       8.8.5.  Implementation Steps
+       8.8.6.  Example Implementation
+   9.  Implementation Status
    10. References
      10.1.  Normative References
      10.2.  Informative References
-   Appendix A.  Diagrams
-     A.1.  IPv4 Address Conversion Diagram
-     A.2.  Deterministic Encryption Flow
-     A.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
-     A.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
-   Appendix B.  Pseudocode and Examples
-     B.1.  IPv4 Address Conversion
-     B.2.  IPv6 Address Conversion
-     B.3.  Conversion from a 16-Byte Array to an IP Address
-     B.4.  Deterministic Encryption (ipcrypt-deterministic)
-     B.5.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
-     B.6.  Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
-   Appendix C.  Implementing KIASU-BC
-     C.1.  Overview
-     C.2.  Tweak Padding
-     C.3.  Round Structure
-     C.4.  Key Schedule
-     C.5.  Implementation Steps
-     C.6.  Example Implementation
-   Appendix D.  Test Vectors
-     D.1.  ipcrypt-deterministic Test Vectors
-     D.2.  ipcrypt-nd Test Vectors
-     D.3.  ipcrypt-ndx Test Vectors
-   Appendix E.  Alternatives to Random Tweaks
-   Appendix F.  Acknowledgments
+   Appendix A.  Test Vectors
+     A.1.  ipcrypt-deterministic Test Vectors
+     A.2.  ipcrypt-nd Test Vectors
+     A.3.  ipcrypt-ndx Test Vectors
+   IANA Considerations
+   Acknowledgments
    Author's Address
 
 1.  Introduction
@@ -198,7 +193,7 @@ Table of Contents
       privacy-preserving identifiers when interacting with untrusted
       services, cloud providers, or external platforms.
 
-   For implementation guidelines and practical examples, see Appendix B.
+   For implementation guidelines and practical examples, see Section 8.
 
 1.3.  Relationship to IETF Work
 
@@ -317,7 +312,7 @@ IPv4 Address:    192.0.2.1
 
    *  *DEOXYS-BC* (see [DEOXYS-BC])
 
-   *  *KIASU-BC* (see Appendix C for implementation details)
+   *  *KIASU-BC* (see Section 8.8 for implementation details)
 
    *  *AES-XTS* (see Section 6.4.2 for usage)
 
@@ -335,7 +330,7 @@ IPv4 Address:    192.0.2.1
    deterministic modes, the tweak must be preserved along with the
    ciphertext to enable decryption.
 
-   For implementation details, see Appendix B.
+   For implementation details, see Section 8.
 
 5.1.  ipcrypt-deterministic
 
@@ -345,7 +340,7 @@ IPv4 Address:    192.0.2.1
    maps to a unique 16-byte ciphertext, preserving the IP address
    format.
 
-   For test vectors, see Appendix D.1.
+   For test vectors, see Appendix A.1.
 
          +---------------------+
          |      IP Address     |
@@ -389,7 +384,7 @@ IPv4 Address:    192.0.2.1
 
    Non-deterministic encryption leverages a tweakable block cipher
    together with a random tweak.  For implementation details, see
-   Appendix B.
+   Section 8.
 
 6.1.  Encryption Process
 
@@ -452,13 +447,13 @@ IPv4 Address:    192.0.2.1
    random.  Reusing the same randomly generated tweak on different
    inputs is acceptable from a confidentiality standpoint.
 
-   For test vectors, see Appendix D.2 and Appendix D.3.
+   For test vectors, see Appendix A.2 and Appendix A.3.
 
 6.4.1.  ipcrypt-nd (KIASU-BC)
 
    The ipcrypt-nd instantiation uses the KIASU-BC tweakable block cipher
    with an 8-byte (64-bit) tweak.  For implementation details, see
-   Appendix C.  The output is 24 bytes total, consisting of an 8-byte
+   Section 8.8.  The output is 24 bytes total, consisting of an 8-byte
    tweak concatenated with a 16-byte ciphertext.
 
    Random sampling of an 8-byte tweak yields an expected collision for a
@@ -472,7 +467,7 @@ IPv4 Address:    192.0.2.1
    The effective security is determined by the underlying block cipher’s
    strength.
 
-   For test vectors, see Appendix D.2.
+   For test vectors, see Appendix A.2.
 
 6.4.2.  ipcrypt-ndx (AES-XTS)
 
@@ -508,6 +503,27 @@ IPv4 Address:    192.0.2.1
          16-byte tweak; supports higher secure operation counts per key.
          Expected collision after approximately 18 quintillion
          operations per key.
+
+6.5.  Alternatives to Random Tweaks
+
+   While this specification recommends the use of uniformly random
+   tweaks for non-deterministic encryption, implementers may consider
+   alternative approaches:
+
+   *  *Monotonic Counter:* A counter could be used as a tweak, but this
+      is difficult to maintain in distributed systems.  If the counter
+      is not encrypted and the tweakable block cipher is not secure
+      against related-tweak attacks, this could enable correlation
+      attacks.
+
+   *  *UUIDs:* UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks;
+      however, these would reveal the original timestamp of the logged
+      IP addresses, which may not be desirable from a privacy
+      perspective.
+
+   Although the birthday bound is a concern with random tweaks, the use
+   of random tweaks remains the recommended and most practical approach,
+   offering the best tradeoffs for most real-world use cases.
 
 7.  Security Considerations
 
@@ -579,7 +595,378 @@ IPv4 Address:    192.0.2.1
    regular key rotation (e.g., monthly or quarterly) is RECOMMENDED to
    stay well within the security bounds discussed in this document.
 
-8.  Implementation Status
+8.  Implementation Details
+
+   This section provides detailed pseudocode and implementation guidance
+   for the key operations described in this document.
+
+8.1.  Visual Diagrams
+
+   The following diagrams illustrate the key processes described in this
+   specification.
+
+8.1.1.  IPv4 Address Conversion Diagram
+
+          IPv4: 192.0.2.1
+              |
+              v
+     Octets:  C0  00  02  01
+              |
+              v
+      16-Byte Array:
+   [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
+
+8.1.2.  Deterministic Encryption Flow
+
+               IP Address
+                   |
+                   v
+          [Convert to 16 Bytes]
+                   |
+                   v
+       [AES-128 Single-Block Encrypt]
+                   |
+                   v
+          16-Byte Ciphertext
+                   |
+                   v
+        [Convert to IP Format]
+                   |
+                   v
+          Encrypted IP Address
+
+8.1.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
+
+                 IP Address
+                     |
+                     v
+          [Convert to 16 Bytes]
+                     |
+                     v
+       [Generate Random 8-Byte Tweak]
+                     |
+                     v
+          [KIASU-BC Tweakable Encrypt]
+                     |
+                     v
+             16-Byte Ciphertext
+                     |
+                     v
+       [Concatenate Tweak || Ciphertext]
+                     |
+                     v
+          24-Byte Output (ipcrypt-nd)
+
+8.1.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
+
+                 IP Address
+                     |
+                     v
+          [Convert to 16 Bytes]
+                     |
+                     v
+       [Generate Random 16-Byte Tweak]
+                     |
+                     v
+          [AES-XTS Tweakable Encrypt]
+                     |
+                     v
+             16-Byte Ciphertext
+                     |
+                     v
+       [Concatenate Tweak || Ciphertext]
+                     |
+                     v
+          32-Byte Output (ipcrypt-ndx)
+
+8.2.  IPv4 Address Conversion
+
+   For a diagram of this conversion process, see Section 8.1.1.
+
+   function IPv4To16Bytes(ipv4_address):
+       // Split the IPv4 address into its octets
+       parts = ipv4_address.split(".")
+       if length(parts) != 4:
+            raise Error("Invalid IPv4 address")
+       // Create a 16-byte array with the IPv4-mapped prefix
+       bytes16 = [0x00] * 10         // 10 bytes of 0x00
+       bytes16.append(0xFF)          // 11th byte: 0xFF
+       bytes16.append(0xFF)          // 12th byte: 0xFF
+       // Append each octet (converted to an 8-bit integer)
+       for part in parts:
+            bytes16.append(int(part))
+       return bytes16
+
+   _Example:_ For "192.0.2.1", the function returns
+
+   [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
+
+8.3.  IPv6 Address Conversion
+
+   function IPv6To16Bytes(ipv6_address):
+       // Parse the IPv6 address into eight 16-bit words.
+       words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
+       bytes16 = []
+       for word in words:
+            high_byte = (word >> 8) & 0xFF
+            low_byte = word & 0xFF
+            bytes16.append(high_byte)
+            bytes16.append(low_byte)
+       return bytes16
+
+   _Example:_ For "2001:0db8:85a3:0000:0000:8a2e:0370:7334", the output
+   is the corresponding 16-byte sequence.
+
+8.4.  Conversion from a 16-Byte Array to an IP Address
+
+   function Bytes16ToIP(bytes16):
+       if length(bytes16) != 16:
+            raise Error("Invalid byte array")
+
+       // Check for the IPv4-mapped prefix
+       if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11] == 0xFF:
+            ipv4_parts = []
+            for i from 12 to 15:
+                ipv4_parts.append(str(bytes16[i]))
+            ipv4_address = join(ipv4_parts, ".")
+            return ipv4_address
+       else:
+            words = []
+            for i from 0 to 15 step 2:
+                word = (bytes16[i] << 8) | bytes16[i+1]
+                words.append(format(word, "x"))
+            ipv6_address = join(words, ":")
+            return ipv6_address
+
+8.5.  Deterministic Encryption (ipcrypt-deterministic)
+
+   function ipcrypt_deterministic_encrypt(ip_address, key):
+       // The key MUST be exactly 16 bytes (128 bits) in length
+       if length(key) != 16:
+           raise Error("Key must be 16 bytes")
+
+       bytes16 = convertTo16Bytes(ip_address)
+       ciphertext = AES128_encrypt(key, bytes16)
+       encrypted_ip = Bytes16ToIP(ciphertext)
+       return encrypted_ip
+
+   function ipcrypt_deterministic_decrypt(encrypted_ip, key):
+       if length(key) != 16:
+           raise Error("Key must be 16 bytes")
+
+       bytes16 = convertTo16Bytes(encrypted_ip)
+       plaintext = AES128_decrypt(key, bytes16)
+       original_ip = Bytes16ToIP(plaintext)
+       return original_ip
+
+8.6.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
+
+   function ipcrypt_nd_encrypt(ip_address, key):
+       if length(key) != 16:
+           raise Error("Key must be 16 bytes")
+
+       // Step 1: Generate random tweak (8 bytes)
+       tweak = random_bytes(8)  // MUST be uniformly random
+
+       // Step 2: Convert IP to 16-byte representation
+       bytes16 = convertTo16Bytes(ip_address)
+
+       // Step 3: Encrypt using key and tweak
+       ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
+
+       // Step 4: Concatenate tweak and ciphertext
+       result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
+       return result
+
+   function ipcrypt_nd_decrypt(ciphertext, key):
+       // Step 1: Split ciphertext into tweak and encrypted IP
+       tweak = ciphertext[0:8]  // First 8 bytes
+       encrypted_ip = ciphertext[8:24]  // Remaining 16 bytes
+
+       // Step 2: Decrypt using key and tweak
+       bytes16 = KIASU_BC_decrypt(key, tweak, encrypted_ip)
+
+       // Step 3: Convert back to IP address
+       ip_address = Bytes16ToIP(bytes16)
+       return ip_address
+
+8.7.  Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
+
+   function AES_XTS_encrypt(key, tweak, block):
+       // Split the key into two halves
+       K1, K2 = split_key(key)
+
+       // Encrypt the tweak with the second half of the key
+       ET = AES128_encrypt(K2, tweak)
+
+       // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
+       return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
+
+   function ipcrypt_ndx_encrypt(ip_address, key):
+       if length(key) != 32:
+           raise Error("Key must be 32 bytes (two AES-128 keys)")
+
+       // Step 1: Generate random tweak (16 bytes)
+       tweak = random_bytes(16)  // MUST be uniformly random
+
+       // Step 2: Convert IP to 16-byte representation
+       bytes16 = convertTo16Bytes(ip_address)
+
+       // Step 3: Encrypt using key and tweak
+       ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
+
+       // Step 4: Concatenate tweak and ciphertext
+       result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
+       return result
+
+   function ipcrypt_ndx_decrypt(ciphertext, key):
+       // Step 1: Split ciphertext into tweak and encrypted IP
+       tweak = ciphertext[0:16]  // First 16 bytes
+       encrypted_ip = ciphertext[16:32]  // Remaining 16 bytes
+
+       // Step 2: Decrypt using key and tweak
+       bytes16 = AES_XTS_decrypt(key, tweak, encrypted_ip)
+
+       // Step 3: Convert back to IP address
+       ip_address = Bytes16ToIP(bytes16)
+       return ip_address
+
+8.8.  KIASU-BC Implementation Guide
+
+   This section provides a detailed guide for implementing the KIASU-BC
+   tweakable block cipher used in ipcrypt-nd.  KIASU-BC is based on
+   AES-128 with modifications to incorporate a tweak.
+
+8.8.1.  Overview
+
+   KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each
+   round.  The tweak is padded to 16 bytes and XORed with the round key
+   at each round of the cipher.  This construction is used in the
+   ipcrypt-nd instantiation.
+
+8.8.2.  Tweak Padding
+
+   The 8-byte tweak is padded to 16 bytes using the following method:
+
+   1.  Split the 8-byte tweak into four 2-byte pairs
+
+   2.  Place each 2-byte pair at the start of each 4-byte group
+
+   3.  Fill the remaining 2 bytes of each group with zeros
+
+   Example:
+
+   8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
+   16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
+
+8.8.3.  Round Structure
+
+   Each round of KIASU-BC consists of the following standard AES
+   operations:
+
+   1.  *SubBytes:* Apply the AES S-box to each byte of the state
+
+   2.  *ShiftRows:* Rotate each row of the state matrix
+
+   3.  *MixColumns:* Mix the columns of the state matrix (except in the
+       final round)
+
+   4.  *AddRoundKey:* XOR the state with the round key and padded tweak
+
+   For details about these operations, see [FIPS-197].
+
+8.8.4.  Key Schedule
+
+   The key schedule follows the standard AES-128 key expansion:
+
+   1.  The initial key is expanded into 11 round keys
+
+   2.  Each round key is XORed with the padded tweak before use
+
+   3.  The first round key is used in the initial AddRoundKey operation
+
+8.8.5.  Implementation Steps
+
+   1.  *Key Expansion:*
+
+       *  Expand the 16-byte key into 11 round keys using the standard
+          AES key schedule
+
+       *  Each round key is 16 bytes
+
+   2.  *Tweak Processing:*
+
+       *  Pad the 8-byte tweak to 16 bytes as described above
+
+       *  XOR the padded tweak with each round key before use
+
+   3.  *Encryption Process:*
+
+       *  Perform initial AddRoundKey with the first tweaked round key
+
+       *  For rounds 1-9:
+
+          -  SubBytes
+
+          -  ShiftRows
+
+          -  MixColumns
+
+          -  AddRoundKey (with tweaked round key)
+
+       *  For round 10 (final round):
+
+          -  SubBytes
+
+          -  ShiftRows
+
+          -  AddRoundKey (with tweaked round key)
+
+8.8.6.  Example Implementation
+
+   The following pseudocode illustrates the core operations of KIASU-BC:
+
+   function pad_tweak(tweak):
+       // Input: 8-byte tweak
+       // Output: 16-byte padded tweak
+       padded = [0] * 16
+       for i in range(0, 8, 2):
+           padded[i*2] = tweak[i]
+           padded[i*2+1] = tweak[i+1]
+       return padded
+
+   function kiasu_bc_encrypt(key, tweak, plaintext):
+       // Input: 16-byte key, 8-byte tweak, 16-byte plaintext
+       // Output: 16-byte ciphertext
+
+       // Expand key and pad tweak
+       round_keys = expand_key(key)
+       padded_tweak = pad_tweak(tweak)
+
+       // Initial round
+       state = plaintext
+       state = add_round_key(state, round_keys[0] ^ padded_tweak)
+
+       // Main rounds
+       for round in range(1, 10):
+           state = sub_bytes(state)
+           state = shift_rows(state)
+           state = mix_columns(state)
+           state = add_round_key(state, round_keys[round] ^ padded_tweak)
+
+       // Final round
+       state = sub_bytes(state)
+       state = shift_rows(state)
+       state = add_round_key(state, round_keys[10] ^ padded_tweak)
+
+       return state
+
+   Key and tweak sizes for each variant: - ipcrypt-deterministic: Key:
+   16 bytes (128 bits), no tweak - ipcrypt-nd: Key: 16 bytes (128 bits),
+   Tweak: 8 bytes (64 bits) - ipcrypt-ndx: Key: 32 bytes (256 bits, two
+   AES-128 keys), Tweak: 16 bytes (128 bits)
+
+9.  Implementation Status
 
    _This section is to be removed before publishing as an RFC._
 
@@ -625,10 +1012,6 @@ IPv4 Address:    192.0.2.1
    All implementations pass the common test vectors specified in this
    document, demonstrating interoperability across programming
    languages.
-
-9.  IANA Considerations
-
-   This document does not require any IANA actions.
 
 10.  References
 
@@ -719,387 +1102,17 @@ IPv4 Address:    192.0.2.1
    [XTS-AES]  Black, J., Dawson, E., Gueron, S., and P. Rogaway, "The
               XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 2010.
 
-Appendix A.  Diagrams
-
-   This appendix provides visual representations of the key operations
-   described in this document.  For implementation details, see
-   Appendix B.
-
-A.1.  IPv4 Address Conversion Diagram
-
-          IPv4: 192.0.2.1
-              |
-              v
-     Octets:  C0  00  02  01
-              |
-              v
-      16-Byte Array:
-   [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
-
-A.2.  Deterministic Encryption Flow
-
-               IP Address
-                   |
-                   v
-          [Convert to 16 Bytes]
-                   |
-                   v
-       [AES-128 Single-Block Encrypt]
-                   |
-                   v
-          16-Byte Ciphertext
-                   |
-                   v
-        [Convert to IP Format]
-                   |
-                   v
-          Encrypted IP Address
-
-A.3.  Non-Deterministic Encryption Flow (ipcrypt-nd)
-
-                 IP Address
-                     |
-                     v
-          [Convert to 16 Bytes]
-                     |
-                     v
-       [Generate Random 8-Byte Tweak]
-                     |
-                     v
-          [KIASU-BC Tweakable Encrypt]
-                     |
-                     v
-             16-Byte Ciphertext
-                     |
-                     v
-       [Concatenate Tweak || Ciphertext]
-                     |
-                     v
-          24-Byte Output (ipcrypt-nd)
-
-A.4.  Non-Deterministic Encryption Flow (ipcrypt-ndx)
-
-                 IP Address
-                     |
-                     v
-          [Convert to 16 Bytes]
-                     |
-                     v
-       [Generate Random 16-Byte Tweak]
-                     |
-                     v
-          [AES-XTS Tweakable Encrypt]
-                     |
-                     v
-             16-Byte Ciphertext
-                     |
-                     v
-       [Concatenate Tweak || Ciphertext]
-                     |
-                     v
-          32-Byte Output (ipcrypt-ndx)
-
-Appendix B.  Pseudocode and Examples
-
-   This appendix provides detailed pseudocode for key operations
-   described in this document.  For a visual representation of these
-   operations, see Appendix A.
-
-B.1.  IPv4 Address Conversion
-
-   For a diagram of this conversion process, see Appendix A.1.
-
-   function IPv4To16Bytes(ipv4_address):
-       // Split the IPv4 address into its octets
-       parts = ipv4_address.split(".")
-       if length(parts) != 4:
-            raise Error("Invalid IPv4 address")
-       // Create a 16-byte array with the IPv4-mapped prefix
-       bytes16 = [0x00] * 10         // 10 bytes of 0x00
-       bytes16.append(0xFF)          // 11th byte: 0xFF
-       bytes16.append(0xFF)          // 12th byte: 0xFF
-       // Append each octet (converted to an 8-bit integer)
-       for part in parts:
-            bytes16.append(int(part))
-       return bytes16
-
-   _Example:_ For "192.0.2.1", the function returns
-
-   [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
-
-B.2.  IPv6 Address Conversion
-
-   function IPv6To16Bytes(ipv6_address):
-       // Parse the IPv6 address into eight 16-bit words.
-       words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
-       bytes16 = []
-       for word in words:
-            high_byte = (word >> 8) & 0xFF
-            low_byte = word & 0xFF
-            bytes16.append(high_byte)
-            bytes16.append(low_byte)
-       return bytes16
-
-   _Example:_ For "2001:0db8:85a3:0000:0000:8a2e:0370:7334", the output
-   is the corresponding 16-byte sequence.
-
-B.3.  Conversion from a 16-Byte Array to an IP Address
-
-   function Bytes16ToIP(bytes16):
-       if length(bytes16) != 16:
-            raise Error("Invalid byte array")
-
-       // Check for the IPv4-mapped prefix
-       if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11] == 0xFF:
-            ipv4_parts = []
-            for i from 12 to 15:
-                ipv4_parts.append(str(bytes16[i]))
-            ipv4_address = join(ipv4_parts, ".")
-            return ipv4_address
-       else:
-            words = []
-            for i from 0 to 15 step 2:
-                word = (bytes16[i] << 8) | bytes16[i+1]
-                words.append(format(word, "x"))
-            ipv6_address = join(words, ":")
-            return ipv6_address
-
-B.4.  Deterministic Encryption (ipcrypt-deterministic)
-
-   function ipcrypt_deterministic_encrypt(ip_address, key):
-       // The key MUST be exactly 16 bytes (128 bits) in length
-       if length(key) != 16:
-           raise Error("Key must be 16 bytes")
-
-       bytes16 = convertTo16Bytes(ip_address)
-       ciphertext = AES128_encrypt(key, bytes16)
-       encrypted_ip = Bytes16ToIP(ciphertext)
-       return encrypted_ip
-
-   function ipcrypt_deterministic_decrypt(encrypted_ip, key):
-       if length(key) != 16:
-           raise Error("Key must be 16 bytes")
-
-       bytes16 = convertTo16Bytes(encrypted_ip)
-       plaintext = AES128_decrypt(key, bytes16)
-       original_ip = Bytes16ToIP(plaintext)
-       return original_ip
-
-B.5.  Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)
-
-   function ipcrypt_nd_encrypt(ip_address, key):
-       if length(key) != 16:
-           raise Error("Key must be 16 bytes")
-
-       // Step 1: Generate random tweak (8 bytes)
-       tweak = random_bytes(8)  // MUST be uniformly random
-
-       // Step 2: Convert IP to 16-byte representation
-       bytes16 = convertTo16Bytes(ip_address)
-
-       // Step 3: Encrypt using key and tweak
-       ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
-
-       // Step 4: Concatenate tweak and ciphertext
-       result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
-       return result
-
-   function ipcrypt_nd_decrypt(ciphertext, key):
-       // Step 1: Split ciphertext into tweak and encrypted IP
-       tweak = ciphertext[0:8]  // First 8 bytes
-       encrypted_ip = ciphertext[8:24]  // Remaining 16 bytes
-
-       // Step 2: Decrypt using key and tweak
-       bytes16 = KIASU_BC_decrypt(key, tweak, encrypted_ip)
-
-       // Step 3: Convert back to IP address
-       ip_address = Bytes16ToIP(bytes16)
-       return ip_address
-
-B.6.  Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)
-
-   function AES_XTS_encrypt(key, tweak, block):
-       // Split the key into two halves
-       K1, K2 = split_key(key)
-
-       // Encrypt the tweak with the second half of the key
-       ET = AES128_encrypt(K2, tweak)
-
-       // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
-       return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
-
-   function ipcrypt_ndx_encrypt(ip_address, key):
-       if length(key) != 32:
-           raise Error("Key must be 32 bytes (two AES-128 keys)")
-
-       // Step 1: Generate random tweak (16 bytes)
-       tweak = random_bytes(16)  // MUST be uniformly random
-
-       // Step 2: Convert IP to 16-byte representation
-       bytes16 = convertTo16Bytes(ip_address)
-
-       // Step 3: Encrypt using key and tweak
-       ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
-
-       // Step 4: Concatenate tweak and ciphertext
-       result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
-       return result
-
-   function ipcrypt_ndx_decrypt(ciphertext, key):
-       // Step 1: Split ciphertext into tweak and encrypted IP
-       tweak = ciphertext[0:16]  // First 16 bytes
-       encrypted_ip = ciphertext[16:32]  // Remaining 16 bytes
-
-       // Step 2: Decrypt using key and tweak
-       bytes16 = AES_XTS_decrypt(key, tweak, encrypted_ip)
-
-       // Step 3: Convert back to IP address
-       ip_address = Bytes16ToIP(bytes16)
-       return ip_address
-
-Appendix C.  Implementing KIASU-BC
-
-   This appendix provides a detailed guide for implementing the KIASU-BC
-   tweakable block cipher.  KIASU-BC is based on AES-128 with
-   modifications to incorporate a tweak.
-
-C.1.  Overview
-
-   KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each
-   round.  The tweak is padded to 16 bytes and XORed with the round key
-   at each round of the cipher.  This construction is used in the
-   ipcrypt-nd instantiation.
-
-C.2.  Tweak Padding
-
-   The 8-byte tweak is padded to 16 bytes using the following method:
-
-   1.  Split the 8-byte tweak into four 2-byte pairs
-
-   2.  Place each 2-byte pair at the start of each 4-byte group
-
-   3.  Fill the remaining 2 bytes of each group with zeros
-
-   Example:
-
-   8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
-   16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
-
-C.3.  Round Structure
-
-   Each round of KIASU-BC consists of the following standard AES
-   operations:
-
-   1.  *SubBytes:* Apply the AES S-box to each byte of the state
-
-   2.  *ShiftRows:* Rotate each row of the state matrix
-
-   3.  *MixColumns:* Mix the columns of the state matrix (except in the
-       final round)
-
-   4.  *AddRoundKey:* XOR the state with the round key and padded tweak
-
-   For details about these operations, see [FIPS-197].
-
-C.4.  Key Schedule
-
-   The key schedule follows the standard AES-128 key expansion:
-
-   1.  The initial key is expanded into 11 round keys
-
-   2.  Each round key is XORed with the padded tweak before use
-
-   3.  The first round key is used in the initial AddRoundKey operation
-
-C.5.  Implementation Steps
-
-   1.  *Key Expansion:*
-
-       *  Expand the 16-byte key into 11 round keys using the standard
-          AES key schedule
-
-       *  Each round key is 16 bytes
-
-   2.  *Tweak Processing:*
-
-       *  Pad the 8-byte tweak to 16 bytes as described above
-
-       *  XOR the padded tweak with each round key before use
-
-   3.  *Encryption Process:*
-
-       *  Perform initial AddRoundKey with the first tweaked round key
-
-       *  For rounds 1-9:
-
-          -  SubBytes
-
-          -  ShiftRows
-
-          -  MixColumns
-
-          -  AddRoundKey (with tweaked round key)
-
-       *  For round 10 (final round):
-
-          -  SubBytes
-
-          -  ShiftRows
-
-          -  AddRoundKey (with tweaked round key)
-
-C.6.  Example Implementation
-
-   The following pseudocode illustrates the core operations of KIASU-BC:
-
-   function pad_tweak(tweak):
-       // Input: 8-byte tweak
-       // Output: 16-byte padded tweak
-       padded = [0] * 16
-       for i in range(0, 8, 2):
-           padded[i*2] = tweak[i]
-           padded[i*2+1] = tweak[i+1]
-       return padded
-
-   function kiasu_bc_encrypt(key, tweak, plaintext):
-       // Input: 16-byte key, 8-byte tweak, 16-byte plaintext
-       // Output: 16-byte ciphertext
-
-       // Expand key and pad tweak
-       round_keys = expand_key(key)
-       padded_tweak = pad_tweak(tweak)
-
-       // Initial round
-       state = plaintext
-       state = add_round_key(state, round_keys[0] ^ padded_tweak)
-
-       // Main rounds
-       for round in range(1, 10):
-           state = sub_bytes(state)
-           state = shift_rows(state)
-           state = mix_columns(state)
-           state = add_round_key(state, round_keys[round] ^ padded_tweak)
-
-       // Final round
-       state = sub_bytes(state)
-       state = shift_rows(state)
-       state = add_round_key(state, round_keys[10] ^ padded_tweak)
-
-       return state
-
-Appendix D.  Test Vectors
+Appendix A.  Test Vectors
 
    This appendix provides test vectors for all three variants of
    ipcrypt.  Each test vector includes the key, input IP address, and
    encrypted output.  For non-deterministic variants (ipcrypt-nd and
    ipcrypt-ndx), the tweak value is also included.
 
-   Key and tweak sizes for each variant: - ipcrypt-deterministic: Key:
-   16 bytes (128 bits), no tweak - ipcrypt-nd: Key: 16 bytes (128 bits),
-   Tweak: 8 bytes (64 bits) - ipcrypt-ndx: Key: 32 bytes (256 bits, two
-   AES-128 keys), Tweak: 16 bytes (128 bits)
+   Implementations MUST verify their correctness against these test
+   vectors before deployment.
 
-D.1.  ipcrypt-deterministic Test Vectors
+A.1.  ipcrypt-deterministic Test Vectors
 
    # Test vector 1
    Key:          0123456789abcdeffedcba9876543210
@@ -1116,7 +1129,7 @@ D.1.  ipcrypt-deterministic Test Vectors
    Input IP:     192.0.2.1
    Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
 
-D.2.  ipcrypt-nd Test Vectors
+A.2.  ipcrypt-nd Test Vectors
 
    # Test vector 1
    Key:          0123456789abcdeffedcba9876543210
@@ -1136,7 +1149,7 @@ D.2.  ipcrypt-nd Test Vectors
    Tweak:        b4ecbe30b70898d7
    Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
 
-D.3.  ipcrypt-ndx Test Vectors
+A.3.  ipcrypt-ndx Test Vectors
 
 # Test vector 1
 Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
@@ -1158,33 +1171,13 @@ Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 
    For non-deterministic variants (ipcrypt-nd and ipcrypt-ndx), the
    tweak values shown are examples.  In practice, tweaks MUST be
-   randomly generated for each encryption operation.
+   uniformly random for each encryption operation.
 
-   Implementations SHOULD verify their correctness against these test
-   vectors before deployment.
+IANA Considerations
 
-Appendix E.  Alternatives to Random Tweaks
+   This document does not require any IANA actions.
 
-   While this specification recommends the use of uniformly random
-   tweaks for non-deterministic encryption, implementers may consider
-   alternative approaches:
-
-   *  *Monotonic Counter:* A counter could be used as a tweak, but this
-      is difficult to maintain in distributed systems.  If the counter
-      is not encrypted and the tweakable block cipher is not secure
-      against related-tweak attacks, this could enable correlation
-      attacks.
-
-   *  *UUIDs:* UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks;
-      however, these would reveal the original timestamp of the logged
-      IP addresses, which may not be desirable from a privacy
-      perspective.
-
-   Although the birthday bound is a concern with random tweaks, the use
-   of random tweaks remains the recommended and most practical approach,
-   offering the best tradeoffs for most real-world use cases.
-
-Appendix F.  Acknowledgments
+Acknowledgments
 
    The author gratefully acknowledges the contributions and insightful
    comments from members of the IETF independent stream community and

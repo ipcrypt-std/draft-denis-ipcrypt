@@ -7,8 +7,8 @@
 <title>Methods for IP Address Encryption and Obfuscation</title>
 <meta content="Frank Denis" name="author">
 <meta content="
-       This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis and correlation while protecting user privacy, addressing concerns raised in   and   regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation. 
-       Three concrete instantiations are defined:  ipcrypt-deterministic  provides reversible deterministic encryption with format preservation, always producing the same output for a given input;  ipcrypt-nd  and  ipcrypt-ndx  provide non-deterministic encryption that produces different outputs for the same input by incorporating randomness. All methods are reversible with the encryption key. Non-deterministic modes produce larger outputs to prevent correlation of identical inputs while maintaining full reversibility. 
+       This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy, addressing concerns raised in   and   regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses. 
+       Three concrete instantiations are defined:  ipcrypt-deterministic  provides deterministic, format-preserving encryption, while  ipcrypt-nd  and  ipcrypt-ndx  introduce randomness to prevent correlation. All methods are reversible with the encryption key. 
     " name="description">
 <meta content="xml2rfc 3.30.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1080,8 +1080,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Methods for IP Address Encryption and Obfuscation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis and correlation while protecting user privacy, addressing concerns raised in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span> and <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">Three concrete instantiations are defined: <code>ipcrypt-deterministic</code> provides reversible deterministic encryption with format preservation, always producing the same output for a given input; <code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code> provide non-deterministic encryption that produces different outputs for the same input by incorporating randomness. All methods are reversible with the encryption key. Non-deterministic modes produce larger outputs to prevent correlation of identical inputs while maintaining full reversibility.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy, addressing concerns raised in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span> and <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Three concrete instantiations are defined: <code>ipcrypt-deterministic</code> provides deterministic, format-preserving encryption, while <code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code> introduce randomness to prevent correlation. All methods are reversible with the encryption key.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1212,6 +1212,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-alternatives-to-random-twea" class="internal xref">Alternatives to Random Tweaks</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
@@ -1232,10 +1235,70 @@ svg :is([fill="white"], [fill^="#fff"]) {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-implementation-details" class="internal xref">Implementation Details</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-visual-diagrams" class="internal xref">Visual Diagrams</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.1">
+                    <p id="section-toc.1-1.8.2.1.2.1.1"><a href="#section-8.1.1" class="auto internal xref">8.1.1</a>.  <a href="#name-ipv4-address-conversion-dia" class="internal xref">IPv4 Address Conversion Diagram</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.2">
+                    <p id="section-toc.1-1.8.2.1.2.2.1"><a href="#section-8.1.2" class="auto internal xref">8.1.2</a>.  <a href="#name-deterministic-encryption-fl" class="internal xref">Deterministic Encryption Flow</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.3">
+                    <p id="section-toc.1-1.8.2.1.2.3.1"><a href="#section-8.1.3" class="auto internal xref">8.1.3</a>.  <a href="#name-nondeterministic-encryption" class="internal xref">Non‑Deterministic Encryption Flow (ipcrypt-nd)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.4">
+                    <p id="section-toc.1-1.8.2.1.2.4.1"><a href="#section-8.1.4" class="auto internal xref">8.1.4</a>.  <a href="#name-nondeterministic-encryption-" class="internal xref">Non‑Deterministic Encryption Flow (ipcrypt-ndx)</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-ipv4-address-conversion" class="internal xref">IPv4 Address Conversion</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-ipv6-address-conversion" class="internal xref">IPv6 Address Conversion</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-conversion-from-a-16-byte-a" class="internal xref">Conversion from a 16-Byte Array to an IP Address</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-deterministic-encryption-ip" class="internal xref">Deterministic Encryption (ipcrypt-deterministic)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.6">
+                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="auto internal xref">8.6</a>.  <a href="#name-non-deterministic-encryption" class="internal xref">Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.7">
+                <p id="section-toc.1-1.8.2.7.1"><a href="#section-8.7" class="auto internal xref">8.7</a>.  <a href="#name-non-deterministic-encryption-" class="internal xref">Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8">
+                <p id="section-toc.1-1.8.2.8.1"><a href="#section-8.8" class="auto internal xref">8.8</a>.  <a href="#name-kiasu-bc-implementation-gui" class="internal xref">KIASU-BC Implementation Guide</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8.2.1">
+                    <p id="section-toc.1-1.8.2.8.2.1.1"><a href="#section-8.8.1" class="auto internal xref">8.8.1</a>.  <a href="#name-overview" class="internal xref">Overview</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8.2.2">
+                    <p id="section-toc.1-1.8.2.8.2.2.1"><a href="#section-8.8.2" class="auto internal xref">8.8.2</a>.  <a href="#name-tweak-padding" class="internal xref">Tweak Padding</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8.2.3">
+                    <p id="section-toc.1-1.8.2.8.2.3.1"><a href="#section-8.8.3" class="auto internal xref">8.8.3</a>.  <a href="#name-round-structure" class="internal xref">Round Structure</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8.2.4">
+                    <p id="section-toc.1-1.8.2.8.2.4.1"><a href="#section-8.8.4" class="auto internal xref">8.8.4</a>.  <a href="#name-key-schedule" class="internal xref">Key Schedule</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8.2.5">
+                    <p id="section-toc.1-1.8.2.8.2.5.1"><a href="#section-8.8.5" class="auto internal xref">8.8.5</a>.  <a href="#name-implementation-steps" class="internal xref">Implementation Steps</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8.2.6">
+                    <p id="section-toc.1-1.8.2.8.2.6.1"><a href="#section-8.8.6" class="auto internal xref">8.8.6</a>.  <a href="#name-example-implementation" class="internal xref">Example Implementation</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
@@ -1249,90 +1312,27 @@ svg :is([fill="white"], [fill^="#fff"]) {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-diagrams" class="internal xref">Diagrams</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-test-vectors" class="internal xref">Test Vectors</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-ipv4-address-conversion-dia" class="internal xref">IPv4 Address Conversion Diagram</a></p>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-ipcrypt-deterministic-test-" class="internal xref">ipcrypt-deterministic Test Vectors</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-deterministic-encryption-fl" class="internal xref">Deterministic Encryption Flow</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-ipcrypt-nd-test-vectors" class="internal xref">ipcrypt-nd Test Vectors</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
-                <p id="section-toc.1-1.11.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-nondeterministic-encryption" class="internal xref">Non‑Deterministic Encryption Flow (ipcrypt-nd)</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.4">
-                <p id="section-toc.1-1.11.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-nondeterministic-encryption-" class="internal xref">Non‑Deterministic Encryption Flow (ipcrypt-ndx)</a></p>
+                <p id="section-toc.1-1.11.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-ipcrypt-ndx-test-vectors" class="internal xref">ipcrypt-ndx Test Vectors</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-pseudocode-and-examples" class="internal xref">Pseudocode and Examples</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-ipv4-address-conversion" class="internal xref">IPv4 Address Conversion</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-ipv6-address-conversion" class="internal xref">IPv6 Address Conversion</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
-                <p id="section-toc.1-1.12.2.3.1"><a href="#appendix-B.3" class="auto internal xref">B.3</a>.  <a href="#name-conversion-from-a-16-byte-a" class="internal xref">Conversion from a 16-Byte Array to an IP Address</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
-                <p id="section-toc.1-1.12.2.4.1"><a href="#appendix-B.4" class="auto internal xref">B.4</a>.  <a href="#name-deterministic-encryption-ip" class="internal xref">Deterministic Encryption (ipcrypt-deterministic)</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.5">
-                <p id="section-toc.1-1.12.2.5.1"><a href="#appendix-B.5" class="auto internal xref">B.5</a>.  <a href="#name-non-deterministic-encryption" class="internal xref">Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.6">
-                <p id="section-toc.1-1.12.2.6.1"><a href="#appendix-B.6" class="auto internal xref">B.6</a>.  <a href="#name-non-deterministic-encryption-" class="internal xref">Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref">Appendix C</a>.  <a href="#name-implementing-kiasu-bc" class="internal xref">Implementing KIASU-BC</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
-                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-C.1" class="auto internal xref">C.1</a>.  <a href="#name-overview" class="internal xref">Overview</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
-                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-C.2" class="auto internal xref">C.2</a>.  <a href="#name-tweak-padding" class="internal xref">Tweak Padding</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
-                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-C.3" class="auto internal xref">C.3</a>.  <a href="#name-round-structure" class="internal xref">Round Structure</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.4">
-                <p id="section-toc.1-1.13.2.4.1"><a href="#appendix-C.4" class="auto internal xref">C.4</a>.  <a href="#name-key-schedule" class="internal xref">Key Schedule</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.5">
-                <p id="section-toc.1-1.13.2.5.1"><a href="#appendix-C.5" class="auto internal xref">C.5</a>.  <a href="#name-implementation-steps" class="internal xref">Implementation Steps</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.6">
-                <p id="section-toc.1-1.13.2.6.1"><a href="#appendix-C.6" class="auto internal xref">C.6</a>.  <a href="#name-example-implementation" class="internal xref">Example Implementation</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-D" class="auto internal xref">Appendix D</a>.  <a href="#name-test-vectors" class="internal xref">Test Vectors</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
-                <p id="section-toc.1-1.14.2.1.1"><a href="#appendix-D.1" class="auto internal xref">D.1</a>.  <a href="#name-ipcrypt-deterministic-test-" class="internal xref">ipcrypt-deterministic Test Vectors</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.2">
-                <p id="section-toc.1-1.14.2.2.1"><a href="#appendix-D.2" class="auto internal xref">D.2</a>.  <a href="#name-ipcrypt-nd-test-vectors" class="internal xref">ipcrypt-nd Test Vectors</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.3">
-                <p id="section-toc.1-1.14.2.3.1"><a href="#appendix-D.3" class="auto internal xref">D.3</a>.  <a href="#name-ipcrypt-ndx-test-vectors" class="internal xref">ipcrypt-ndx Test Vectors</a></p>
-</li>
-            </ul>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-E" class="auto internal xref">Appendix E</a>.  <a href="#name-alternatives-to-random-twea" class="internal xref">Alternatives to Random Tweaks</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-F" class="auto internal xref">Appendix F</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
-            <p id="section-toc.1-1.17.1"><a href="#appendix-G" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1390,7 +1390,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-1.2-4.4.1"><strong>Seamless Third-Party Integration:</strong> Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.<a href="#section-1.2-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.2-5">For implementation guidelines and practical examples, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B</a>.<a href="#section-1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.2-5">For implementation guidelines and practical examples, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-1.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="relationship-to-ietf-work">
@@ -1555,7 +1555,7 @@ IPv4 Address:    192.0.2.1
           <p id="section-4-4.2.1"><strong>DEOXYS-BC</strong> (see <span>[<a href="#DEOXYS-BC" class="cite xref">DEOXYS-BC</a>]</span>)<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-4.3">
-          <p id="section-4-4.3.1"><strong>KIASU-BC</strong> (see <a href="#implementing-kiasu-bc" class="auto internal xref">Appendix C</a> for implementation details)<a href="#section-4-4.3.1" class="pilcrow">¶</a></p>
+          <p id="section-4-4.3.1"><strong>KIASU-BC</strong> (see <a href="#implementing-kiasu-bc" class="auto internal xref">Section 8.8</a> for implementation details)<a href="#section-4-4.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-4.4">
           <p id="section-4-4.4.1"><strong>AES-XTS</strong> (see <a href="#ipcrypt-ndx" class="auto internal xref">Section 6.4.2</a> for usage)<a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
@@ -1570,14 +1570,14 @@ IPv4 Address:    192.0.2.1
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-deterministic-encryption" class="section-name selfRef">Deterministic Encryption</a>
       </h2>
 <p id="section-5-1">Deterministic encryption applies a 128-bit block cipher directly to the 16-byte representation of an IP address. All instantiations documented in this specification (<code>ipcrypt-deterministic</code>, <code>ipcrypt-nd</code>, and <code>ipcrypt-ndx</code>) are invertible - encrypted IP addresses can be decrypted back to their original values using the same key. For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">For implementation details, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B</a>.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-2">For implementation details, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="ipcrypt-deterministic">
 <section id="section-5.1">
         <h3 id="name-ipcrypt-deterministic">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-ipcrypt-deterministic" class="section-name selfRef">ipcrypt-deterministic</a>
         </h3>
 <p id="section-5.1-1">The <code>ipcrypt-deterministic</code> instantiation employs AES-128 in a single-block operation. The key MUST be exactly 16 bytes (128 bits) in length. Since AES-128 is a permutation, every distinct 16-byte input maps to a unique 16-byte ciphertext, preserving the IP address format.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">For test vectors, see <a href="#ipcrypt-deterministic-test-vectors" class="auto internal xref">Appendix D.1</a>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">For test vectors, see <a href="#ipcrypt-deterministic-test-vectors" class="auto internal xref">Appendix A.1</a>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1-3">
 <pre>
       +---------------------+
@@ -1632,7 +1632,7 @@ IPv4 Address:    192.0.2.1
       <h2 id="name-non-deterministic-encryptio">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-non-deterministic-encryptio" class="section-name selfRef">Non-Deterministic Encryption</a>
       </h2>
-<p id="section-6-1">Non-deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">Non-deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <div id="encryption-process">
 <section id="section-6.1">
         <h3 id="name-encryption-process">
@@ -1699,16 +1699,16 @@ IPv4 Address:    192.0.2.1
 </li>
         </ul>
 <p id="section-6.4-3">In both cases, if a tweak is generated randomly, it MUST be uniformly random. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
-<p id="section-6.4-4">For test vectors, see <a href="#ipcrypt-nd-test-vectors" class="auto internal xref">Appendix D.2</a> and <a href="#ipcrypt-ndx-test-vectors" class="auto internal xref">Appendix D.3</a>.<a href="#section-6.4-4" class="pilcrow">¶</a></p>
+<p id="section-6.4-4">For test vectors, see <a href="#ipcrypt-nd-test-vectors" class="auto internal xref">Appendix A.2</a> and <a href="#ipcrypt-ndx-test-vectors" class="auto internal xref">Appendix A.3</a>.<a href="#section-6.4-4" class="pilcrow">¶</a></p>
 <div id="ipcrypt-nd">
 <section id="section-6.4.1">
           <h4 id="name-ipcrypt-nd-kiasu-bc">
 <a href="#section-6.4.1" class="section-number selfRef">6.4.1. </a><a href="#name-ipcrypt-nd-kiasu-bc" class="section-name selfRef">ipcrypt-nd (KIASU-BC)</a>
           </h4>
-<p id="section-6.4.1-1">The <code>ipcrypt-nd</code> instantiation uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. For implementation details, see <a href="#implementing-kiasu-bc" class="auto internal xref">Appendix C</a>. The output is 24 bytes total, consisting of an 8-byte tweak concatenated with a 16-byte ciphertext.<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.4.1-1">The <code>ipcrypt-nd</code> instantiation uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. For implementation details, see <a href="#implementing-kiasu-bc" class="auto internal xref">Section 8.8</a>. The output is 24 bytes total, consisting of an 8-byte tweak concatenated with a 16-byte ciphertext.<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.4.1-2">Random sampling of an 8-byte tweak yields an expected collision for a specific tweak value after about 2^(64/2) = 2^32 operations (approximately 4 billion operations). If an <code>(input, tweak)</code> collision occurs, it indicates that the same input was processed with that tweak without revealing the input’s value.<a href="#section-6.4.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.4.1-3">These collision bounds apply per cryptographic key. By rotating keys regularly, secure usage can be extended well beyond these bounds. The effective security is determined by the underlying block cipher’s strength.<a href="#section-6.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.4.1-4">For test vectors, see <a href="#ipcrypt-nd-test-vectors" class="auto internal xref">Appendix D.2</a>.<a href="#section-6.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.4.1-4">For test vectors, see <a href="#ipcrypt-nd-test-vectors" class="auto internal xref">Appendix A.2</a>.<a href="#section-6.4.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ipcrypt-ndx">
@@ -1745,6 +1745,23 @@ Produces a 16-byte output; preserves format but reveals repeated inputs.<a href=
           </ul>
 </section>
 </div>
+</section>
+</div>
+<div id="alternatives-to-random-tweaks">
+<section id="section-6.5">
+        <h3 id="name-alternatives-to-random-twea">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-alternatives-to-random-twea" class="section-name selfRef">Alternatives to Random Tweaks</a>
+        </h3>
+<p id="section-6.5-1">While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, implementers may consider alternative approaches:<a href="#section-6.5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.5-2.1">
+            <p id="section-6.5-2.1.1"><strong>Monotonic Counter:</strong> A counter could be used as a tweak, but this is difficult to maintain in distributed systems. If the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.<a href="#section-6.5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.5-2.2">
+            <p id="section-6.5-2.2.1"><strong>UUIDs:</strong> UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.<a href="#section-6.5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-6.5-3">Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.<a href="#section-6.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1820,57 +1837,577 @@ Produces a 16-byte output; preserves format but reveals repeated inputs.<a href=
 </div>
 </section>
 </div>
-<div id="implementation-status">
+<div id="implementation-details">
 <section id="section-8">
-      <h2 id="name-implementation-status">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+      <h2 id="name-implementation-details">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-implementation-details" class="section-name selfRef">Implementation Details</a>
       </h2>
-<p id="section-8-1"><em>This section is to be removed before publishing as an RFC.</em><a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <span>[<a href="#RFC7942" class="cite xref">RFC7942</a>]</span>. The description of implementations in this section is intended to assist the Independent Submissions Editor in judging whether the specification is suitable for publication.<a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">Please note that the listing of any individual implementation here does not imply endorsement. Furthermore, no effort has been spent to verify the information presented here that was supplied by contributors. This is not intended as, and must not be construed to be, a catalog of available implementations or their features.<a href="#section-8-3" class="pilcrow">¶</a></p>
-<p id="section-8-4">Multiple interoperable implementations of the schemes described in this document have been developed:<a href="#section-8-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-8-5.1">
-          <p id="section-8-5.1.1">C implementation<a href="#section-8-5.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.2">
-          <p id="section-8-5.2.1">D implementation<a href="#section-8-5.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.3">
-          <p id="section-8-5.3.1">Go implementation<a href="#section-8-5.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.4">
-          <p id="section-8-5.4.1">Java implementation (maven package)<a href="#section-8-5.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.5">
-          <p id="section-8-5.5.1">JavaScript/TypeScript implementation (npm package)<a href="#section-8-5.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.6">
-          <p id="section-8-5.6.1">PHP implementation (Composer package)<a href="#section-8-5.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.7">
-          <p id="section-8-5.7.1">Python reference implementation<a href="#section-8-5.7.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.8">
-          <p id="section-8-5.8.1">Rust implementation (cargo package)<a href="#section-8-5.8.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.9">
-          <p id="section-8-5.9.1">Zig implementation<a href="#section-8-5.9.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-5.10">
-          <p id="section-8-5.10.1">Dart implementation (pub.dev package)<a href="#section-8-5.10.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-8-6">A comprehensive list of implementations and their test results can be found at: https://ipcrypt-std.github.io/implementations/<a href="#section-8-6" class="pilcrow">¶</a></p>
-<p id="section-8-7">All implementations pass the common test vectors specified in this document, demonstrating interoperability across programming languages.<a href="#section-8-7" class="pilcrow">¶</a></p>
+<p id="section-8-1">This section provides detailed pseudocode and implementation guidance for the key operations described in this document.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<div id="diagrams">
+<section id="section-8.1">
+        <h3 id="name-visual-diagrams">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-visual-diagrams" class="section-name selfRef">Visual Diagrams</a>
+        </h3>
+<p id="section-8.1-1">The following diagrams illustrate the key processes described in this specification.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<div id="ipv4-address-conversion-diagram">
+<section id="section-8.1.1">
+          <h4 id="name-ipv4-address-conversion-dia">
+<a href="#section-8.1.1" class="section-number selfRef">8.1.1. </a><a href="#name-ipv4-address-conversion-dia" class="section-name selfRef">IPv4 Address Conversion Diagram</a>
+          </h4>
+<div class="alignLeft art-text artwork" id="section-8.1.1-1">
+<pre>
+       IPv4: 192.0.2.1
+           |
+           v
+  Octets:  C0  00  02  01
+           |
+           v
+   16-Byte Array:
+[00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
+</pre><a href="#section-8.1.1-1" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
-<div id="iana-considerations">
+<div id="deterministic-encryption-flow">
+<section id="section-8.1.2">
+          <h4 id="name-deterministic-encryption-fl">
+<a href="#section-8.1.2" class="section-number selfRef">8.1.2. </a><a href="#name-deterministic-encryption-fl" class="section-name selfRef">Deterministic Encryption Flow</a>
+          </h4>
+<div class="alignLeft art-text artwork" id="section-8.1.2-1">
+<pre>
+            IP Address
+                |
+                v
+       [Convert to 16 Bytes]
+                |
+                v
+    [AES-128 Single-Block Encrypt]
+                |
+                v
+       16-Byte Ciphertext
+                |
+                v
+     [Convert to IP Format]
+                |
+                v
+       Encrypted IP Address
+</pre><a href="#section-8.1.2-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="nondeterministic-encryption-flow-ipcrypt-nd">
+<section id="section-8.1.3">
+          <h4 id="name-nondeterministic-encryption">
+<a href="#section-8.1.3" class="section-number selfRef">8.1.3. </a><a href="#name-nondeterministic-encryption" class="section-name selfRef">Non‑Deterministic Encryption Flow (ipcrypt-nd)</a>
+          </h4>
+<div class="alignLeft art-text artwork" id="section-8.1.3-1">
+<pre>
+              IP Address
+                  |
+                  v
+       [Convert to 16 Bytes]
+                  |
+                  v
+    [Generate Random 8-Byte Tweak]
+                  |
+                  v
+       [KIASU-BC Tweakable Encrypt]
+                  |
+                  v
+          16-Byte Ciphertext
+                  |
+                  v
+    [Concatenate Tweak || Ciphertext]
+                  |
+                  v
+       24-Byte Output (ipcrypt-nd)
+</pre><a href="#section-8.1.3-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="nondeterministic-encryption-flow-ipcrypt-ndx">
+<section id="section-8.1.4">
+          <h4 id="name-nondeterministic-encryption-">
+<a href="#section-8.1.4" class="section-number selfRef">8.1.4. </a><a href="#name-nondeterministic-encryption-" class="section-name selfRef">Non‑Deterministic Encryption Flow (ipcrypt-ndx)</a>
+          </h4>
+<div class="alignLeft art-text artwork" id="section-8.1.4-1">
+<pre>
+              IP Address
+                  |
+                  v
+       [Convert to 16 Bytes]
+                  |
+                  v
+    [Generate Random 16-Byte Tweak]
+                  |
+                  v
+       [AES-XTS Tweakable Encrypt]
+                  |
+                  v
+          16-Byte Ciphertext
+                  |
+                  v
+    [Concatenate Tweak || Ciphertext]
+                  |
+                  v
+       32-Byte Output (ipcrypt-ndx)
+</pre><a href="#section-8.1.4-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="ipv4-address-conversion">
+<section id="section-8.2">
+        <h3 id="name-ipv4-address-conversion">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-ipv4-address-conversion" class="section-name selfRef">IPv4 Address Conversion</a>
+        </h3>
+<p id="section-8.2-1">For a diagram of this conversion process, see <a href="#ipv4-address-conversion-diagram" class="auto internal xref">Section 8.1.1</a>.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<div class="lang-pseudocode sourcecode" id="section-8.2-2">
+<pre>
+function IPv4To16Bytes(ipv4_address):
+    // Split the IPv4 address into its octets
+    parts = ipv4_address.split(".")
+    if length(parts) != 4:
+         raise Error("Invalid IPv4 address")
+    // Create a 16-byte array with the IPv4-mapped prefix
+    bytes16 = [0x00] * 10         // 10 bytes of 0x00
+    bytes16.append(0xFF)          // 11th byte: 0xFF
+    bytes16.append(0xFF)          // 12th byte: 0xFF
+    // Append each octet (converted to an 8-bit integer)
+    for part in parts:
+         bytes16.append(int(part))
+    return bytes16
+</pre><a href="#section-8.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-8.2-3"><em>Example:</em> For <code>"192.0.2.1"</code>, the function returns<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.2-4">
+<pre>
+[00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
+</pre><a href="#section-8.2-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="ipv6-address-conversion">
+<section id="section-8.3">
+        <h3 id="name-ipv6-address-conversion">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-ipv6-address-conversion" class="section-name selfRef">IPv6 Address Conversion</a>
+        </h3>
+<div class="lang-pseudocode sourcecode" id="section-8.3-1">
+<pre>
+function IPv6To16Bytes(ipv6_address):
+    // Parse the IPv6 address into eight 16-bit words.
+    words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
+    bytes16 = []
+    for word in words:
+         high_byte = (word &gt;&gt; 8) &amp; 0xFF
+         low_byte = word &amp; 0xFF
+         bytes16.append(high_byte)
+         bytes16.append(low_byte)
+    return bytes16
+</pre><a href="#section-8.3-1" class="pilcrow">¶</a>
+</div>
+<p id="section-8.3-2"><em>Example:</em> For <code>"2001:0db8:85a3:0000:0000:8a2e:0370:7334"</code>, the output is the corresponding 16‑byte sequence.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conversion-from-a-16-byte-array-to-an-ip-address">
+<section id="section-8.4">
+        <h3 id="name-conversion-from-a-16-byte-a">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-conversion-from-a-16-byte-a" class="section-name selfRef">Conversion from a 16-Byte Array to an IP Address</a>
+        </h3>
+<div class="lang-pseudocode sourcecode" id="section-8.4-1">
+<pre>
+function Bytes16ToIP(bytes16):
+    if length(bytes16) != 16:
+         raise Error("Invalid byte array")
+
+    // Check for the IPv4-mapped prefix
+    if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11] == 0xFF:
+         ipv4_parts = []
+         for i from 12 to 15:
+             ipv4_parts.append(str(bytes16[i]))
+         ipv4_address = join(ipv4_parts, ".")
+         return ipv4_address
+    else:
+         words = []
+         for i from 0 to 15 step 2:
+             word = (bytes16[i] &lt;&lt; 8) | bytes16[i+1]
+             words.append(format(word, "x"))
+         ipv6_address = join(words, ":")
+         return ipv6_address
+</pre><a href="#section-8.4-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="deterministic-encryption-ipcrypt-deterministic">
+<section id="section-8.5">
+        <h3 id="name-deterministic-encryption-ip">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-deterministic-encryption-ip" class="section-name selfRef">Deterministic Encryption (ipcrypt-deterministic)</a>
+        </h3>
+<div class="lang-pseudocode sourcecode" id="section-8.5-1">
+<pre>
+function ipcrypt_deterministic_encrypt(ip_address, key):
+    // The key MUST be exactly 16 bytes (128 bits) in length
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+
+    bytes16 = convertTo16Bytes(ip_address)
+    ciphertext = AES128_encrypt(key, bytes16)
+    encrypted_ip = Bytes16ToIP(ciphertext)
+    return encrypted_ip
+
+function ipcrypt_deterministic_decrypt(encrypted_ip, key):
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+
+    bytes16 = convertTo16Bytes(encrypted_ip)
+    plaintext = AES128_decrypt(key, bytes16)
+    original_ip = Bytes16ToIP(plaintext)
+    return original_ip
+</pre><a href="#section-8.5-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="non-deterministic-encryption-using-kiasu-bc-ipcrypt-nd">
+<section id="section-8.6">
+        <h3 id="name-non-deterministic-encryption">
+<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-non-deterministic-encryption" class="section-name selfRef">Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)</a>
+        </h3>
+<div class="lang-pseudocode sourcecode" id="section-8.6-1">
+<pre>
+function ipcrypt_nd_encrypt(ip_address, key):
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+
+    // Step 1: Generate random tweak (8 bytes)
+    tweak = random_bytes(8)  // MUST be uniformly random
+
+    // Step 2: Convert IP to 16-byte representation
+    bytes16 = convertTo16Bytes(ip_address)
+
+    // Step 3: Encrypt using key and tweak
+    ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
+
+    // Step 4: Concatenate tweak and ciphertext
+    result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
+    return result
+
+function ipcrypt_nd_decrypt(ciphertext, key):
+    // Step 1: Split ciphertext into tweak and encrypted IP
+    tweak = ciphertext[0:8]  // First 8 bytes
+    encrypted_ip = ciphertext[8:24]  // Remaining 16 bytes
+
+    // Step 2: Decrypt using key and tweak
+    bytes16 = KIASU_BC_decrypt(key, tweak, encrypted_ip)
+
+    // Step 3: Convert back to IP address
+    ip_address = Bytes16ToIP(bytes16)
+    return ip_address
+</pre><a href="#section-8.6-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="non-deterministic-encryption-using-aes-xts-ipcrypt-ndx">
+<section id="section-8.7">
+        <h3 id="name-non-deterministic-encryption-">
+<a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-non-deterministic-encryption-" class="section-name selfRef">Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)</a>
+        </h3>
+<div class="lang-pseudocode sourcecode" id="section-8.7-1">
+<pre>
+function AES_XTS_encrypt(key, tweak, block):
+    // Split the key into two halves
+    K1, K2 = split_key(key)
+
+    // Encrypt the tweak with the second half of the key
+    ET = AES128_encrypt(K2, tweak)
+
+    // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
+    return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
+</pre><a href="#section-8.7-1" class="pilcrow">¶</a>
+</div>
+<div class="lang-pseudocode sourcecode" id="section-8.7-2">
+<pre>
+function ipcrypt_ndx_encrypt(ip_address, key):
+    if length(key) != 32:
+        raise Error("Key must be 32 bytes (two AES-128 keys)")
+
+    // Step 1: Generate random tweak (16 bytes)
+    tweak = random_bytes(16)  // MUST be uniformly random
+
+    // Step 2: Convert IP to 16-byte representation
+    bytes16 = convertTo16Bytes(ip_address)
+
+    // Step 3: Encrypt using key and tweak
+    ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
+
+    // Step 4: Concatenate tweak and ciphertext
+    result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
+    return result
+
+function ipcrypt_ndx_decrypt(ciphertext, key):
+    // Step 1: Split ciphertext into tweak and encrypted IP
+    tweak = ciphertext[0:16]  // First 16 bytes
+    encrypted_ip = ciphertext[16:32]  // Remaining 16 bytes
+
+    // Step 2: Decrypt using key and tweak
+    bytes16 = AES_XTS_decrypt(key, tweak, encrypted_ip)
+
+    // Step 3: Convert back to IP address
+    ip_address = Bytes16ToIP(bytes16)
+    return ip_address
+</pre><a href="#section-8.7-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="implementing-kiasu-bc">
+<section id="section-8.8">
+        <h3 id="name-kiasu-bc-implementation-gui">
+<a href="#section-8.8" class="section-number selfRef">8.8. </a><a href="#name-kiasu-bc-implementation-gui" class="section-name selfRef">KIASU-BC Implementation Guide</a>
+        </h3>
+<p id="section-8.8-1">This section provides a detailed guide for implementing the KIASU-BC tweakable block cipher used in <code>ipcrypt-nd</code>. KIASU-BC is based on AES-128 with modifications to incorporate a tweak.<a href="#section-8.8-1" class="pilcrow">¶</a></p>
+<div id="overview">
+<section id="section-8.8.1">
+          <h4 id="name-overview">
+<a href="#section-8.8.1" class="section-number selfRef">8.8.1. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
+          </h4>
+<p id="section-8.8.1-1">KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the <code>ipcrypt-nd</code> instantiation.<a href="#section-8.8.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="tweak-padding">
+<section id="section-8.8.2">
+          <h4 id="name-tweak-padding">
+<a href="#section-8.8.2" class="section-number selfRef">8.8.2. </a><a href="#name-tweak-padding" class="section-name selfRef">Tweak Padding</a>
+          </h4>
+<p id="section-8.8.2-1">The 8-byte tweak is padded to 16 bytes using the following method:<a href="#section-8.8.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.8.2-2">
+<li id="section-8.8.2-2.1">
+              <p id="section-8.8.2-2.1.1">Split the 8-byte tweak into four 2-byte pairs<a href="#section-8.8.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-8.8.2-2.2">
+              <p id="section-8.8.2-2.2.1">Place each 2-byte pair at the start of each 4-byte group<a href="#section-8.8.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-8.8.2-2.3">
+              <p id="section-8.8.2-2.3.1">Fill the remaining 2 bytes of each group with zeros<a href="#section-8.8.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+<p id="section-8.8.2-3">Example:<a href="#section-8.8.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.8.2-4">
+<pre>
+8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
+16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
+</pre><a href="#section-8.8.2-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="round-structure">
+<section id="section-8.8.3">
+          <h4 id="name-round-structure">
+<a href="#section-8.8.3" class="section-number selfRef">8.8.3. </a><a href="#name-round-structure" class="section-name selfRef">Round Structure</a>
+          </h4>
+<p id="section-8.8.3-1">Each round of KIASU-BC consists of the following standard AES operations:<a href="#section-8.8.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.8.3-2">
+<li id="section-8.8.3-2.1">
+              <p id="section-8.8.3-2.1.1"><strong>SubBytes:</strong> Apply the AES S-box to each byte of the state<a href="#section-8.8.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-8.8.3-2.2">
+              <p id="section-8.8.3-2.2.1"><strong>ShiftRows:</strong> Rotate each row of the state matrix<a href="#section-8.8.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-8.8.3-2.3">
+              <p id="section-8.8.3-2.3.1"><strong>MixColumns:</strong> Mix the columns of the state matrix (except in the final round)<a href="#section-8.8.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-8.8.3-2.4">
+              <p id="section-8.8.3-2.4.1"><strong>AddRoundKey:</strong> XOR the state with the round key and padded tweak<a href="#section-8.8.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+<p id="section-8.8.3-3">For details about these operations, see <span>[<a href="#FIPS-197" class="cite xref">FIPS-197</a>]</span>.<a href="#section-8.8.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="key-schedule">
+<section id="section-8.8.4">
+          <h4 id="name-key-schedule">
+<a href="#section-8.8.4" class="section-number selfRef">8.8.4. </a><a href="#name-key-schedule" class="section-name selfRef">Key Schedule</a>
+          </h4>
+<p id="section-8.8.4-1">The key schedule follows the standard AES-128 key expansion:<a href="#section-8.8.4-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.8.4-2">
+<li id="section-8.8.4-2.1">
+              <p id="section-8.8.4-2.1.1">The initial key is expanded into 11 round keys<a href="#section-8.8.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-8.8.4-2.2">
+              <p id="section-8.8.4-2.2.1">Each round key is XORed with the padded tweak before use<a href="#section-8.8.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-8.8.4-2.3">
+              <p id="section-8.8.4-2.3.1">The first round key is used in the initial AddRoundKey operation<a href="#section-8.8.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+</section>
+</div>
+<div id="implementation-steps">
+<section id="section-8.8.5">
+          <h4 id="name-implementation-steps">
+<a href="#section-8.8.5" class="section-number selfRef">8.8.5. </a><a href="#name-implementation-steps" class="section-name selfRef">Implementation Steps</a>
+          </h4>
+<ol start="1" type="1" class="normal type-1" id="section-8.8.5-1">
+<li id="section-8.8.5-1.1">
+              <p id="section-8.8.5-1.1.1"><strong>Key Expansion:</strong><a href="#section-8.8.5-1.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.8.5-1.1.2.1">
+                  <p id="section-8.8.5-1.1.2.1.1">Expand the 16-byte key into 11 round keys using the standard AES key schedule<a href="#section-8.8.5-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-8.8.5-1.1.2.2">
+                  <p id="section-8.8.5-1.1.2.2.1">Each round key is 16 bytes<a href="#section-8.8.5-1.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li id="section-8.8.5-1.2">
+              <p id="section-8.8.5-1.2.1"><strong>Tweak Processing:</strong><a href="#section-8.8.5-1.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.8.5-1.2.2.1">
+                  <p id="section-8.8.5-1.2.2.1.1">Pad the 8-byte tweak to 16 bytes as described above<a href="#section-8.8.5-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-8.8.5-1.2.2.2">
+                  <p id="section-8.8.5-1.2.2.2.1">XOR the padded tweak with each round key before use<a href="#section-8.8.5-1.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li id="section-8.8.5-1.3">
+              <p id="section-8.8.5-1.3.1"><strong>Encryption Process:</strong><a href="#section-8.8.5-1.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.8.5-1.3.2.1">
+                  <p id="section-8.8.5-1.3.2.1.1">Perform initial AddRoundKey with the first tweaked round key<a href="#section-8.8.5-1.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-8.8.5-1.3.2.2">
+                  <p id="section-8.8.5-1.3.2.2.1">For rounds 1-9:<a href="#section-8.8.5-1.3.2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.8.5-1.3.2.2.2.1">
+                      <p id="section-8.8.5-1.3.2.2.2.1.1">SubBytes<a href="#section-8.8.5-1.3.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                    <li class="normal" id="section-8.8.5-1.3.2.2.2.2">
+                      <p id="section-8.8.5-1.3.2.2.2.2.1">ShiftRows<a href="#section-8.8.5-1.3.2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                    <li class="normal" id="section-8.8.5-1.3.2.2.2.3">
+                      <p id="section-8.8.5-1.3.2.2.2.3.1">MixColumns<a href="#section-8.8.5-1.3.2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                    <li class="normal" id="section-8.8.5-1.3.2.2.2.4">
+                      <p id="section-8.8.5-1.3.2.2.2.4.1">AddRoundKey (with tweaked round key)<a href="#section-8.8.5-1.3.2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                  </ul>
+</li>
+                <li class="normal" id="section-8.8.5-1.3.2.3">
+                  <p id="section-8.8.5-1.3.2.3.1">For round 10 (final round):<a href="#section-8.8.5-1.3.2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.8.5-1.3.2.3.2.1">
+                      <p id="section-8.8.5-1.3.2.3.2.1.1">SubBytes<a href="#section-8.8.5-1.3.2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                    <li class="normal" id="section-8.8.5-1.3.2.3.2.2">
+                      <p id="section-8.8.5-1.3.2.3.2.2.1">ShiftRows<a href="#section-8.8.5-1.3.2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                    <li class="normal" id="section-8.8.5-1.3.2.3.2.3">
+                      <p id="section-8.8.5-1.3.2.3.2.3.1">AddRoundKey (with tweaked round key)<a href="#section-8.8.5-1.3.2.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  </ul>
+</li>
+              </ul>
+</li>
+          </ol>
+</section>
+</div>
+<div id="example-implementation">
+<section id="section-8.8.6">
+          <h4 id="name-example-implementation">
+<a href="#section-8.8.6" class="section-number selfRef">8.8.6. </a><a href="#name-example-implementation" class="section-name selfRef">Example Implementation</a>
+          </h4>
+<p id="section-8.8.6-1">The following pseudocode illustrates the core operations of KIASU-BC:<a href="#section-8.8.6-1" class="pilcrow">¶</a></p>
+<div class="lang-pseudocode sourcecode" id="section-8.8.6-2">
+<pre>
+function pad_tweak(tweak):
+    // Input: 8-byte tweak
+    // Output: 16-byte padded tweak
+    padded = [0] * 16
+    for i in range(0, 8, 2):
+        padded[i*2] = tweak[i]
+        padded[i*2+1] = tweak[i+1]
+    return padded
+
+function kiasu_bc_encrypt(key, tweak, plaintext):
+    // Input: 16-byte key, 8-byte tweak, 16-byte plaintext
+    // Output: 16-byte ciphertext
+
+    // Expand key and pad tweak
+    round_keys = expand_key(key)
+    padded_tweak = pad_tweak(tweak)
+
+    // Initial round
+    state = plaintext
+    state = add_round_key(state, round_keys[0] ^ padded_tweak)
+
+    // Main rounds
+    for round in range(1, 10):
+        state = sub_bytes(state)
+        state = shift_rows(state)
+        state = mix_columns(state)
+        state = add_round_key(state, round_keys[round] ^ padded_tweak)
+
+    // Final round
+    state = sub_bytes(state)
+    state = shift_rows(state)
+    state = add_round_key(state, round_keys[10] ^ padded_tweak)
+
+    return state
+</pre><a href="#section-8.8.6-2" class="pilcrow">¶</a>
+</div>
+<p id="section-8.8.6-3">Key and tweak sizes for each variant:
+- <code>ipcrypt-deterministic</code>: Key: 16 bytes (128 bits), no tweak
+- <code>ipcrypt-nd</code>: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)
+- <code>ipcrypt-ndx</code>: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits)<a href="#section-8.8.6-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="implementation-status">
 <section id="section-9">
-      <h2 id="name-iana-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      <h2 id="name-implementation-status">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
       </h2>
-<p id="section-9-1">This document does not require any IANA actions.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-1"><em>This section is to be removed before publishing as an RFC.</em><a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <span>[<a href="#RFC7942" class="cite xref">RFC7942</a>]</span>. The description of implementations in this section is intended to assist the Independent Submissions Editor in judging whether the specification is suitable for publication.<a href="#section-9-2" class="pilcrow">¶</a></p>
+<p id="section-9-3">Please note that the listing of any individual implementation here does not imply endorsement. Furthermore, no effort has been spent to verify the information presented here that was supplied by contributors. This is not intended as, and must not be construed to be, a catalog of available implementations or their features.<a href="#section-9-3" class="pilcrow">¶</a></p>
+<p id="section-9-4">Multiple interoperable implementations of the schemes described in this document have been developed:<a href="#section-9-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9-5.1">
+          <p id="section-9-5.1.1">C implementation<a href="#section-9-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.2">
+          <p id="section-9-5.2.1">D implementation<a href="#section-9-5.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.3">
+          <p id="section-9-5.3.1">Go implementation<a href="#section-9-5.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.4">
+          <p id="section-9-5.4.1">Java implementation (maven package)<a href="#section-9-5.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.5">
+          <p id="section-9-5.5.1">JavaScript/TypeScript implementation (npm package)<a href="#section-9-5.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.6">
+          <p id="section-9-5.6.1">PHP implementation (Composer package)<a href="#section-9-5.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.7">
+          <p id="section-9-5.7.1">Python reference implementation<a href="#section-9-5.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.8">
+          <p id="section-9-5.8.1">Rust implementation (cargo package)<a href="#section-9-5.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.9">
+          <p id="section-9-5.9.1">Zig implementation<a href="#section-9-5.9.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-5.10">
+          <p id="section-9-5.10.1">Dart implementation (pub.dev package)<a href="#section-9-5.10.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-9-6">A comprehensive list of implementations and their test results can be found at: https://ipcrypt-std.github.io/implementations/<a href="#section-9-6" class="pilcrow">¶</a></p>
+<p id="section-9-7">All implementations pass the common test vectors specified in this document, demonstrating interoperability across programming languages.<a href="#section-9-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -1966,546 +2503,19 @@ Produces a 16-byte output; preserves format but reveals repeated inputs.<a href=
 </div>
 </section>
 </div>
-<div id="diagrams">
+<div id="test-vectors">
 <section id="appendix-A">
-      <h2 id="name-diagrams">
-<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-diagrams" class="section-name selfRef">Diagrams</a>
+      <h2 id="name-test-vectors">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
       </h2>
-<p id="appendix-A-1">This appendix provides visual representations of the key operations described in this document. For implementation details, see <a href="#pseudocode-and-examples" class="auto internal xref">Appendix B</a>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<div id="ipv4-address-conversion-diagram">
+<p id="appendix-A-1">This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (<code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code>), the tweak value is also included.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Implementations MUST verify their correctness against these test vectors before deployment.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<div id="ipcrypt-deterministic-test-vectors">
 <section id="appendix-A.1">
-        <h3 id="name-ipv4-address-conversion-dia">
-<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-ipv4-address-conversion-dia" class="section-name selfRef">IPv4 Address Conversion Diagram</a>
+        <h3 id="name-ipcrypt-deterministic-test-">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-ipcrypt-deterministic-test-" class="section-name selfRef">ipcrypt-deterministic Test Vectors</a>
         </h3>
 <div class="alignLeft art-text artwork" id="appendix-A.1-1">
-<pre>
-       IPv4: 192.0.2.1
-           |
-           v
-  Octets:  C0  00  02  01
-           |
-           v
-   16-Byte Array:
-[00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
-</pre><a href="#appendix-A.1-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="deterministic-encryption-flow">
-<section id="appendix-A.2">
-        <h3 id="name-deterministic-encryption-fl">
-<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-deterministic-encryption-fl" class="section-name selfRef">Deterministic Encryption Flow</a>
-        </h3>
-<div class="alignLeft art-text artwork" id="appendix-A.2-1">
-<pre>
-            IP Address
-                |
-                v
-       [Convert to 16 Bytes]
-                |
-                v
-    [AES-128 Single-Block Encrypt]
-                |
-                v
-       16-Byte Ciphertext
-                |
-                v
-     [Convert to IP Format]
-                |
-                v
-       Encrypted IP Address
-</pre><a href="#appendix-A.2-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="nondeterministic-encryption-flow-ipcrypt-nd">
-<section id="appendix-A.3">
-        <h3 id="name-nondeterministic-encryption">
-<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-nondeterministic-encryption" class="section-name selfRef">Non‑Deterministic Encryption Flow (ipcrypt-nd)</a>
-        </h3>
-<div class="alignLeft art-text artwork" id="appendix-A.3-1">
-<pre>
-              IP Address
-                  |
-                  v
-       [Convert to 16 Bytes]
-                  |
-                  v
-    [Generate Random 8-Byte Tweak]
-                  |
-                  v
-       [KIASU-BC Tweakable Encrypt]
-                  |
-                  v
-          16-Byte Ciphertext
-                  |
-                  v
-    [Concatenate Tweak || Ciphertext]
-                  |
-                  v
-       24-Byte Output (ipcrypt-nd)
-</pre><a href="#appendix-A.3-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="nondeterministic-encryption-flow-ipcrypt-ndx">
-<section id="appendix-A.4">
-        <h3 id="name-nondeterministic-encryption-">
-<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-nondeterministic-encryption-" class="section-name selfRef">Non‑Deterministic Encryption Flow (ipcrypt-ndx)</a>
-        </h3>
-<div class="alignLeft art-text artwork" id="appendix-A.4-1">
-<pre>
-              IP Address
-                  |
-                  v
-       [Convert to 16 Bytes]
-                  |
-                  v
-    [Generate Random 16-Byte Tweak]
-                  |
-                  v
-       [AES-XTS Tweakable Encrypt]
-                  |
-                  v
-          16-Byte Ciphertext
-                  |
-                  v
-    [Concatenate Tweak || Ciphertext]
-                  |
-                  v
-       32-Byte Output (ipcrypt-ndx)
-</pre><a href="#appendix-A.4-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-</section>
-</div>
-<div id="pseudocode-and-examples">
-<section id="appendix-B">
-      <h2 id="name-pseudocode-and-examples">
-<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-pseudocode-and-examples" class="section-name selfRef">Pseudocode and Examples</a>
-      </h2>
-<p id="appendix-B-1">This appendix provides detailed pseudocode for key operations described in this document. For a visual representation of these operations, see <a href="#diagrams" class="auto internal xref">Appendix A</a>.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<div id="ipv4-address-conversion">
-<section id="appendix-B.1">
-        <h3 id="name-ipv4-address-conversion">
-<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-ipv4-address-conversion" class="section-name selfRef">IPv4 Address Conversion</a>
-        </h3>
-<p id="appendix-B.1-1">For a diagram of this conversion process, see <a href="#ipv4-address-conversion-diagram" class="auto internal xref">Appendix A.1</a>.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
-<div class="lang-pseudocode sourcecode" id="appendix-B.1-2">
-<pre>
-function IPv4To16Bytes(ipv4_address):
-    // Split the IPv4 address into its octets
-    parts = ipv4_address.split(".")
-    if length(parts) != 4:
-         raise Error("Invalid IPv4 address")
-    // Create a 16-byte array with the IPv4-mapped prefix
-    bytes16 = [0x00] * 10         // 10 bytes of 0x00
-    bytes16.append(0xFF)          // 11th byte: 0xFF
-    bytes16.append(0xFF)          // 12th byte: 0xFF
-    // Append each octet (converted to an 8-bit integer)
-    for part in parts:
-         bytes16.append(int(part))
-    return bytes16
-</pre><a href="#appendix-B.1-2" class="pilcrow">¶</a>
-</div>
-<p id="appendix-B.1-3"><em>Example:</em> For <code>"192.0.2.1"</code>, the function returns<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="appendix-B.1-4">
-<pre>
-[00, 00, 00, 00, 00, 00, 00, 00, 00, 00, FF, FF, C0, 00, 02, 01]
-</pre><a href="#appendix-B.1-4" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="ipv6-address-conversion">
-<section id="appendix-B.2">
-        <h3 id="name-ipv6-address-conversion">
-<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-ipv6-address-conversion" class="section-name selfRef">IPv6 Address Conversion</a>
-        </h3>
-<div class="lang-pseudocode sourcecode" id="appendix-B.2-1">
-<pre>
-function IPv6To16Bytes(ipv6_address):
-    // Parse the IPv6 address into eight 16-bit words.
-    words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
-    bytes16 = []
-    for word in words:
-         high_byte = (word &gt;&gt; 8) &amp; 0xFF
-         low_byte = word &amp; 0xFF
-         bytes16.append(high_byte)
-         bytes16.append(low_byte)
-    return bytes16
-</pre><a href="#appendix-B.2-1" class="pilcrow">¶</a>
-</div>
-<p id="appendix-B.2-2"><em>Example:</em> For <code>"2001:0db8:85a3:0000:0000:8a2e:0370:7334"</code>, the output is the corresponding 16‑byte sequence.<a href="#appendix-B.2-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="conversion-from-a-16-byte-array-to-an-ip-address">
-<section id="appendix-B.3">
-        <h3 id="name-conversion-from-a-16-byte-a">
-<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-conversion-from-a-16-byte-a" class="section-name selfRef">Conversion from a 16-Byte Array to an IP Address</a>
-        </h3>
-<div class="lang-pseudocode sourcecode" id="appendix-B.3-1">
-<pre>
-function Bytes16ToIP(bytes16):
-    if length(bytes16) != 16:
-         raise Error("Invalid byte array")
-
-    // Check for the IPv4-mapped prefix
-    if bytes16[0:10] == [0x00]*10 and bytes16[10] == 0xFF and bytes16[11] == 0xFF:
-         ipv4_parts = []
-         for i from 12 to 15:
-             ipv4_parts.append(str(bytes16[i]))
-         ipv4_address = join(ipv4_parts, ".")
-         return ipv4_address
-    else:
-         words = []
-         for i from 0 to 15 step 2:
-             word = (bytes16[i] &lt;&lt; 8) | bytes16[i+1]
-             words.append(format(word, "x"))
-         ipv6_address = join(words, ":")
-         return ipv6_address
-</pre><a href="#appendix-B.3-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="deterministic-encryption-ipcrypt-deterministic">
-<section id="appendix-B.4">
-        <h3 id="name-deterministic-encryption-ip">
-<a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-deterministic-encryption-ip" class="section-name selfRef">Deterministic Encryption (ipcrypt-deterministic)</a>
-        </h3>
-<div class="lang-pseudocode sourcecode" id="appendix-B.4-1">
-<pre>
-function ipcrypt_deterministic_encrypt(ip_address, key):
-    // The key MUST be exactly 16 bytes (128 bits) in length
-    if length(key) != 16:
-        raise Error("Key must be 16 bytes")
-
-    bytes16 = convertTo16Bytes(ip_address)
-    ciphertext = AES128_encrypt(key, bytes16)
-    encrypted_ip = Bytes16ToIP(ciphertext)
-    return encrypted_ip
-
-function ipcrypt_deterministic_decrypt(encrypted_ip, key):
-    if length(key) != 16:
-        raise Error("Key must be 16 bytes")
-
-    bytes16 = convertTo16Bytes(encrypted_ip)
-    plaintext = AES128_decrypt(key, bytes16)
-    original_ip = Bytes16ToIP(plaintext)
-    return original_ip
-</pre><a href="#appendix-B.4-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="non-deterministic-encryption-using-kiasu-bc-ipcrypt-nd">
-<section id="appendix-B.5">
-        <h3 id="name-non-deterministic-encryption">
-<a href="#appendix-B.5" class="section-number selfRef">B.5. </a><a href="#name-non-deterministic-encryption" class="section-name selfRef">Non-Deterministic Encryption using KIASU-BC (ipcrypt-nd)</a>
-        </h3>
-<div class="lang-pseudocode sourcecode" id="appendix-B.5-1">
-<pre>
-function ipcrypt_nd_encrypt(ip_address, key):
-    if length(key) != 16:
-        raise Error("Key must be 16 bytes")
-
-    // Step 1: Generate random tweak (8 bytes)
-    tweak = random_bytes(8)  // MUST be uniformly random
-
-    // Step 2: Convert IP to 16-byte representation
-    bytes16 = convertTo16Bytes(ip_address)
-
-    // Step 3: Encrypt using key and tweak
-    ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
-
-    // Step 4: Concatenate tweak and ciphertext
-    result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
-    return result
-
-function ipcrypt_nd_decrypt(ciphertext, key):
-    // Step 1: Split ciphertext into tweak and encrypted IP
-    tweak = ciphertext[0:8]  // First 8 bytes
-    encrypted_ip = ciphertext[8:24]  // Remaining 16 bytes
-
-    // Step 2: Decrypt using key and tweak
-    bytes16 = KIASU_BC_decrypt(key, tweak, encrypted_ip)
-
-    // Step 3: Convert back to IP address
-    ip_address = Bytes16ToIP(bytes16)
-    return ip_address
-</pre><a href="#appendix-B.5-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="non-deterministic-encryption-using-aes-xts-ipcrypt-ndx">
-<section id="appendix-B.6">
-        <h3 id="name-non-deterministic-encryption-">
-<a href="#appendix-B.6" class="section-number selfRef">B.6. </a><a href="#name-non-deterministic-encryption-" class="section-name selfRef">Non-Deterministic Encryption using AES-XTS (ipcrypt-ndx)</a>
-        </h3>
-<div class="lang-pseudocode sourcecode" id="appendix-B.6-1">
-<pre>
-function AES_XTS_encrypt(key, tweak, block):
-    // Split the key into two halves
-    K1, K2 = split_key(key)
-
-    // Encrypt the tweak with the second half of the key
-    ET = AES128_encrypt(K2, tweak)
-
-    // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
-    return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
-</pre><a href="#appendix-B.6-1" class="pilcrow">¶</a>
-</div>
-<div class="lang-pseudocode sourcecode" id="appendix-B.6-2">
-<pre>
-function ipcrypt_ndx_encrypt(ip_address, key):
-    if length(key) != 32:
-        raise Error("Key must be 32 bytes (two AES-128 keys)")
-
-    // Step 1: Generate random tweak (16 bytes)
-    tweak = random_bytes(16)  // MUST be uniformly random
-
-    // Step 2: Convert IP to 16-byte representation
-    bytes16 = convertTo16Bytes(ip_address)
-
-    // Step 3: Encrypt using key and tweak
-    ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
-
-    // Step 4: Concatenate tweak and ciphertext
-    result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
-    return result
-
-function ipcrypt_ndx_decrypt(ciphertext, key):
-    // Step 1: Split ciphertext into tweak and encrypted IP
-    tweak = ciphertext[0:16]  // First 16 bytes
-    encrypted_ip = ciphertext[16:32]  // Remaining 16 bytes
-
-    // Step 2: Decrypt using key and tweak
-    bytes16 = AES_XTS_decrypt(key, tweak, encrypted_ip)
-
-    // Step 3: Convert back to IP address
-    ip_address = Bytes16ToIP(bytes16)
-    return ip_address
-</pre><a href="#appendix-B.6-2" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-</section>
-</div>
-<div id="implementing-kiasu-bc">
-<section id="appendix-C">
-      <h2 id="name-implementing-kiasu-bc">
-<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-implementing-kiasu-bc" class="section-name selfRef">Implementing KIASU-BC</a>
-      </h2>
-<p id="appendix-C-1">This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<div id="overview">
-<section id="appendix-C.1">
-        <h3 id="name-overview">
-<a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
-        </h3>
-<p id="appendix-C.1-1">KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the <code>ipcrypt-nd</code> instantiation.<a href="#appendix-C.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="tweak-padding">
-<section id="appendix-C.2">
-        <h3 id="name-tweak-padding">
-<a href="#appendix-C.2" class="section-number selfRef">C.2. </a><a href="#name-tweak-padding" class="section-name selfRef">Tweak Padding</a>
-        </h3>
-<p id="appendix-C.2-1">The 8-byte tweak is padded to 16 bytes using the following method:<a href="#appendix-C.2-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-C.2-2">
-<li id="appendix-C.2-2.1">
-            <p id="appendix-C.2-2.1.1">Split the 8-byte tweak into four 2-byte pairs<a href="#appendix-C.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="appendix-C.2-2.2">
-            <p id="appendix-C.2-2.2.1">Place each 2-byte pair at the start of each 4-byte group<a href="#appendix-C.2-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="appendix-C.2-2.3">
-            <p id="appendix-C.2-2.3.1">Fill the remaining 2 bytes of each group with zeros<a href="#appendix-C.2-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
-<p id="appendix-C.2-3">Example:<a href="#appendix-C.2-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="appendix-C.2-4">
-<pre>
-8-byte tweak:    [T0 T1 T2 T3 T4 T5 T6 T7]
-16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
-</pre><a href="#appendix-C.2-4" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="round-structure">
-<section id="appendix-C.3">
-        <h3 id="name-round-structure">
-<a href="#appendix-C.3" class="section-number selfRef">C.3. </a><a href="#name-round-structure" class="section-name selfRef">Round Structure</a>
-        </h3>
-<p id="appendix-C.3-1">Each round of KIASU-BC consists of the following standard AES operations:<a href="#appendix-C.3-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-C.3-2">
-<li id="appendix-C.3-2.1">
-            <p id="appendix-C.3-2.1.1"><strong>SubBytes:</strong> Apply the AES S-box to each byte of the state<a href="#appendix-C.3-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="appendix-C.3-2.2">
-            <p id="appendix-C.3-2.2.1"><strong>ShiftRows:</strong> Rotate each row of the state matrix<a href="#appendix-C.3-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="appendix-C.3-2.3">
-            <p id="appendix-C.3-2.3.1"><strong>MixColumns:</strong> Mix the columns of the state matrix (except in the final round)<a href="#appendix-C.3-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="appendix-C.3-2.4">
-            <p id="appendix-C.3-2.4.1"><strong>AddRoundKey:</strong> XOR the state with the round key and padded tweak<a href="#appendix-C.3-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
-<p id="appendix-C.3-3">For details about these operations, see <span>[<a href="#FIPS-197" class="cite xref">FIPS-197</a>]</span>.<a href="#appendix-C.3-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="key-schedule">
-<section id="appendix-C.4">
-        <h3 id="name-key-schedule">
-<a href="#appendix-C.4" class="section-number selfRef">C.4. </a><a href="#name-key-schedule" class="section-name selfRef">Key Schedule</a>
-        </h3>
-<p id="appendix-C.4-1">The key schedule follows the standard AES-128 key expansion:<a href="#appendix-C.4-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-C.4-2">
-<li id="appendix-C.4-2.1">
-            <p id="appendix-C.4-2.1.1">The initial key is expanded into 11 round keys<a href="#appendix-C.4-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="appendix-C.4-2.2">
-            <p id="appendix-C.4-2.2.1">Each round key is XORed with the padded tweak before use<a href="#appendix-C.4-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="appendix-C.4-2.3">
-            <p id="appendix-C.4-2.3.1">The first round key is used in the initial AddRoundKey operation<a href="#appendix-C.4-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
-</section>
-</div>
-<div id="implementation-steps">
-<section id="appendix-C.5">
-        <h3 id="name-implementation-steps">
-<a href="#appendix-C.5" class="section-number selfRef">C.5. </a><a href="#name-implementation-steps" class="section-name selfRef">Implementation Steps</a>
-        </h3>
-<ol start="1" type="1" class="normal type-1" id="appendix-C.5-1">
-<li id="appendix-C.5-1.1">
-            <p id="appendix-C.5-1.1.1"><strong>Key Expansion:</strong><a href="#appendix-C.5-1.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C.5-1.1.2.1">
-                <p id="appendix-C.5-1.1.2.1.1">Expand the 16-byte key into 11 round keys using the standard AES key schedule<a href="#appendix-C.5-1.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="appendix-C.5-1.1.2.2">
-                <p id="appendix-C.5-1.1.2.2.1">Each round key is 16 bytes<a href="#appendix-C.5-1.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li id="appendix-C.5-1.2">
-            <p id="appendix-C.5-1.2.1"><strong>Tweak Processing:</strong><a href="#appendix-C.5-1.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C.5-1.2.2.1">
-                <p id="appendix-C.5-1.2.2.1.1">Pad the 8-byte tweak to 16 bytes as described above<a href="#appendix-C.5-1.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="appendix-C.5-1.2.2.2">
-                <p id="appendix-C.5-1.2.2.2.1">XOR the padded tweak with each round key before use<a href="#appendix-C.5-1.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li id="appendix-C.5-1.3">
-            <p id="appendix-C.5-1.3.1"><strong>Encryption Process:</strong><a href="#appendix-C.5-1.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C.5-1.3.2.1">
-                <p id="appendix-C.5-1.3.2.1.1">Perform initial AddRoundKey with the first tweaked round key<a href="#appendix-C.5-1.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="appendix-C.5-1.3.2.2">
-                <p id="appendix-C.5-1.3.2.2.1">For rounds 1-9:<a href="#appendix-C.5-1.3.2.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C.5-1.3.2.2.2.1">
-                    <p id="appendix-C.5-1.3.2.2.2.1.1">SubBytes<a href="#appendix-C.5-1.3.2.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="normal" id="appendix-C.5-1.3.2.2.2.2">
-                    <p id="appendix-C.5-1.3.2.2.2.2.1">ShiftRows<a href="#appendix-C.5-1.3.2.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="normal" id="appendix-C.5-1.3.2.2.2.3">
-                    <p id="appendix-C.5-1.3.2.2.2.3.1">MixColumns<a href="#appendix-C.5-1.3.2.2.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="normal" id="appendix-C.5-1.3.2.2.2.4">
-                    <p id="appendix-C.5-1.3.2.2.2.4.1">AddRoundKey (with tweaked round key)<a href="#appendix-C.5-1.3.2.2.2.4.1" class="pilcrow">¶</a></p>
-</li>
-                </ul>
-</li>
-              <li class="normal" id="appendix-C.5-1.3.2.3">
-                <p id="appendix-C.5-1.3.2.3.1">For round 10 (final round):<a href="#appendix-C.5-1.3.2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C.5-1.3.2.3.2.1">
-                    <p id="appendix-C.5-1.3.2.3.2.1.1">SubBytes<a href="#appendix-C.5-1.3.2.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="normal" id="appendix-C.5-1.3.2.3.2.2">
-                    <p id="appendix-C.5-1.3.2.3.2.2.1">ShiftRows<a href="#appendix-C.5-1.3.2.3.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="normal" id="appendix-C.5-1.3.2.3.2.3">
-                    <p id="appendix-C.5-1.3.2.3.2.3.1">AddRoundKey (with tweaked round key)<a href="#appendix-C.5-1.3.2.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                </ul>
-</li>
-            </ul>
-</li>
-        </ol>
-</section>
-</div>
-<div id="example-implementation">
-<section id="appendix-C.6">
-        <h3 id="name-example-implementation">
-<a href="#appendix-C.6" class="section-number selfRef">C.6. </a><a href="#name-example-implementation" class="section-name selfRef">Example Implementation</a>
-        </h3>
-<p id="appendix-C.6-1">The following pseudocode illustrates the core operations of KIASU-BC:<a href="#appendix-C.6-1" class="pilcrow">¶</a></p>
-<div class="lang-pseudocode sourcecode" id="appendix-C.6-2">
-<pre>
-function pad_tweak(tweak):
-    // Input: 8-byte tweak
-    // Output: 16-byte padded tweak
-    padded = [0] * 16
-    for i in range(0, 8, 2):
-        padded[i*2] = tweak[i]
-        padded[i*2+1] = tweak[i+1]
-    return padded
-
-function kiasu_bc_encrypt(key, tweak, plaintext):
-    // Input: 16-byte key, 8-byte tweak, 16-byte plaintext
-    // Output: 16-byte ciphertext
-
-    // Expand key and pad tweak
-    round_keys = expand_key(key)
-    padded_tweak = pad_tweak(tweak)
-
-    // Initial round
-    state = plaintext
-    state = add_round_key(state, round_keys[0] ^ padded_tweak)
-
-    // Main rounds
-    for round in range(1, 10):
-        state = sub_bytes(state)
-        state = shift_rows(state)
-        state = mix_columns(state)
-        state = add_round_key(state, round_keys[round] ^ padded_tweak)
-
-    // Final round
-    state = sub_bytes(state)
-    state = shift_rows(state)
-    state = add_round_key(state, round_keys[10] ^ padded_tweak)
-
-    return state
-</pre><a href="#appendix-C.6-2" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-</section>
-</div>
-<div id="test-vectors">
-<section id="appendix-D">
-      <h2 id="name-test-vectors">
-<a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
-      </h2>
-<p id="appendix-D-1">This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (<code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code>), the tweak value is also included.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
-<p id="appendix-D-2">Key and tweak sizes for each variant:
-- <code>ipcrypt-deterministic</code>: Key: 16 bytes (128 bits), no tweak
-- <code>ipcrypt-nd</code>: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)
-- <code>ipcrypt-ndx</code>: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits)<a href="#appendix-D-2" class="pilcrow">¶</a></p>
-<div id="ipcrypt-deterministic-test-vectors">
-<section id="appendix-D.1">
-        <h3 id="name-ipcrypt-deterministic-test-">
-<a href="#appendix-D.1" class="section-number selfRef">D.1. </a><a href="#name-ipcrypt-deterministic-test-" class="section-name selfRef">ipcrypt-deterministic Test Vectors</a>
-        </h3>
-<div class="alignLeft art-text artwork" id="appendix-D.1-1">
 <pre>
 # Test vector 1
 Key:          0123456789abcdeffedcba9876543210
@@ -2521,16 +2531,16 @@ Encrypted IP: aed2:92f6:ea23:58c3:48fd:8b8:74e8:45d8
 Key:          2b7e151628aed2a6abf7158809cf4f3c
 Input IP:     192.0.2.1
 Encrypted IP: 1dbd:c1b9:fff1:7586:7d0b:67b4:e76e:4777
-</pre><a href="#appendix-D.1-1" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.1-1" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="ipcrypt-nd-test-vectors">
-<section id="appendix-D.2">
+<section id="appendix-A.2">
         <h3 id="name-ipcrypt-nd-test-vectors">
-<a href="#appendix-D.2" class="section-number selfRef">D.2. </a><a href="#name-ipcrypt-nd-test-vectors" class="section-name selfRef">ipcrypt-nd Test Vectors</a>
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-ipcrypt-nd-test-vectors" class="section-name selfRef">ipcrypt-nd Test Vectors</a>
         </h3>
-<div class="alignLeft art-text artwork" id="appendix-D.2-1">
+<div class="alignLeft art-text artwork" id="appendix-A.2-1">
 <pre>
 # Test vector 1
 Key:          0123456789abcdeffedcba9876543210
@@ -2549,16 +2559,16 @@ Key:          2b7e151628aed2a6abf7158809cf4f3c
 Input IP:     2001:db8::1
 Tweak:        b4ecbe30b70898d7
 Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
-</pre><a href="#appendix-D.2-1" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.2-1" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="ipcrypt-ndx-test-vectors">
-<section id="appendix-D.3">
+<section id="appendix-A.3">
         <h3 id="name-ipcrypt-ndx-test-vectors">
-<a href="#appendix-D.3" class="section-number selfRef">D.3. </a><a href="#name-ipcrypt-ndx-test-vectors" class="section-name selfRef">ipcrypt-ndx Test Vectors</a>
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-ipcrypt-ndx-test-vectors" class="section-name selfRef">ipcrypt-ndx Test Vectors</a>
         </h3>
-<div class="alignLeft art-text artwork" id="appendix-D.3-1">
+<div class="alignLeft art-text artwork" id="appendix-A.3-1">
 <pre>
 # Test vector 1
 Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
@@ -2577,41 +2587,31 @@ Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
 Input IP:     2001:db8::1
 Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
 Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
-</pre><a href="#appendix-D.3-1" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.3-1" class="pilcrow">¶</a>
 </div>
-<p id="appendix-D.3-2">For non-deterministic variants (<code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code>), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.<a href="#appendix-D.3-2" class="pilcrow">¶</a></p>
-<p id="appendix-D.3-3">Implementations SHOULD verify their correctness against these test vectors before deployment.<a href="#appendix-D.3-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-2">For non-deterministic variants (<code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code>), the tweak values shown are examples. In practice, tweaks MUST be uniformly random for each encryption operation.<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
-<div id="alternatives-to-random-tweaks">
-<section id="appendix-E">
-      <h2 id="name-alternatives-to-random-twea">
-<a href="#appendix-E" class="section-number selfRef">Appendix E. </a><a href="#name-alternatives-to-random-twea" class="section-name selfRef">Alternatives to Random Tweaks</a>
+<div id="iana-considerations">
+<section id="appendix-B">
+      <h2 id="name-iana-considerations">
+<a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="appendix-E-1">While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, implementers may consider alternative approaches:<a href="#appendix-E-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-E-2.1">
-          <p id="appendix-E-2.1.1"><strong>Monotonic Counter:</strong> A counter could be used as a tweak, but this is difficult to maintain in distributed systems. If the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.<a href="#appendix-E-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-E-2.2">
-          <p id="appendix-E-2.2.1"><strong>UUIDs:</strong> UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.<a href="#appendix-E-2.2.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="appendix-E-3">Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.<a href="#appendix-E-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">This document does not require any IANA actions.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="appendix-F">
+<section id="appendix-C">
       <h2 id="name-acknowledgments">
-<a href="#appendix-F" class="section-number selfRef">Appendix F. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-F-1">The author gratefully acknowledges the contributions and insightful comments from members of the IETF independent stream community and the broader cryptographic community that have helped shape this specification.<a href="#appendix-F-1" class="pilcrow">¶</a></p>
+<p id="appendix-C-1">The author gratefully acknowledges the contributions and insightful comments from members of the IETF independent stream community and the broader cryptographic community that have helped shape this specification.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-G">
+<section id="appendix-D">
       <h2 id="name-authors-address">
 <a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
       </h2>
