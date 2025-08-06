@@ -117,15 +117,9 @@ informative:
 
 --- abstract
 
-This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format-preserving and non-deterministic constructions. These methods address privacy concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring and data collection.
+This document specifies methods for encrypting and obfuscating IP addresses, providing both deterministic format-preserving and non-deterministic constructions. These methods address privacy concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring and data collection. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation.
 
-The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation. Two generic constructions are defined—one using a 128-bit block cipher and the other using a 128-bit tweakable block cipher—along with three concrete instantiations:
-
-- **`ipcrypt-deterministic`:** Deterministic encryption using AES-128 as a single-block operation.
-- **`ipcrypt-nd`:** Non-deterministic encryption using the KIASU-BC tweakable block cipher with an 8-byte tweak.
-- **`ipcrypt-ndx`:** Non-deterministic encryption using the AES-XTS tweakable block cipher with a 16-byte tweak.
-
-Deterministic mode produces a 16-byte ciphertext enabling format preservation. Non-deterministic modes prepend a randomly sampled tweak to produce larger ciphertexts that resist correlation attacks. When generated, tweaks MUST be uniformly random as specified in {{!RFC4086}}.
+Three concrete instantiations are defined: `ipcrypt-deterministic` uses AES-128 for deterministic encryption with format preservation; `ipcrypt-nd` uses KIASU-BC with an 8-byte random tweak for non-deterministic encryption; and `ipcrypt-ndx` uses AES-XTS with a 16-byte random tweak. Non-deterministic modes prepend the tweak to produce larger ciphertexts that resist correlation attacks.
 
 --- middle
 
