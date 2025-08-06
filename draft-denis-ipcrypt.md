@@ -139,19 +139,27 @@ There are no known patent claims on these methods.
 
 ## Use Cases and Motivations
 
-The main motivations include:
+IP addresses are personally identifiable information (PII). While generic encryption systems can protect them, the specialized methods described here offer significant advantages with well-defined security guarantees:
 
-- **Privacy Protection:** Encrypting IP addresses prevents the disclosure of user-specific information when data is logged or measured, as discussed in {{!RFC6973}}.
+- **Efficiency and Compactness:** All variants operate on exactly 128 bits, providing single-block encryption speed. Non-deterministic variants add only 8-16 bytes of tweak overhead compared to arbitrary expansion in generic encryption systems. This enables processing billions of addresses at network speeds.
 
-- **Format Preservation:** Ensuring that the encrypted output remains a valid IP address allows network devices to process the data without modification. See {{format-preservation}} for details.
+- **High Usage Limits:** Non-deterministic variants support extensive operations per key - approximately 4 billion for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` - far exceeding typical cryptographic limits while maintaining compact outputs.
 
-- **Mitigation of Correlation Attacks:** Deterministic encryption reveals repeated inputs; non-deterministic modes use a random tweak to obscure linkability while keeping the underlying input confidential. See {{non-deterministic-encryption}} for implementation details.
+- **Format Preservation (Deterministic):** The `ipcrypt-deterministic` variant produces valid IP addresses, enabling seamless integration with existing network tools that validate IP formats (see {{format-preservation}}).
 
-- **Privacy-Preserving Analytics:** Many common operations like counting unique clients or implementing rate limiting can be performed using encrypted IP addresses without ever accessing the original values. This enables privacy-preserving analytics while maintaining functionality.
+- **Interoperability:** By following the recommendations from this specification, implementations can reliably encrypt and decrypt IP addresses in a compatible way across different systems and vendors.
 
-- **Third-Party Service Integration:** IP addresses are private information that should not be sent in cleartext to potentially untrusted third-party services or cloud providers. Using encrypted IP addresses as keys or identifiers allows integration with external services while protecting user privacy.
+These specialized encryption methods unlock several critical use cases:
 
-For implementation examples, see {{pseudocode-and-examples}}.
+- **Privacy Protection:** They prevent the exposure of sensitive user information in logs, analytics data, and network measurements ({{!RFC6973}}).
+
+- **Correlation Attack Resistance:** While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see {{non-deterministic-encryption}}).
+  
+- **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal or access the original values.
+
+- **Seamless Third-Party Integration:** Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
+
+For implementation guidelines and practical examples, see {{pseudocode-and-examples}}.
 
 ## Relationship to IETF Work
 
