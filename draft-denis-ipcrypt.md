@@ -875,4 +875,4 @@ This document does not require any IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-The author gratefully acknowledges the contributions and insightful comments from members of the IETF independent stream community and the broader cryptographic community that have helped shape this specification.
+The author gratefully acknowledges the contributions and insightful comments from members of the IETF and the broader cryptographic community that have helped shape this specification.
