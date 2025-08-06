@@ -62,9 +62,8 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-     1.1.  Licensing
-     1.2.  Use Cases and Motivations
-     1.3.  Relationship to IETF Work
+     1.1.  Use Cases and Motivations
+     1.2.  Relationship to IETF Work
    2.  Terminology
    3.  IP Address Conversion
      3.1.  Converting to a 16-Byte Representation
@@ -109,9 +108,10 @@ Table of Contents
        8.8.5.  Implementation Steps
        8.8.6.  Example Implementation
    9.  Implementation Status
-   10. References
-     10.1.  Normative References
-     10.2.  Informative References
+   10. Licensing
+   11. References
+     11.1.  Normative References
+     11.2.  Informative References
    Appendix A.  Test Vectors
      A.1.  ipcrypt-deterministic Test Vectors
      A.2.  ipcrypt-nd Test Vectors
@@ -133,17 +133,7 @@ Table of Contents
    properties of these methods are discussed throughout this document
    and summarized in Section 7.
 
-1.1.  Licensing
-
-   _This section is to be removed before publishing as an RFC._
-
-   Implementations of the ipcrypt methods are freely available under
-   permissive open source licenses (MIT, BSD, or Apache 2.0) at the
-   repository listed in the Implementation Status section.
-
-   There are no known patent claims on these methods.
-
-1.2.  Use Cases and Motivations
+1.1.  Use Cases and Motivations
 
    IP addresses are personally identifiable information (PII).  While
    generic encryption systems can protect them, the specialized methods
@@ -194,7 +184,7 @@ Table of Contents
 
    For implementation guidelines and practical examples, see Section 8.
 
-1.3.  Relationship to IETF Work
+1.2.  Relationship to IETF Work
 
    _This section is to be removed before publishing as an RFC._
 
@@ -1012,9 +1002,19 @@ IPv4 Address:    192.0.2.1
    document, demonstrating interoperability across programming
    languages.
 
-10.  References
+10.  Licensing
 
-10.1.  Normative References
+   _This section is to be removed before publishing as an RFC._
+
+   Implementations of the ipcrypt methods are freely available under
+   permissive open source licenses (MIT, BSD, or Apache 2.0) at the
+   repository listed in the Implementation Status section.
+
+   There are no known patent claims on these methods.
+
+11.  References
+
+11.1.  Normative References
 
    [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
               26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
@@ -1068,7 +1068,7 @@ IPv4 Address:    192.0.2.1
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-10.2.  Informative References
+11.2.  Informative References
 
    [BRW2005]  Bellare, M., Rogaway, P., and D. Wagner, "Format-
               Preserving Encryption", CRYPTO 2005, 2005,
