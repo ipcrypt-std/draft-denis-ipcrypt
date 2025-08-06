@@ -17,8 +17,7 @@ Abstract
    addresses for privacy-preserving storage, logging, and analytics.
    These encrypted addresses enable data analysis while protecting user
    privacy, addressing concerns raised in [RFC6973] and [RFC7258]
-   regarding pervasive monitoring.  The methods apply uniformly to both
-   IPv4 and IPv6 addresses.
+   regarding pervasive monitoring.
 
    Three concrete instantiations are defined: ipcrypt-deterministic
    provides deterministic, format-preserving encryption, while ipcrypt-
