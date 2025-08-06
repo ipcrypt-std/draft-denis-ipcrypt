@@ -154,7 +154,7 @@ These specialized encryption methods unlock several critical use cases:
 - **Privacy Protection:** They prevent the exposure of sensitive user information in logs, analytics data, and network measurements ({{!RFC6973}}).
 
 - **Correlation Attack Resistance:** While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see {{non-deterministic-encryption}}).
-  
+
 - **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal or access the original values.
 
 - **Seamless Third-Party Integration:** Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
