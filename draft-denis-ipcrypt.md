@@ -117,9 +117,9 @@ informative:
 
 --- abstract
 
-This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis and correlation while protecting user privacy, addressing concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses by converting them into a 16-byte representation.
+This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy, addressing concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring. The methods apply uniformly to both IPv4 and IPv6 addresses.
 
-Three concrete instantiations are defined: `ipcrypt-deterministic` provides reversible deterministic encryption with format preservation, always producing the same output for a given input; `ipcrypt-nd` and `ipcrypt-ndx` provide non-deterministic encryption that produces different outputs for the same input by incorporating randomness. All methods are reversible with the encryption key. Non-deterministic modes produce larger outputs to prevent correlation of identical inputs while maintaining full reversibility.
+Three concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption, while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key.
 
 --- middle
 
@@ -159,7 +159,7 @@ These specialized encryption methods unlock several critical use cases:
 
 - **Seamless Third-Party Integration:** Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
 
-For implementation guidelines and practical examples, see {{pseudocode-and-examples}}.
+For implementation guidelines and practical examples, see {{implementation-details}}.
 
 ## Relationship to IETF Work
 
@@ -246,7 +246,7 @@ Implementers MUST choose a cipher that meets the required security properties an
 
 Deterministic encryption applies a 128-bit block cipher directly to the 16-byte representation of an IP address. All instantiations documented in this specification (`ipcrypt-deterministic`, `ipcrypt-nd`, and `ipcrypt-ndx`) are invertible - encrypted IP addresses can be decrypted back to their original values using the same key. For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.
 
-For implementation details, see {{pseudocode-and-examples}}.
+For implementation details, see {{implementation-details}}.
 
 ## ipcrypt-deterministic
 
@@ -291,7 +291,7 @@ To ensure IPv4 format preservation, implementers MUST consider using cycle-walki
 
 # Non-Deterministic Encryption {#non-deterministic-encryption}
 
-Non-deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see {{pseudocode-and-examples}}.
+Non-deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see {{implementation-details}}.
 
 ## Encryption Process
 
@@ -356,6 +356,16 @@ As with `ipcrypt-nd`, an `(input, tweak)` collision reveals repetition without c
   - **`ipcrypt-nd` (KIASU-BC):** Produces a 24-byte output using an 8-byte tweak; `(input, tweak)` collisions reveal repeated inputs (with the same tweak) but not their values. Expected collision after approximately 4 billion operations per key.
   - **`ipcrypt-ndx` (AES-XTS):** Produces a 32-byte output using a 16-byte tweak; supports higher secure operation counts per key. Expected collision after approximately 18 quintillion operations per key.
 
+## Alternatives to Random Tweaks {#alternatives-to-random-tweaks}
+
+While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, implementers may consider alternative approaches:
+
+- **Monotonic Counter:** A counter could be used as a tweak, but this is difficult to maintain in distributed systems. If the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.
+
+- **UUIDs:** UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.
+
+Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.
+
 # Security Considerations
 
 The ipcrypt constructions focus solely on confidentiality and do not provide integrity. This means that IP addresses in an ordered sequence can be partially removed, duplicated, reordered, or blindly altered by an active adversary. Applications that require sequences of encrypted IP addresses that cannot be modified must apply an authentication scheme over the entire sequence, such as an HMAC construction, a keyed hash function, or a public key signature. This is outside the scope of this specification, but implementers should be aware that additional authentication mechanisms are required if protection against active adversaries is needed.
@@ -392,42 +402,15 @@ This specification focuses on the cryptographic transformations and does not man
 
 For high-volume deployments processing billions of IP addresses, regular key rotation (e.g., monthly or quarterly) is RECOMMENDED to stay well within the security bounds discussed in this document.
 
-# Implementation Status
+# Implementation Details {#implementation-details}
 
-*This section is to be removed before publishing as an RFC.*
+This section provides detailed pseudocode and implementation guidance for the key operations described in this document.
 
-This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in {{!RFC7942}}. The description of implementations in this section is intended to assist the Independent Submissions Editor in judging whether the specification is suitable for publication.
+## Visual Diagrams {#diagrams}
 
-Please note that the listing of any individual implementation here does not imply endorsement. Furthermore, no effort has been spent to verify the information presented here that was supplied by contributors. This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
+The following diagrams illustrate the key processes described in this specification.
 
-Multiple interoperable implementations of the schemes described in this document have been developed:
-
-- C implementation
-- D implementation
-- Go implementation
-- Java implementation (maven package)
-- JavaScript/TypeScript implementation (npm package)
-- PHP implementation (Composer package)
-- Python reference implementation
-- Rust implementation (cargo package)
-- Zig implementation
-- Dart implementation (pub.dev package)
-
-A comprehensive list of implementations and their test results can be found at: https://ipcrypt-std.github.io/implementations/
-
-All implementations pass the common test vectors specified in this document, demonstrating interoperability across programming languages.
-
-# IANA Considerations
-
-This document does not require any IANA actions.
-
---- back
-
-# Diagrams {#diagrams}
-
-This appendix provides visual representations of the key operations described in this document. For implementation details, see {{pseudocode-and-examples}}.
-
-## IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
+### IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
 
 ~~~
        IPv4: 192.0.2.1
@@ -440,7 +423,7 @@ This appendix provides visual representations of the key operations described in
 [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
 ~~~
 
-## Deterministic Encryption Flow
+### Deterministic Encryption Flow
 
 ~~~
             IP Address
@@ -461,7 +444,7 @@ This appendix provides visual representations of the key operations described in
        Encrypted IP Address
 ~~~
 
-## Non‑Deterministic Encryption Flow (ipcrypt-nd)
+### Non‑Deterministic Encryption Flow (ipcrypt-nd)
 
 ~~~
               IP Address
@@ -485,7 +468,7 @@ This appendix provides visual representations of the key operations described in
        24-Byte Output (ipcrypt-nd)
 ~~~
 
-## Non‑Deterministic Encryption Flow (ipcrypt-ndx)
+### Non‑Deterministic Encryption Flow (ipcrypt-ndx)
 
 ~~~
               IP Address
@@ -508,10 +491,6 @@ This appendix provides visual representations of the key operations described in
                   v
        32-Byte Output (ipcrypt-ndx)
 ~~~
-
-# Pseudocode and Examples {#pseudocode-and-examples}
-
-This appendix provides detailed pseudocode for key operations described in this document. For a visual representation of these operations, see {{diagrams}}.
 
 ## IPv4 Address Conversion
 
@@ -680,15 +659,15 @@ function ipcrypt_ndx_decrypt(ciphertext, key):
     return ip_address
 ~~~
 
-# Implementing KIASU-BC {#implementing-kiasu-bc}
+## KIASU-BC Implementation Guide {#implementing-kiasu-bc}
 
-This appendix provides a detailed guide for implementing the KIASU-BC tweakable block cipher. KIASU-BC is based on AES-128 with modifications to incorporate a tweak.
+This section provides a detailed guide for implementing the KIASU-BC tweakable block cipher used in `ipcrypt-nd`. KIASU-BC is based on AES-128 with modifications to incorporate a tweak.
 
-## Overview
+### Overview
 
 KIASU-BC extends AES-128 by incorporating an 8-byte tweak into each round. The tweak is padded to 16 bytes and XORed with the round key at each round of the cipher. This construction is used in the `ipcrypt-nd` instantiation.
 
-## Tweak Padding
+### Tweak Padding
 
 The 8-byte tweak is padded to 16 bytes using the following method:
 
@@ -703,7 +682,7 @@ Example:
 16-byte padded:  [T0 T1 00 00 T2 T3 00 00 T4 T5 00 00 T6 T7 00 00]
 ~~~
 
-## Round Structure
+### Round Structure
 
 Each round of KIASU-BC consists of the following standard AES operations:
 
@@ -714,7 +693,7 @@ Each round of KIASU-BC consists of the following standard AES operations:
 
 For details about these operations, see {{FIPS-197}}.
 
-## Key Schedule
+### Key Schedule
 
 The key schedule follows the standard AES-128 key expansion:
 
@@ -722,7 +701,7 @@ The key schedule follows the standard AES-128 key expansion:
 2. Each round key is XORed with the padded tweak before use
 3. The first round key is used in the initial AddRoundKey operation
 
-## Implementation Steps
+### Implementation Steps
 
 1. **Key Expansion:**
    - Expand the 16-byte key into 11 round keys using the standard AES key schedule
@@ -744,7 +723,7 @@ The key schedule follows the standard AES-128 key expansion:
      - ShiftRows
      - AddRoundKey (with tweaked round key)
 
-## Example Implementation
+### Example Implementation
 
 The following pseudocode illustrates the core operations of KIASU-BC:
 
@@ -785,14 +764,43 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
     return state
 ~~~
 
-# Test Vectors {#test-vectors}
-
-This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak value is also included.
-
 Key and tweak sizes for each variant:
 - `ipcrypt-deterministic`: Key: 16 bytes (128 bits), no tweak
 - `ipcrypt-nd`: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)
 - `ipcrypt-ndx`: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits)
+
+# Implementation Status
+
+*This section is to be removed before publishing as an RFC.*
+
+This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in {{!RFC7942}}. The description of implementations in this section is intended to assist the Independent Submissions Editor in judging whether the specification is suitable for publication.
+
+Please note that the listing of any individual implementation here does not imply endorsement. Furthermore, no effort has been spent to verify the information presented here that was supplied by contributors. This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
+
+Multiple interoperable implementations of the schemes described in this document have been developed:
+
+- C implementation
+- D implementation
+- Go implementation
+- Java implementation (maven package)
+- JavaScript/TypeScript implementation (npm package)
+- PHP implementation (Composer package)
+- Python reference implementation
+- Rust implementation (cargo package)
+- Zig implementation
+- Dart implementation (pub.dev package)
+
+A comprehensive list of implementations and their test results can be found at: https://ipcrypt-std.github.io/implementations/
+
+All implementations pass the common test vectors specified in this document, demonstrating interoperability across programming languages.
+
+--- back
+
+# Test Vectors {#test-vectors}
+
+This appendix provides test vectors for all three variants of ipcrypt. Each test vector includes the key, input IP address, and encrypted output. For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak value is also included.
+
+Implementations MUST verify their correctness against these test vectors before deployment.
 
 ## ipcrypt-deterministic Test Vectors {#ipcrypt-deterministic-test-vectors}
 
@@ -857,20 +865,14 @@ Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
 Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 ~~~
 
-For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak values shown are examples. In practice, tweaks MUST be randomly generated for each encryption operation.
+For non-deterministic variants (`ipcrypt-nd` and `ipcrypt-ndx`), the tweak values shown are examples. In practice, tweaks MUST be uniformly random for each encryption operation.
 
-Implementations SHOULD verify their correctness against these test vectors before deployment.
+# IANA Considerations
+{:numbered="false"}
 
-# Alternatives to Random Tweaks {#alternatives-to-random-tweaks}
-
-While this specification recommends the use of uniformly random tweaks for non-deterministic encryption, implementers may consider alternative approaches:
-
-- **Monotonic Counter:** A counter could be used as a tweak, but this is difficult to maintain in distributed systems. If the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.
-
-- **UUIDs:** UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.
-
-Although the birthday bound is a concern with random tweaks, the use of random tweaks remains the recommended and most practical approach, offering the best tradeoffs for most real-world use cases.
+This document does not require any IANA actions.
 
 # Acknowledgments
+{:numbered="false"}
 
 The author gratefully acknowledges the contributions and insightful comments from members of the IETF independent stream community and the broader cryptographic community that have helped shape this specification.
