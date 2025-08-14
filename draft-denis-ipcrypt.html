@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Denis</td>
-<td class="center">Expires 7 February 2026</td>
+<td class="center">Expires 15 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-denis-ipcrypt-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-06" class="published">6 August 2025</time>
+<time datetime="2025-08-14" class="published">14 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-02-07">7 February 2026</time></dd>
+<dd class="expires"><time datetime="2026-02-15">15 February 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1110,7 +1110,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2345,10 +2345,18 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
     return state
 </pre><a href="#section-8.8.6-2" class="pilcrow">¶</a>
 </div>
-<p id="section-8.8.6-3">Key and tweak sizes for each variant:
-- <code>ipcrypt-deterministic</code>: Key: 16 bytes (128 bits), no tweak
-- <code>ipcrypt-nd</code>: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)
-- <code>ipcrypt-ndx</code>: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits)<a href="#section-8.8.6-3" class="pilcrow">¶</a></p>
+<p id="section-8.8.6-3">Key and tweak sizes for each variant:<a href="#section-8.8.6-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.8.6-4.1">
+              <p id="section-8.8.6-4.1.1"><code>ipcrypt-deterministic</code>: Key: 16 bytes (128 bits), no tweak<a href="#section-8.8.6-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8.8.6-4.2">
+              <p id="section-8.8.6-4.2.1"><code>ipcrypt-nd</code>: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)<a href="#section-8.8.6-4.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8.8.6-4.3">
+              <p id="section-8.8.6-4.3.1"><code>ipcrypt-ndx</code>: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits)<a href="#section-8.8.6-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 </section>

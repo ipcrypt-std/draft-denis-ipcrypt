@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                             6 August 2025
-Expires: 7 February 2026
+Intended status: Informational                            14 August 2025
+Expires: 15 February 2026
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 February 2026.
+   This Internet-Draft will expire on 15 February 2026.
 
 Copyright Notice
 
@@ -950,10 +950,14 @@ IPv4 Address:    192.0.2.1
 
        return state
 
-   Key and tweak sizes for each variant: - ipcrypt-deterministic: Key:
-   16 bytes (128 bits), no tweak - ipcrypt-nd: Key: 16 bytes (128 bits),
-   Tweak: 8 bytes (64 bits) - ipcrypt-ndx: Key: 32 bytes (256 bits, two
-   AES-128 keys), Tweak: 16 bytes (128 bits)
+   Key and tweak sizes for each variant:
+
+   *  ipcrypt-deterministic: Key: 16 bytes (128 bits), no tweak
+
+   *  ipcrypt-nd: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)
+
+   *  ipcrypt-ndx: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16
+      bytes (128 bits)
 
 9.  Implementation Status
 
