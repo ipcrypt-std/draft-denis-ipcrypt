@@ -757,6 +757,7 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 ~~~
 
 Key and tweak sizes for each variant:
+
 - `ipcrypt-deterministic`: Key: 16 bytes (128 bits), no tweak
 - `ipcrypt-nd`: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits)
 - `ipcrypt-ndx`: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits)
