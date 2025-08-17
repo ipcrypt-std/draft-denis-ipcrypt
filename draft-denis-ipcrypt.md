@@ -169,7 +169,7 @@ Throughout this document, the following terms and conventions apply:
 
 - **IP Address:** An IPv4 or IPv6 address as defined in {{!RFC4291}}.
 - **16-Byte Representation:** A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
-- **Tweak:** A non‑secret, additional input to a tweakable block cipher that further randomizes the output.
+- **Tweak:** A non-secret, additional input to a tweakable block cipher that further randomizes the output.
 - **Deterministic Encryption:** Encryption that always produces the same ciphertext for a given input and key.
 - **Non-Deterministic Encryption:** Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.
 - **(Input, Tweak) Collision:** A scenario where the same input is encrypted with the same tweak. This reveals that the input was repeated but not the input's value.
@@ -178,7 +178,7 @@ Throughout this document, the following terms and conventions apply:
 
 This section describes the conversion of IP addresses to and from a 16-byte representation. This conversion is necessary to operate a 128-bit cipher on both IPv4 and IPv6 addresses.
 
-## Converting to a 16‑Byte Representation
+## Converting to a 16-Byte Representation
 
 ### IPv6 Addresses
 
@@ -449,7 +449,7 @@ The following diagrams illustrate the key processes described in this specificat
        Encrypted IP Address
 ~~~
 
-### Non‑Deterministic Encryption Flow (ipcrypt-nd)
+### Non-Deterministic Encryption Flow (ipcrypt-nd)
 
 ~~~
               IP Address
@@ -473,7 +473,7 @@ The following diagrams illustrate the key processes described in this specificat
        24-Byte Output (ipcrypt-nd)
 ~~~
 
-### Non‑Deterministic Encryption Flow (ipcrypt-ndx)
+### Non-Deterministic Encryption Flow (ipcrypt-ndx)
 
 ~~~
               IP Address
@@ -538,7 +538,7 @@ function IPv6To16Bytes(ipv6_address):
     return bytes16
 ~~~
 
-_Example:_ For `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"`, the output is the corresponding 16‑byte sequence.
+_Example:_ For `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"`, the output is the corresponding 16-byte sequence.
 
 ## Conversion from a 16-Byte Array to an IP Address
 
