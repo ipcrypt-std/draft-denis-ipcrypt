@@ -1209,7 +1209,8 @@ Acknowledgments
 
    The author gratefully acknowledges the contributions and insightful
    comments from members of the IETF and the broader cryptographic
-   community that have helped shape this specification.
+   community that have helped shape this specification.  Special thanks
+   to Tobias Fiebig for his thorough review of this draft.
 
 Author's Address
 
