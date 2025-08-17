@@ -117,7 +117,7 @@ informative:
 
 --- abstract
 
-This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy, addressing concerns raised in {{!RFC6973}} and {{!RFC7258}} regarding pervasive monitoring.
+This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in {{!RFC6973}}.
 
 Three concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption, while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key.
 
@@ -127,7 +127,7 @@ Three concrete instantiations are defined: `ipcrypt-deterministic` provides dete
 
 This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information.
 
-This work addresses concerns raised in {{!RFC7624}} regarding confidentiality in the face of pervasive surveillance. The security properties of these methods are discussed throughout this document and summarized in {{security-considerations}}.
+This work addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. The security properties of these methods are discussed throughout this document and summarized in {{security-considerations}}.
 
 ## Use Cases and Motivations
 
@@ -137,17 +137,17 @@ IP addresses are personally identifiable information (PII). While generic encryp
 
 - **High Usage Limits:** Non-deterministic variants support extensive operations per key - approximately 4 billion for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` - far exceeding typical cryptographic limits while maintaining compact outputs.
 
-- **Format Preservation (Deterministic):** The `ipcrypt-deterministic` variant produces valid IP addresses, enabling seamless integration with existing network tools that validate IP formats (see {{format-preservation}}).
+- **Format Preservation (Deterministic):** The `ipcrypt-deterministic` variant produces valid IP addresses, enabling seamless integration with existing network tools that validate IP formats (see {{format-preservation-and-limitations}}).
 
 - **Interoperability:** By following the recommendations from this specification, implementations can reliably encrypt and decrypt IP addresses in a compatible way across different systems and vendors.
 
 These specialized encryption methods unlock several critical use cases:
 
-- **Privacy Protection:** They prevent the exposure of sensitive user information in logs, analytics data, and network measurements ({{!RFC6973}}).
+- **Privacy Protection:** They prevent the exposure of sensitive user information to third parties in logs, analytics data, and network measurements ({{!RFC6973}}). Note that protection is specifically against parties without key access; the key holder retains full decryption capability.
 
 - **Correlation Attack Resistance:** While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see {{non-deterministic-encryption}}).
 
-- **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal or access the original values.
+- **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. Note that network hierarchy and geographic relationships are not preserved.
 
 - **Seamless Third-Party Integration:** Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
 
@@ -274,12 +274,25 @@ For test vectors, see {{ipcrypt-deterministic-test-vectors}}.
       +---------------------+
 ~~~
 
-## Format Preservation
+## Format Preservation and Limitations {#format-preservation-and-limitations}
 
-- If the 16-byte ciphertext begins with an IPv4-mapped prefix, it MUST be rendered as a dotted-decimal IPv4 address.
-- Otherwise, it is interpreted as an IPv6 address.
+### Network Hierarchy Preservation
 
-To ensure IPv4 format preservation, implementers MUST consider using cycle-walking (repeatedly encrypting until a valid IPv4-mapped address is obtained), a 32-bit random permutation, or a Format-Preserving Encryption (FPE) mode as specified in {{NIST-SP-800-38G}}.
+The encryption methods described in this specification do not preserve network hierarchy or prefix relationships.
+
+- IPv4 and IPv6 prefixes are completely scrambled in the encrypted output
+- Addresses from the same subnet will not appear related after encryption
+- Geographic or topological proximity cannot be inferred from encrypted addresses
+
+### Format Preservation for IPv4
+
+The methods specified in this document typically result in IPv4 addresses being encrypted as IPv6 addresses.
+
+IPv4 format preservation (maintaining IPv4 addresses as IPv4 rather than mapping them to IPv6) is not specified in this document and is generally discouraged due to the limited 32-bit address space, which significantly reduces encryption security.
+
+If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD use one of the following approaches:
+- A 32-bit block cipher that operates only on the IPv4 portion while preserving the format
+- A Format-Preserving Encryption (FPE) mode as specified in {{NIST-SP-800-38G}}
 
 # Non-Deterministic Encryption {#non-deterministic-encryption}
 
