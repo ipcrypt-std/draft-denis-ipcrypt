@@ -1639,7 +1639,7 @@ IPv4 Address:    192.0.2.1
 <p id="section-5.2.2-1">The methods specified in this document typically result in IPv4 addresses being encrypted as IPv6 addresses.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-2">IPv4 format preservation (maintaining IPv4 addresses as IPv4 rather than mapping them to IPv6) is not specified in this document and is generally discouraged due to the limited 32-bit address space, which significantly reduces encryption security.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-3">If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD use one of the following approaches:
-- A 32-bit block cipher that operates only on the IPv4 portion while preserving the format
+- A 32-bit block cipher
 - A Format-Preserving Encryption (FPE) mode as specified in <span>[<a href="#NIST-SP-800-38G" class="cite xref">NIST-SP-800-38G</a>]</span><a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>

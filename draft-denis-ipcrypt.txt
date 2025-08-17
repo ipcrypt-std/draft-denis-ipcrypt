@@ -390,8 +390,7 @@ IPv4 Address:    192.0.2.1
 
    If IPv4 format preservation is absolutely required despite the
    security limitations, implementers SHOULD use one of the following
-   approaches: - A 32-bit block cipher that operates only on the IPv4
-   portion while preserving the format - A Format-Preserving Encryption
+   approaches: - A 32-bit block cipher - A Format-Preserving Encryption
    (FPE) mode as specified in [NIST-SP-800-38G]
 
 6.  Non-Deterministic Encryption
