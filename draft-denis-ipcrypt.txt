@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                            14 August 2025
-Expires: 15 February 2026
+Intended status: Informational                            17 August 2025
+Expires: 18 February 2026
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -16,8 +16,8 @@ Abstract
    This document specifies methods for encrypting and obfuscating IP
    addresses for privacy-preserving storage, logging, and analytics.
    These encrypted addresses enable data analysis while protecting user
-   privacy, addressing concerns raised in [RFC6973] and [RFC7258]
-   regarding pervasive monitoring.
+   privacy from third parties without key access, addressing data
+   minimization concerns raised in [RFC6973].
 
    Three concrete instantiations are defined: ipcrypt-deterministic
    provides deterministic, format-preserving encryption, while ipcrypt-
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 February 2026.
+   This Internet-Draft will expire on 18 February 2026.
 
 Copyright Notice
 
@@ -73,7 +73,9 @@ Table of Contents
    4.  Generic Constructions
    5.  Deterministic Encryption
      5.1.  ipcrypt-deterministic
-     5.2.  Format Preservation
+     5.2.  Format Preservation and Limitations
+       5.2.1.  Network Hierarchy Preservation
+       5.2.2.  Format Preservation for IPv4
    6.  Non-Deterministic Encryption
      6.1.  Encryption Process
      6.2.  Decryption Process
@@ -129,7 +131,7 @@ Table of Contents
    information.
 
    This work addresses concerns raised in [RFC7624] regarding
-   confidentiality in the face of pervasive surveillance.  The security
+   confidentiality when sharing data with third parties.  The security
    properties of these methods are discussed throughout this document
    and summarized in Section 7.
 
@@ -165,8 +167,10 @@ Table of Contents
    cases:
 
    *  *Privacy Protection:* They prevent the exposure of sensitive user
-      information in logs, analytics data, and network measurements
-      ([RFC6973]).
+      information to third parties in logs, analytics data, and network
+      measurements ([RFC6973]).  Note that protection is specifically
+      against parties without key access; the key holder retains full
+      decryption capability.
 
    *  *Correlation Attack Resistance:* While deterministic encryption
       can reveal repeated inputs, the non-deterministic variants
@@ -175,8 +179,9 @@ Table of Contents
 
    *  *Privacy-Preserving Analytics:* Encrypted IP addresses can be used
       directly for operations such as counting unique clients, rate
-      limiting, or deduplication—without needing to reveal or access the
-      original values.
+      limiting, or deduplication—without needing to reveal the original
+      values to third-party processors.  Note that network hierarchy and
+      geographic relationships are not preserved.
 
    *  *Seamless Third-Party Integration:* Encrypted IPs can act as
       privacy-preserving identifiers when interacting with untrusted
@@ -357,17 +362,37 @@ IPv4 Address:    192.0.2.1
          | Convert to IP Format|
          +---------------------+
 
-5.2.  Format Preservation
+5.2.  Format Preservation and Limitations
 
-   *  If the 16-byte ciphertext begins with an IPv4-mapped prefix, it
-      MUST be rendered as a dotted-decimal IPv4 address.
+5.2.1.  Network Hierarchy Preservation
 
-   *  Otherwise, it is interpreted as an IPv6 address.
+   The encryption methods described in this specification do not
+   preserve network hierarchy or prefix relationships.
 
-   To ensure IPv4 format preservation, implementers MUST consider using
-   cycle-walking (repeatedly encrypting until a valid IPv4-mapped
-   address is obtained), a 32-bit random permutation, or a Format-
-   Preserving Encryption (FPE) mode as specified in [NIST-SP-800-38G].
+   *  IPv4 and IPv6 prefixes are completely scrambled in the encrypted
+      output
+
+   *  Addresses from the same subnet will not appear related after
+      encryption
+
+   *  Geographic or topological proximity cannot be inferred from
+      encrypted addresses
+
+5.2.2.  Format Preservation for IPv4
+
+   The methods specified in this document typically result in IPv4
+   addresses being encrypted as IPv6 addresses.
+
+   IPv4 format preservation (maintaining IPv4 addresses as IPv4 rather
+   than mapping them to IPv6) is not specified in this document and is
+   generally discouraged due to the limited 32-bit address space, which
+   significantly reduces encryption security.
+
+   If IPv4 format preservation is absolutely required despite the
+   security limitations, implementers SHOULD use one of the following
+   approaches: - A 32-bit block cipher that operates only on the IPv4
+   portion while preserving the format - A Format-Preserving Encryption
+   (FPE) mode as specified in [NIST-SP-800-38G]
 
 6.  Non-Deterministic Encryption
 
