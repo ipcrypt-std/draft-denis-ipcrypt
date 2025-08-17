@@ -783,7 +783,7 @@ This section records the status of known implementations of the protocol defined
 
 Please note that the listing of any individual implementation here does not imply endorsement. Furthermore, no effort has been spent to verify the information presented here that was supplied by contributors. This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
 
-Multiple interoperable implementations of the schemes described in this document have been developed:
+Multiple independent, interoperable implementations of the schemes described in this document have been developed:
 
 - C implementation
 - D implementation
