@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Denis</td>
-<td class="center">Expires 18 February 2026</td>
+<td class="center">Expires 23 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-denis-ipcrypt-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-17" class="published">17 August 2025</time>
+<time datetime="2025-08-22" class="published">22 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-02-18">18 February 2026</time></dd>
+<dd class="expires"><time datetime="2026-02-23">23 February 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1110,7 +1110,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1382,7 +1382,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-1.1-4.2.1"><strong>Correlation Attack Resistance:</strong> While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see <a href="#non-deterministic-encryption" class="auto internal xref">Section 6</a>).<a href="#section-1.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-4.3">
-            <p id="section-1.1-4.3.1"><strong>Privacy-Preserving Analytics:</strong> Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. Note that network hierarchy and geographic relationships are not preserved.<a href="#section-1.1-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.3.1"><strong>Privacy-Preserving Analytics:</strong> Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in <span>[<a href="#RSSAC040" class="cite xref">RSSAC040</a>]</span>, enabling research while protecting source IP privacy. Note that network hierarchy and geographic relationships are not preserved.<a href="#section-1.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-4.4">
             <p id="section-1.1-4.4.1"><strong>Seamless Third-Party Integration:</strong> Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.<a href="#section-1.1-4.4.1" class="pilcrow">¶</a></p>
@@ -2527,6 +2527,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <dt id="LRW2002">[LRW2002]</dt>
         <dd>
 <span class="refAuthor">Liskov, M.</span>, <span class="refAuthor">Rivest, R.</span>, and <span class="refAuthor">D. Wagner</span>, <span class="refTitle">"Tweakable Block Ciphers"</span>, <span class="seriesInfo">Fast Software Encryption 2002</span>, <time datetime="2002" class="refDate">2002</time>, <span>&lt;<a href="https://www.cs.berkeley.edu/~daw/papers/tweak-crypto02.pdf">https://www.cs.berkeley.edu/~daw/papers/tweak-crypto02.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RSSAC040">[RSSAC040]</dt>
+        <dd>
+<span class="refAuthor">ICANN RSSAC</span>, <span class="refTitle">"RSSAC040: Recommendations on Anonymization Processes for Source IP Addresses Submitted for Future Analysis"</span>, <time datetime="2021-03-09" class="refDate">9 March 2021</time>, <span>&lt;<a href="https://www.icann.org/en/system/files/files/rssac-040-09mar21-en.pdf">https://www.icann.org/en/system/files/files/rssac-040-09mar21-en.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SKINNY">[SKINNY]</dt>
         <dd>
