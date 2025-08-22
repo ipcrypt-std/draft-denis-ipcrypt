@@ -114,6 +114,12 @@ informative:
       - ins: F. Denis
     date: 2025
     target: https://github.com/jedisct1/ipcrypt2
+  RSSAC040:
+    title: "RSSAC040: Recommendations on Anonymization Processes for Source IP Addresses Submitted for Future Analysis"
+    author:
+      - ins: ICANN RSSAC
+    date: 2021-03-09
+    target: https://www.icann.org/en/system/files/files/rssac-040-09mar21-en.pdf
 
 --- abstract
 
@@ -147,7 +153,7 @@ These specialized encryption methods unlock several critical use cases:
 
 - **Correlation Attack Resistance:** While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see {{non-deterministic-encryption}}).
 
-- **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. Note that network hierarchy and geographic relationships are not preserved.
+- **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in {{RSSAC040}}, enabling research while protecting source IP privacy. Note that network hierarchy and geographic relationships are not preserved.
 
 - **Seamless Third-Party Integration:** Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
 
