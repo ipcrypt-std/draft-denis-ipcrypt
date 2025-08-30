@@ -98,33 +98,42 @@ def mix_columns(state):
     return bytes(new_state)
 
 
+def mul_09(b):
+    """Multiply byte by 0x09 in GF(2^8)."""
+    return MUL2[MUL2[MUL2[b]]] ^ b
+
+
+def mul_0B(b):
+    """Multiply byte by 0x0B in GF(2^8)."""
+    return MUL2[MUL2[MUL2[b]]] ^ MUL2[b] ^ b
+
+
+def mul_0D(b):
+    """Multiply byte by 0x0D in GF(2^8)."""
+    x2 = MUL2[b]
+    x4 = MUL2[x2]
+    x8 = MUL2[x4]
+    return x8 ^ x4 ^ b
+
+
+def mul_0E(b):
+    """Multiply byte by 0x0E in GF(2^8)."""
+    x2 = MUL2[b]
+    x4 = MUL2[x2]
+    x8 = MUL2[x4]
+    return x8 ^ x4 ^ x2
+
+
 def inv_mix_columns(state):
     """Perform inverse AES MixColumns operation."""
-    def mul(a, b):
-        """Multiply two bytes in GF(2^8)."""
-        p = 0
-        for _ in range(8):
-            if b & 1:
-                p ^= a
-            hi_bit_set = a & 0x80
-            a <<= 1
-            if hi_bit_set:
-                a ^= 0x1B  # AES irreducible polynomial
-            b >>= 1
-        return p & 0xFF
-
     new_state = bytearray(16)
     for i in range(4):
         col = state[4*i:4*i+4]
         result = [
-            mul(0x0E, col[0]) ^ mul(0x0B, col[1]) ^ mul(
-                0x0D, col[2]) ^ mul(0x09, col[3]),
-            mul(0x09, col[0]) ^ mul(0x0E, col[1]) ^ mul(
-                0x0B, col[2]) ^ mul(0x0D, col[3]),
-            mul(0x0D, col[0]) ^ mul(0x09, col[1]) ^ mul(
-                0x0E, col[2]) ^ mul(0x0B, col[3]),
-            mul(0x0B, col[0]) ^ mul(0x0D, col[1]) ^ mul(
-                0x09, col[2]) ^ mul(0x0E, col[3])
+            mul_0E(col[0]) ^ mul_0B(col[1]) ^ mul_0D(col[2]) ^ mul_09(col[3]),
+            mul_09(col[0]) ^ mul_0E(col[1]) ^ mul_0B(col[2]) ^ mul_0D(col[3]),
+            mul_0D(col[0]) ^ mul_09(col[1]) ^ mul_0E(col[2]) ^ mul_0B(col[3]),
+            mul_0B(col[0]) ^ mul_0D(col[1]) ^ mul_09(col[2]) ^ mul_0E(col[3])
         ]
         for j in range(4):
             new_state[4*i+j] = result[j]
