@@ -793,14 +793,17 @@ Multiple independent, interoperable implementations of the schemes described in 
 
 - C implementation
 - D implementation
+- Dart implementation (pub.dev package)
+- Elixir implementation (hex package)
 - Go implementation
 - Java implementation (maven package)
 - JavaScript/TypeScript implementation (npm package)
 - PHP implementation (Composer package)
 - Python reference implementation
+- Ruby implementation (rubygems package)
 - Rust implementation (cargo package)
+- Swift implementation
 - Zig implementation
-- Dart implementation (pub.dev package)
 
 A comprehensive list of implementations and their test results can be found at: https://ipcrypt-std.github.io/implementations/
 
