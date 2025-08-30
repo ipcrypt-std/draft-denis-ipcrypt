@@ -1010,6 +1010,10 @@ IPv4 Address:    192.0.2.1
 
    *  D implementation
 
+   *  Dart implementation (pub.dev package)
+
+   *  Elixir implementation (hex package)
+
    *  Go implementation
 
    *  Java implementation (maven package)
@@ -1020,11 +1024,13 @@ IPv4 Address:    192.0.2.1
 
    *  Python reference implementation
 
+   *  Ruby implementation (rubygems package)
+
    *  Rust implementation (cargo package)
 
-   *  Zig implementation
+   *  Swift implementation
 
-   *  Dart implementation (pub.dev package)
+   *  Zig implementation
 
    A comprehensive list of implementations and their test results can be
    found at: https://ipcrypt-std.github.io/implementations/
