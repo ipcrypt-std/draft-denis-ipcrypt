@@ -260,7 +260,7 @@ Deterministic encryption applies a 128-bit block cipher directly to the 16-byte 
 
 Choose deterministic encryption when:
 
-- You need to detect duplicate IP addresses in encrypted form (e.g., for rate limiting)
+- Duplicate IP addresses need to be detected in encrypted form (e.g., for rate limiting)
 - Storage space is critical (produces only 16 bytes output)
 - Format preservation is required (output remains a valid IP address)
 - Correlation of the same address across records is acceptable
@@ -349,7 +349,7 @@ Non-deterministic encryption enhances privacy by ensuring that the same IP addre
 Choose non-deterministic encryption when:
 - Preventing correlation of the same IP address across records is critical
 - Storage can accommodate the additional tweak data (8-16 bytes)
-- You need stronger privacy guarantees than deterministic encryption provides
+- Stronger privacy guarantees than deterministic encryption provides are required
 - Processing the same address multiple times without revealing repetition patterns
 
 For implementation details, see {{implementation-details}}.
@@ -411,12 +411,12 @@ As with `ipcrypt-nd`, an `(input, tweak)` collision reveals repetition without c
 
 ### Comparison of Modes
 
-Choosing the right mode depends on your specific privacy requirements and operational constraints:
+Choosing the right mode depends on specific privacy requirements and operational constraints:
 
 - **Deterministic (`ipcrypt-deterministic`):**
   - **Output size:** 16 bytes (most compact)
   - **Privacy:** Same IP always produces same ciphertext (allows correlation)
-  - **Use case:** When you need to identify duplicates or when format preservation is critical
+  - **Use case:** When duplicate identification is needed or when format preservation is critical
   - **Performance:** Fastest (single AES operation)
 
 - **Non-Deterministic `ipcrypt-nd` (KIASU-BC):**
