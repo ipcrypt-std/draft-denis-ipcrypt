@@ -163,7 +163,7 @@ These specialized encryption methods unlock several critical use cases:
 
 - **Correlation Attack Resistance:** While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see {{non-deterministic-encryption}}).
 
-- **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in {{RSSAC040}}, enabling research while protecting source IP privacy. Note that network hierarchy and geographic relationships are not preserved.
+- **Privacy-Preserving Analytics:** Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in {{RSSAC040}}, enabling research while protecting source IP privacy. Since network hierarchy and geographic relationships are not preserved by encryption, organizations requiring such metadata SHOULD extract and store it separately (e.g., country, ASN) rather than relying on the flawed practice of IP address truncation, which provides inconsistent privacy protection and irreversibly destroys information.
 
 - **Seamless Third-Party Integration:** Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
 
@@ -307,6 +307,27 @@ The methods specified in this document typically result in IPv4 addresses being 
 IPv4 format preservation (maintaining IPv4 addresses as IPv4 rather than mapping them to IPv6) is not specified in this document and is generally discouraged due to the limited 32-bit address space, which significantly reduces encryption security.
 
 If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD implement a Format-Preserving Encryption (FPE) mode such as the FF1 algorithm specified in {{NIST-SP-800-38G}} or FAST {{FAST}}.
+
+### Preserving Metadata for Analytics
+
+Organizations requiring network metadata for analytics SHOULD extract and store geographic location, ASN, or network classification separately before encryption, rather than using IP address truncation. Truncation (e.g., storing only /24 or /48 prefixes) is a fundamentally flawed privacy mechanism that provides inconsistent protection and irreversibly destroys data.
+
+Recommended approach:
+1. Extract metadata (geographic location, ASN, network type) from the original IP address
+2. Store this information as separate fields alongside the encrypted IP address
+3. Apply appropriate privacy-preserving aggregation to the metadata itself
+
+Example storage schema:
+~~~
+{
+  "encrypted_ip": "bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb",
+  "country": "US",
+  "asn": 15169,
+  "network_type": "cloud_provider"
+}
+~~~
+
+This approach ensures consistent privacy protection through proper encryption while preserving analytical capabilities in a controlled manner.
 
 # Non-Deterministic Encryption {#non-deterministic-encryption}
 
