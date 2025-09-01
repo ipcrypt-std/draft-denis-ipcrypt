@@ -35,6 +35,16 @@ normative:
     seriesinfo:
       NIST: SP 800-38G
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
+  FAST:
+    title: "FAST: Format-Preserving Encryption via Shortened AES Tweakable Block Cipher"
+    author:
+      - ins: Y. Doh
+      - ins: J. Ha
+      - ins: J. Kim
+    date: 2021-09-12
+    seriesinfo:
+      Cryptology ePrint Archive: Report 2021/1171
+    target: https://eprint.iacr.org/2021/1171
   IEEE-P1619:
     title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
     author:
@@ -296,9 +306,7 @@ The methods specified in this document typically result in IPv4 addresses being 
 
 IPv4 format preservation (maintaining IPv4 addresses as IPv4 rather than mapping them to IPv6) is not specified in this document and is generally discouraged due to the limited 32-bit address space, which significantly reduces encryption security.
 
-If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD use one of the following approaches:
-- A 32-bit block cipher
-- A Format-Preserving Encryption (FPE) mode as specified in {{NIST-SP-800-38G}}
+If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD implement a Format-Preserving Encryption (FPE) mode such as the FF1 algorithm specified in {{NIST-SP-800-38G}} or FAST {{FAST}}.
 
 # Non-Deterministic Encryption {#non-deterministic-encryption}
 
