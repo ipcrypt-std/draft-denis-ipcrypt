@@ -133,29 +133,33 @@ informative:
 
 --- abstract
 
-This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in {{!RFC6973}}.
+IP addresses are personally identifiable information that require protection, yet many anonymization approaches have critical flaws. Simple techniques like truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.
 
-Three concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption, while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key.
+This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. The methods enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in {{!RFC6973}}.
+
+Three concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption, while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.
 
 --- middle
 
 # Introduction
 
-This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information.
+IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing unpredictable privacy levels - a /24 mask may hide one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks like abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and cannot interoperate between systems.
 
-This work addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. The security properties of these methods are discussed throughout this document and summarized in {{security-considerations}}.
+This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information through cryptographically sound techniques rather than flawed approaches.
+
+This work directly addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. Unlike existing practices that merely obscure addresses, these methods provide mathematically provable security properties, discussed throughout this document and summarized in {{security-considerations}}.
 
 ## Use Cases and Motivations
 
-IP addresses are personally identifiable information (PII). While generic encryption systems can protect them, the specialized methods described here offer significant advantages with well-defined security guarantees:
+Organizations handling IP addresses face a critical dilemma: they must protect user privacy while maintaining operational capabilities. Generic encryption systems, though secure, are poorly suited for IP addresses - they expand data unpredictably, break compatibility with network tools, and operate too slowly for high-volume processing. The specialized methods in this specification resolve these conflicts through purpose-built cryptographic techniques:
 
-- **Efficiency and Compactness:** All variants operate on exactly 128 bits, providing single-block encryption speed. Non-deterministic variants add only 8-16 bytes of tweak overhead compared to arbitrary expansion in generic encryption systems. This enables processing billions of addresses at network speeds.
+- **Efficiency and Compactness:** All variants operate on exactly 128 bits, achieving single-block encryption speed critical for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead versus potentially hundreds of bytes with generic encryption. This difference enables processing billions of addresses in real-time rather than requiring expensive batch operations.
 
-- **High Usage Limits:** Non-deterministic variants support extensive operations per key - approximately 4 billion for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` - far exceeding typical cryptographic limits while maintaining compact outputs.
+- **High Usage Limits:** Non-deterministic variants safely handle massive volumes - approximately 4 billion operations for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` per key - without degrading security. Generic encryption often requires complex key rotation schemes at much lower thresholds.
 
-- **Format Preservation (Deterministic):** The `ipcrypt-deterministic` variant produces valid IP addresses, enabling seamless integration with existing network tools that validate IP formats (see {{format-preservation-and-limitations}}).
+- **Format Preservation (Deterministic):** The `ipcrypt-deterministic` variant produces valid IP addresses, not arbitrary ciphertext. This enables encrypted addresses to flow through existing network infrastructure, monitoring tools, and databases without modification (see {{format-preservation-and-limitations}}).
 
-- **Interoperability:** By following the recommendations from this specification, implementations can reliably encrypt and decrypt IP addresses in a compatible way across different systems and vendors.
+- **Interoperability:** This specification ensures that encrypted IP addresses can be exchanged between different systems, vendors, and programming languages. All conforming implementations produce identical results, enabling seamless data exchange and avoiding vendor lock-in.
 
 These specialized encryption methods unlock several critical use cases:
 
@@ -252,7 +256,16 @@ Implementers MUST choose a cipher that meets the required security properties an
 
 # Deterministic Encryption
 
-Deterministic encryption applies a 128-bit block cipher directly to the 16-byte representation of an IP address. All instantiations documented in this specification (`ipcrypt-deterministic`, `ipcrypt-nd`, and `ipcrypt-ndx`) are invertible - encrypted IP addresses can be decrypted back to their original values using the same key. For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.
+Deterministic encryption applies a 128-bit block cipher directly to the 16-byte representation of an IP address. The defining characteristic is that the same IP address always encrypts to the same ciphertext when using the same key - this predictability is both its strength and limitation.
+
+Choose deterministic encryption when:
+
+- You need to detect duplicate IP addresses in encrypted form (e.g., for rate limiting)
+- Storage space is critical (produces only 16 bytes output)
+- Format preservation is required (output remains a valid IP address)
+- Correlation of the same address across records is acceptable
+
+All instantiations documented in this specification (`ipcrypt-deterministic`, `ipcrypt-nd`, and `ipcrypt-ndx`) are invertible - encrypted IP addresses can be decrypted back to their original values using the same key. For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.
 
 For implementation details, see {{implementation-details}}.
 
@@ -331,7 +344,15 @@ This approach ensures consistent privacy protection through proper encryption wh
 
 # Non-Deterministic Encryption {#non-deterministic-encryption}
 
-Non-deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see {{implementation-details}}.
+Non-deterministic encryption enhances privacy by ensuring that the same IP address produces different ciphertexts each time it is encrypted, preventing correlation attacks that plague deterministic schemes. This is achieved through tweakable block ciphers that incorporate random values called tweaks.
+
+Choose non-deterministic encryption when:
+- Preventing correlation of the same IP address across records is critical
+- Storage can accommodate the additional tweak data (8-16 bytes)
+- You need stronger privacy guarantees than deterministic encryption provides
+- Processing the same address multiple times without revealing repetition patterns
+
+For implementation details, see {{implementation-details}}.
 
 ## Encryption Process
 
@@ -390,11 +411,25 @@ As with `ipcrypt-nd`, an `(input, tweak)` collision reveals repetition without c
 
 ### Comparison of Modes
 
+Choosing the right mode depends on your specific privacy requirements and operational constraints:
+
 - **Deterministic (`ipcrypt-deterministic`):**
-  Produces a 16-byte output; preserves format but reveals repeated inputs.
-- **Non-Deterministic:**
-  - **`ipcrypt-nd` (KIASU-BC):** Produces a 24-byte output using an 8-byte tweak; `(input, tweak)` collisions reveal repeated inputs (with the same tweak) but not their values. Expected collision after approximately 4 billion operations per key.
-  - **`ipcrypt-ndx` (AES-XTS):** Produces a 32-byte output using a 16-byte tweak; supports higher secure operation counts per key. Expected collision after approximately 18 quintillion operations per key.
+  - **Output size:** 16 bytes (most compact)
+  - **Privacy:** Same IP always produces same ciphertext (allows correlation)
+  - **Use case:** When you need to identify duplicates or when format preservation is critical
+  - **Performance:** Fastest (single AES operation)
+
+- **Non-Deterministic `ipcrypt-nd` (KIASU-BC):**
+  - **Output size:** 24 bytes (16-byte ciphertext + 8-byte tweak)
+  - **Privacy:** Same IP produces different ciphertexts (prevents most correlation)
+  - **Use case:** General privacy protection with reasonable storage overhead
+  - **Collision resistance:** Approximately 4 billion operations per key
+
+- **Non-Deterministic `ipcrypt-ndx` (AES-XTS):**
+  - **Output size:** 32 bytes (16-byte ciphertext + 16-byte tweak)
+  - **Privacy:** Same IP produces different ciphertexts (prevents correlation)
+  - **Use case:** Maximum privacy protection when storage permits
+  - **Collision resistance:** Approximately 18 quintillion operations per key
 
 ## Alternatives to Random Tweaks {#alternatives-to-random-tweaks}
 
@@ -408,7 +443,21 @@ Although the birthday bound is a concern with random tweaks, the use of random t
 
 # Security Considerations
 
-The ipcrypt constructions focus solely on confidentiality and do not provide integrity. This means that IP addresses in an ordered sequence can be partially removed, duplicated, reordered, or blindly altered by an active adversary. Applications that require sequences of encrypted IP addresses that cannot be modified must apply an authentication scheme over the entire sequence, such as an HMAC construction, a keyed hash function, or a public key signature. This is outside the scope of this specification, but implementers should be aware that additional authentication mechanisms are required if protection against active adversaries is needed.
+The methods specified in this document provide strong confidentiality guarantees but explicitly do not provide integrity protection. Understanding this distinction is critical for secure deployment:
+
+**What these methods protect against:**
+
+- Unauthorized parties learning the original IP addresses (without the key)
+- Statistical analysis revealing patterns in network traffic (non-deterministic modes)
+- Brute-force attacks on the address space (128-bit security level)
+
+**What these methods do NOT protect against:**
+
+- Active attackers modifying, reordering, or removing encrypted addresses
+- Authorized key holders decrypting addresses (by design)
+- Traffic analysis based on volume and timing (metadata)
+
+Applications requiring integrity protection must additionally employ authentication mechanisms such as HMAC, authenticated encryption modes, or digital signatures over the encrypted data. While outside this specification's scope, implementers should carefully evaluate whether their threat model requires such additional protections.
 
 ## Deterministic Mode Security
 
