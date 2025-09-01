@@ -7,8 +7,9 @@
 <title>Methods for IP Address Encryption and Obfuscation</title>
 <meta content="Frank Denis" name="author">
 <meta content="
-       This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in  . 
-       Three concrete instantiations are defined:  ipcrypt-deterministic  provides deterministic, format-preserving encryption, while  ipcrypt-nd  and  ipcrypt-ndx  introduce randomness to prevent correlation. All methods are reversible with the encryption key. 
+       IP addresses are personally identifiable information that require protection, yet many anonymization approaches have critical flaws. Simple techniques like truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis. 
+       This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. The methods enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in  . 
+       Three concrete instantiations are defined:  ipcrypt-deterministic  provides deterministic, format-preserving encryption, while  ipcrypt-nd  and  ipcrypt-ndx  introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds. 
     " name="description">
 <meta content="xml2rfc 3.30.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1080,8 +1081,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Methods for IP Address Encryption and Obfuscation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies methods for encrypting and obfuscating IP addresses for privacy-preserving storage, logging, and analytics. These encrypted addresses enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">Three concrete instantiations are defined: <code>ipcrypt-deterministic</code> provides deterministic, format-preserving encryption, while <code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code> introduce randomness to prevent correlation. All methods are reversible with the encryption key.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">IP addresses are personally identifiable information that require protection, yet many anonymization approaches have critical flaws. Simple techniques like truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. The methods enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">Three concrete instantiations are defined: <code>ipcrypt-deterministic</code> provides deterministic, format-preserving encryption, while <code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code> introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1354,26 +1356,27 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This document specifies methods for the encryption and obfuscation of IP addresses for both operational use and privacy preservation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">This work addresses concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality when sharing data with third parties. The security properties of these methods are discussed throughout this document and summarized in <a href="#security-considerations" class="auto internal xref">Section 7</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-1">IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing unpredictable privacy levels - a /24 mask may hide one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks like abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and cannot interoperate between systems.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information through cryptographically sound techniques rather than flawed approaches.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This work directly addresses concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality when sharing data with third parties. Unlike existing practices that merely obscure addresses, these methods provide mathematically provable security properties, discussed throughout this document and summarized in <a href="#security-considerations" class="auto internal xref">Section 7</a>.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <div id="use-cases-and-motivations">
 <section id="section-1.1">
         <h3 id="name-use-cases-and-motivations">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-use-cases-and-motivations" class="section-name selfRef">Use Cases and Motivations</a>
         </h3>
-<p id="section-1.1-1">IP addresses are personally identifiable information (PII). While generic encryption systems can protect them, the specialized methods described here offer significant advantages with well-defined security guarantees:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-1">Organizations handling IP addresses face a critical dilemma: they must protect user privacy while maintaining operational capabilities. Generic encryption systems, though secure, are poorly suited for IP addresses - they expand data unpredictably, break compatibility with network tools, and operate too slowly for high-volume processing. The specialized methods in this specification resolve these conflicts through purpose-built cryptographic techniques:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-2.1">
-            <p id="section-1.1-2.1.1"><strong>Efficiency and Compactness:</strong> All variants operate on exactly 128 bits, providing single-block encryption speed. Non-deterministic variants add only 8-16 bytes of tweak overhead compared to arbitrary expansion in generic encryption systems. This enables processing billions of addresses at network speeds.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.1.1"><strong>Efficiency and Compactness:</strong> All variants operate on exactly 128 bits, achieving single-block encryption speed critical for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead versus potentially hundreds of bytes with generic encryption. This difference enables processing billions of addresses in real-time rather than requiring expensive batch operations.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.2">
-            <p id="section-1.1-2.2.1"><strong>High Usage Limits:</strong> Non-deterministic variants support extensive operations per key - approximately 4 billion for <code>ipcrypt-nd</code> and 18 quintillion for <code>ipcrypt-ndx</code> - far exceeding typical cryptographic limits while maintaining compact outputs.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.2.1"><strong>High Usage Limits:</strong> Non-deterministic variants safely handle massive volumes - approximately 4 billion operations for <code>ipcrypt-nd</code> and 18 quintillion for <code>ipcrypt-ndx</code> per key - without degrading security. Generic encryption often requires complex key rotation schemes at much lower thresholds.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.3">
-            <p id="section-1.1-2.3.1"><strong>Format Preservation (Deterministic):</strong> The <code>ipcrypt-deterministic</code> variant produces valid IP addresses, enabling seamless integration with existing network tools that validate IP formats (see <a href="#format-preservation-and-limitations" class="auto internal xref">Section 5.2</a>).<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.3.1"><strong>Format Preservation (Deterministic):</strong> The <code>ipcrypt-deterministic</code> variant produces valid IP addresses, not arbitrary ciphertext. This enables encrypted addresses to flow through existing network infrastructure, monitoring tools, and databases without modification (see <a href="#format-preservation-and-limitations" class="auto internal xref">Section 5.2</a>).<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.4">
-            <p id="section-1.1-2.4.1"><strong>Interoperability:</strong> By following the recommendations from this specification, implementations can reliably encrypt and decrypt IP addresses in a compatible way across different systems and vendors.<a href="#section-1.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.4.1"><strong>Interoperability:</strong> This specification ensures that encrypted IP addresses can be exchanged between different systems, vendors, and programming languages. All conforming implementations produce identical results, enabling seamless data exchange and avoiding vendor lock-in.<a href="#section-1.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.1-3">These specialized encryption methods unlock several critical use cases:<a href="#section-1.1-3" class="pilcrow">¶</a></p>
@@ -1570,8 +1573,24 @@ IPv4 Address:    192.0.2.1
       <h2 id="name-deterministic-encryption">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-deterministic-encryption" class="section-name selfRef">Deterministic Encryption</a>
       </h2>
-<p id="section-5-1">Deterministic encryption applies a 128-bit block cipher directly to the 16-byte representation of an IP address. All instantiations documented in this specification (<code>ipcrypt-deterministic</code>, <code>ipcrypt-nd</code>, and <code>ipcrypt-ndx</code>) are invertible - encrypted IP addresses can be decrypted back to their original values using the same key. For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">For implementation details, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-1">Deterministic encryption applies a 128-bit block cipher directly to the 16-byte representation of an IP address. The defining characteristic is that the same IP address always encrypts to the same ciphertext when using the same key - this predictability is both its strength and limitation.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Choose deterministic encryption when:<a href="#section-5-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-3.1">
+          <p id="section-5-3.1.1">You need to detect duplicate IP addresses in encrypted form (e.g., for rate limiting)<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-3.2">
+          <p id="section-5-3.2.1">Storage space is critical (produces only 16 bytes output)<a href="#section-5-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-3.3">
+          <p id="section-5-3.3.1">Format preservation is required (output remains a valid IP address)<a href="#section-5-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-3.4">
+          <p id="section-5-3.4.1">Correlation of the same address across records is acceptable<a href="#section-5-3.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-5-4">All instantiations documented in this specification (<code>ipcrypt-deterministic</code>, <code>ipcrypt-nd</code>, and <code>ipcrypt-ndx</code>) are invertible - encrypted IP addresses can be decrypted back to their original values using the same key. For non-deterministic modes, the tweak must be preserved along with the ciphertext to enable decryption.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">For implementation details, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <div id="ipcrypt-deterministic">
 <section id="section-5.1">
         <h3 id="name-ipcrypt-deterministic">
@@ -1675,7 +1694,13 @@ IPv4 Address:    192.0.2.1
       <h2 id="name-non-deterministic-encryptio">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-non-deterministic-encryptio" class="section-name selfRef">Non-Deterministic Encryption</a>
       </h2>
-<p id="section-6-1">Non-deterministic encryption leverages a tweakable block cipher together with a random tweak. For implementation details, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">Non-deterministic encryption enhances privacy by ensuring that the same IP address produces different ciphertexts each time it is encrypted, preventing correlation attacks that plague deterministic schemes. This is achieved through tweakable block ciphers that incorporate random values called tweaks.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Choose non-deterministic encryption when:
+- Preventing correlation of the same IP address across records is critical
+- Storage can accommodate the additional tweak data (8-16 bytes)
+- You need stronger privacy guarantees than deterministic encryption provides
+- Processing the same address multiple times without revealing repetition patterns<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">For implementation details, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <div id="encryption-process">
 <section id="section-6.1">
         <h3 id="name-encryption-process">
@@ -1769,19 +1794,56 @@ IPv4 Address:    192.0.2.1
           <h4 id="name-comparison-of-modes">
 <a href="#section-6.4.3" class="section-number selfRef">6.4.3. </a><a href="#name-comparison-of-modes" class="section-name selfRef">Comparison of Modes</a>
           </h4>
+<p id="section-6.4.3-1">Choosing the right mode depends on your specific privacy requirements and operational constraints:<a href="#section-6.4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.4.3-1.1">
-              <p id="section-6.4.3-1.1.1"><strong>Deterministic (<code>ipcrypt-deterministic</code>):</strong>
-Produces a 16-byte output; preserves format but reveals repeated inputs.<a href="#section-6.4.3-1.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.4.3-1.2">
-              <p id="section-6.4.3-1.2.1"><strong>Non-Deterministic:</strong><a href="#section-6.4.3-1.2.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.4.3-2.1">
+              <p id="section-6.4.3-2.1.1"><strong>Deterministic (<code>ipcrypt-deterministic</code>):</strong><a href="#section-6.4.3-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.4.3-1.2.2.1">
-                  <p id="section-6.4.3-1.2.2.1.1"><strong><code>ipcrypt-nd</code> (KIASU-BC):</strong> Produces a 24-byte output using an 8-byte tweak; <code>(input, tweak)</code> collisions reveal repeated inputs (with the same tweak) but not their values. Expected collision after approximately 4 billion operations per key.<a href="#section-6.4.3-1.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.4.3-2.1.2.1">
+                  <p id="section-6.4.3-2.1.2.1.1"><strong>Output size:</strong> 16 bytes (most compact)<a href="#section-6.4.3-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.4.3-1.2.2.2">
-                  <p id="section-6.4.3-1.2.2.2.1"><strong><code>ipcrypt-ndx</code> (AES-XTS):</strong> Produces a 32-byte output using a 16-byte tweak; supports higher secure operation counts per key. Expected collision after approximately 18 quintillion operations per key.<a href="#section-6.4.3-1.2.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.4.3-2.1.2.2">
+                  <p id="section-6.4.3-2.1.2.2.1"><strong>Privacy:</strong> Same IP always produces same ciphertext (allows correlation)<a href="#section-6.4.3-2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.1.2.3">
+                  <p id="section-6.4.3-2.1.2.3.1"><strong>Use case:</strong> When you need to identify duplicates or when format preservation is critical<a href="#section-6.4.3-2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.1.2.4">
+                  <p id="section-6.4.3-2.1.2.4.1"><strong>Performance:</strong> Fastest (single AES operation)<a href="#section-6.4.3-2.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li class="normal" id="section-6.4.3-2.2">
+              <p id="section-6.4.3-2.2.1"><strong>Non-Deterministic <code>ipcrypt-nd</code> (KIASU-BC):</strong><a href="#section-6.4.3-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.4.3-2.2.2.1">
+                  <p id="section-6.4.3-2.2.2.1.1"><strong>Output size:</strong> 24 bytes (16-byte ciphertext + 8-byte tweak)<a href="#section-6.4.3-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.2.2.2">
+                  <p id="section-6.4.3-2.2.2.2.1"><strong>Privacy:</strong> Same IP produces different ciphertexts (prevents most correlation)<a href="#section-6.4.3-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.2.2.3">
+                  <p id="section-6.4.3-2.2.2.3.1"><strong>Use case:</strong> General privacy protection with reasonable storage overhead<a href="#section-6.4.3-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.2.2.4">
+                  <p id="section-6.4.3-2.2.2.4.1"><strong>Collision resistance:</strong> Approximately 4 billion operations per key<a href="#section-6.4.3-2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li class="normal" id="section-6.4.3-2.3">
+              <p id="section-6.4.3-2.3.1"><strong>Non-Deterministic <code>ipcrypt-ndx</code> (AES-XTS):</strong><a href="#section-6.4.3-2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.4.3-2.3.2.1">
+                  <p id="section-6.4.3-2.3.2.1.1"><strong>Output size:</strong> 32 bytes (16-byte ciphertext + 16-byte tweak)<a href="#section-6.4.3-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.3.2.2">
+                  <p id="section-6.4.3-2.3.2.2.1"><strong>Privacy:</strong> Same IP produces different ciphertexts (prevents correlation)<a href="#section-6.4.3-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.3.2.3">
+                  <p id="section-6.4.3-2.3.2.3.1"><strong>Use case:</strong> Maximum privacy protection when storage permits<a href="#section-6.4.3-2.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-6.4.3-2.3.2.4">
+                  <p id="section-6.4.3-2.3.2.4.1"><strong>Collision resistance:</strong> Approximately 18 quintillion operations per key<a href="#section-6.4.3-2.3.2.4.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
@@ -1814,7 +1876,32 @@ Produces a 16-byte output; preserves format but reveals repeated inputs.<a href=
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-7-1">The ipcrypt constructions focus solely on confidentiality and do not provide integrity. This means that IP addresses in an ordered sequence can be partially removed, duplicated, reordered, or blindly altered by an active adversary. Applications that require sequences of encrypted IP addresses that cannot be modified must apply an authentication scheme over the entire sequence, such as an HMAC construction, a keyed hash function, or a public key signature. This is outside the scope of this specification, but implementers should be aware that additional authentication mechanisms are required if protection against active adversaries is needed.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">The methods specified in this document provide strong confidentiality guarantees but explicitly do not provide integrity protection. Understanding this distinction is critical for secure deployment:<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2"><strong>What these methods protect against:</strong><a href="#section-7-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-3.1">
+          <p id="section-7-3.1.1">Unauthorized parties learning the original IP addresses (without the key)<a href="#section-7-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-3.2">
+          <p id="section-7-3.2.1">Statistical analysis revealing patterns in network traffic (non-deterministic modes)<a href="#section-7-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-3.3">
+          <p id="section-7-3.3.1">Brute-force attacks on the address space (128-bit security level)<a href="#section-7-3.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-7-4"><strong>What these methods do NOT protect against:</strong><a href="#section-7-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-5.1">
+          <p id="section-7-5.1.1">Active attackers modifying, reordering, or removing encrypted addresses<a href="#section-7-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-5.2">
+          <p id="section-7-5.2.1">Authorized key holders decrypting addresses (by design)<a href="#section-7-5.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-5.3">
+          <p id="section-7-5.3.1">Traffic analysis based on volume and timing (metadata)<a href="#section-7-5.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-7-6">Applications requiring integrity protection must additionally employ authentication mechanisms such as HMAC, authenticated encryption modes, or digital signatures over the encrypted data. While outside this specification’s scope, implementers should carefully evaluate whether their threat model requires such additional protections.<a href="#section-7-6" class="pilcrow">¶</a></p>
 <div id="deterministic-mode-security">
 <section id="section-7.1">
         <h3 id="name-deterministic-mode-security">
