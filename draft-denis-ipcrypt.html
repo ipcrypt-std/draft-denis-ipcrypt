@@ -1045,11 +1045,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ipcrypt</td>
-<td class="right">August 2025</td>
+<td class="right">September 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Denis</td>
-<td class="center">Expires 3 March 2026</td>
+<td class="center">Expires 5 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-denis-ipcrypt-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-30" class="published">30 August 2025</time>
+<time datetime="2025-09-01" class="published">1 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-03-03">3 March 2026</time></dd>
+<dd class="expires"><time datetime="2026-03-05">5 March 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1110,7 +1110,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1186,6 +1186,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.2">
                     <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-format-preservation-for-ipv" class="internal xref">Format Preservation for IPv4</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.3">
+                    <p id="section-toc.1-1.5.2.2.2.3.1"><a href="#section-5.2.3" class="auto internal xref">5.2.3</a>.  <a href="#name-preserving-metadata-for-ana" class="internal xref">Preserving Metadata for Analytics</a></p>
 </li>
                 </ul>
 </li>
@@ -1382,7 +1385,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-1.1-4.2.1"><strong>Correlation Attack Resistance:</strong> While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see <a href="#non-deterministic-encryption" class="auto internal xref">Section 6</a>).<a href="#section-1.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-4.3">
-            <p id="section-1.1-4.3.1"><strong>Privacy-Preserving Analytics:</strong> Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in <span>[<a href="#RSSAC040" class="cite xref">RSSAC040</a>]</span>, enabling research while protecting source IP privacy. Note that network hierarchy and geographic relationships are not preserved.<a href="#section-1.1-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.3.1"><strong>Privacy-Preserving Analytics:</strong> Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without needing to reveal the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in <span>[<a href="#RSSAC040" class="cite xref">RSSAC040</a>]</span>, enabling research while protecting source IP privacy. Since network hierarchy and geographic relationships are not preserved by encryption, organizations requiring such metadata SHOULD extract and store it separately (e.g., country, ASN) rather than relying on the flawed practice of IP address truncation, which provides inconsistent privacy protection and irreversibly destroys information.<a href="#section-1.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-4.4">
             <p id="section-1.1-4.4.1"><strong>Seamless Third-Party Integration:</strong> Encrypted IPs can act as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.<a href="#section-1.1-4.4.1" class="pilcrow">¶</a></p>
@@ -1638,9 +1641,29 @@ IPv4 Address:    192.0.2.1
           </h4>
 <p id="section-5.2.2-1">The methods specified in this document typically result in IPv4 addresses being encrypted as IPv6 addresses.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-2">IPv4 format preservation (maintaining IPv4 addresses as IPv4 rather than mapping them to IPv6) is not specified in this document and is generally discouraged due to the limited 32-bit address space, which significantly reduces encryption security.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.2-3">If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD use one of the following approaches:
-- A 32-bit block cipher
-- A Format-Preserving Encryption (FPE) mode as specified in <span>[<a href="#NIST-SP-800-38G" class="cite xref">NIST-SP-800-38G</a>]</span><a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-3">If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD implement a Format-Preserving Encryption (FPE) mode such as the FF1 algorithm specified in <span>[<a href="#NIST-SP-800-38G" class="cite xref">NIST-SP-800-38G</a>]</span> or FAST <span>[<a href="#FAST" class="cite xref">FAST</a>]</span>.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="preserving-metadata-for-analytics">
+<section id="section-5.2.3">
+          <h4 id="name-preserving-metadata-for-ana">
+<a href="#section-5.2.3" class="section-number selfRef">5.2.3. </a><a href="#name-preserving-metadata-for-ana" class="section-name selfRef">Preserving Metadata for Analytics</a>
+          </h4>
+<p id="section-5.2.3-1">Organizations requiring network metadata for analytics SHOULD extract and store geographic location, ASN, or network classification separately before encryption, rather than using IP address truncation. Truncation (e.g., storing only /24 or /48 prefixes) is a fundamentally flawed privacy mechanism that provides inconsistent protection and irreversibly destroys data.<a href="#section-5.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.3-2">Recommended approach:
+1. Extract metadata (geographic location, ASN, network type) from the original IP address
+2. Store this information as separate fields alongside the encrypted IP address
+3. Apply appropriate privacy-preserving aggregation to the metadata itself<a href="#section-5.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.2.3-3">Example storage schema:
+~~~
+{
+  “encrypted_ip”: “bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb”,
+  “country”: “US”,
+  “asn”: 15169,
+  “network_type”: “cloud_provider”
+}
+~~~<a href="#section-5.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.3-4">This approach ensures consistent privacy protection through proper encryption while preserving analytical capabilities in a controlled manner.<a href="#section-5.2.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2468,6 +2491,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="FAST">[FAST]</dt>
+        <dd>
+<span class="refAuthor">Doh, Y.</span>, <span class="refAuthor">Ha, J.</span>, and <span class="refAuthor">J. Kim</span>, <span class="refTitle">"FAST: Format-Preserving Encryption via Shortened AES Tweakable Block Cipher"</span>, <span class="seriesInfo">Cryptology ePrint Archive Report 2021/1171</span>, <time datetime="2021-09-12" class="refDate">12 September 2021</time>, <span>&lt;<a href="https://eprint.iacr.org/2021/1171">https://eprint.iacr.org/2021/1171</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="FIPS-197">[FIPS-197]</dt>
         <dd>
 <span class="refAuthor">NIST</span>, <span class="refTitle">"Advanced Encryption Standard (AES)"</span>, <span class="seriesInfo">FIPS PUB 197</span>, <time datetime="2001-11-26" class="refDate">26 November 2001</time>, <span>&lt;<a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf">https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf</a>&gt;</span>. </dd>

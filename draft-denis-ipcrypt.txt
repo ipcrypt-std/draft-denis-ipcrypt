@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                            30 August 2025
-Expires: 3 March 2026
+Intended status: Informational                          1 September 2025
+Expires: 5 March 2026
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 March 2026.
+   This Internet-Draft will expire on 5 March 2026.
 
 Copyright Notice
 
@@ -76,6 +76,7 @@ Table of Contents
      5.2.  Format Preservation and Limitations
        5.2.1.  Network Hierarchy Preservation
        5.2.2.  Format Preservation for IPv4
+       5.2.3.  Preserving Metadata for Analytics
    6.  Non-Deterministic Encryption
      6.1.  Encryption Process
      6.2.  Decryption Process
@@ -183,8 +184,12 @@ Table of Contents
       values to third-party processors.  This approach addresses the
       anonymization requirements for DNS query data sharing outlined in
       [RSSAC040], enabling research while protecting source IP privacy.
-      Note that network hierarchy and geographic relationships are not
-      preserved.
+      Since network hierarchy and geographic relationships are not
+      preserved by encryption, organizations requiring such metadata
+      SHOULD extract and store it separately (e.g., country, ASN) rather
+      than relying on the flawed practice of IP address truncation,
+      which provides inconsistent privacy protection and irreversibly
+      destroys information.
 
    *  *Seamless Third-Party Integration:* Encrypted IPs can act as
       privacy-preserving identifiers when interacting with untrusted
@@ -392,9 +397,31 @@ IPv4 Address:    192.0.2.1
    significantly reduces encryption security.
 
    If IPv4 format preservation is absolutely required despite the
-   security limitations, implementers SHOULD use one of the following
-   approaches: - A 32-bit block cipher - A Format-Preserving Encryption
-   (FPE) mode as specified in [NIST-SP-800-38G]
+   security limitations, implementers SHOULD implement a Format-
+   Preserving Encryption (FPE) mode such as the FF1 algorithm specified
+   in [NIST-SP-800-38G] or FAST [FAST].
+
+5.2.3.  Preserving Metadata for Analytics
+
+   Organizations requiring network metadata for analytics SHOULD extract
+   and store geographic location, ASN, or network classification
+   separately before encryption, rather than using IP address
+   truncation.  Truncation (e.g., storing only /24 or /48 prefixes) is a
+   fundamentally flawed privacy mechanism that provides inconsistent
+   protection and irreversibly destroys data.
+
+   Recommended approach: 1.  Extract metadata (geographic location, ASN,
+   network type) from the original IP address 2.  Store this information
+   as separate fields alongside the encrypted IP address 3.  Apply
+   appropriate privacy-preserving aggregation to the metadata itself
+
+   Example storage schema: ~~~ { “encrypted_ip”:
+   “bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb”, “country”: “US”, “asn”:
+   15169, “network_type”: “cloud_provider” } ~~~
+
+   This approach ensures consistent privacy protection through proper
+   encryption while preserving analytical capabilities in a controlled
+   manner.
 
 6.  Non-Deterministic Encryption
 
@@ -1052,6 +1079,11 @@ IPv4 Address:    192.0.2.1
 11.  References
 
 11.1.  Normative References
+
+   [FAST]     Doh, Y., Ha, J., and J. Kim, "FAST: Format-Preserving
+              Encryption via Shortened AES Tweakable Block Cipher",
+              Cryptology ePrint Archive Report 2021/1171, 12 September
+              2021, <https://eprint.iacr.org/2021/1171>.
 
    [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
               26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
