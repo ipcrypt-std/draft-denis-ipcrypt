@@ -1577,7 +1577,7 @@ IPv4 Address:    192.0.2.1
 <p id="section-5-2">Choose deterministic encryption when:<a href="#section-5-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-3.1">
-          <p id="section-5-3.1.1">You need to detect duplicate IP addresses in encrypted form (e.g., for rate limiting)<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-3.1.1">Duplicate IP addresses need to be detected in encrypted form (e.g., for rate limiting)<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-3.2">
           <p id="section-5-3.2.1">Storage space is critical (produces only 16 bytes output)<a href="#section-5-3.2.1" class="pilcrow">¶</a></p>
@@ -1698,7 +1698,7 @@ IPv4 Address:    192.0.2.1
 <p id="section-6-2">Choose non-deterministic encryption when:
 - Preventing correlation of the same IP address across records is critical
 - Storage can accommodate the additional tweak data (8-16 bytes)
-- You need stronger privacy guarantees than deterministic encryption provides
+- Stronger privacy guarantees than deterministic encryption provides are required
 - Processing the same address multiple times without revealing repetition patterns<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">For implementation details, see <a href="#implementation-details" class="auto internal xref">Section 8</a>.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <div id="encryption-process">
@@ -1794,7 +1794,7 @@ IPv4 Address:    192.0.2.1
           <h4 id="name-comparison-of-modes">
 <a href="#section-6.4.3" class="section-number selfRef">6.4.3. </a><a href="#name-comparison-of-modes" class="section-name selfRef">Comparison of Modes</a>
           </h4>
-<p id="section-6.4.3-1">Choosing the right mode depends on your specific privacy requirements and operational constraints:<a href="#section-6.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.4.3-1">Choosing the right mode depends on specific privacy requirements and operational constraints:<a href="#section-6.4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.4.3-2.1">
               <p id="section-6.4.3-2.1.1"><strong>Deterministic (<code>ipcrypt-deterministic</code>):</strong><a href="#section-6.4.3-2.1.1" class="pilcrow">¶</a></p>
@@ -1806,7 +1806,7 @@ IPv4 Address:    192.0.2.1
                   <p id="section-6.4.3-2.1.2.2.1"><strong>Privacy:</strong> Same IP always produces same ciphertext (allows correlation)<a href="#section-6.4.3-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-6.4.3-2.1.2.3">
-                  <p id="section-6.4.3-2.1.2.3.1"><strong>Use case:</strong> When you need to identify duplicates or when format preservation is critical<a href="#section-6.4.3-2.1.2.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-6.4.3-2.1.2.3.1"><strong>Use case:</strong> When duplicate identification is needed or when format preservation is critical<a href="#section-6.4.3-2.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-6.4.3-2.1.2.4">
                   <p id="section-6.4.3-2.1.2.4.1"><strong>Performance:</strong> Fastest (single AES operation)<a href="#section-6.4.3-2.1.2.4.1" class="pilcrow">¶</a></p>
