@@ -133,7 +133,7 @@ informative:
 
 --- abstract
 
-IP addresses are personally identifiable information that require protection, yet common techniques like truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.
+IP addresses are personally identifiable information that requires protection, yet common techniques such as truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.
 
 This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. The methods enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in {{!RFC6973}}.
 
@@ -143,7 +143,7 @@ Three concrete instantiations are defined: `ipcrypt-deterministic` provides dete
 
 # Introduction
 
-IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing unpredictable privacy levels - a /24 mask may hide one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks like abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and cannot interoperate between systems.
+IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing unpredictable privacy levels - a /24 mask may hide one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and cannot interoperate between systems.
 
 This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information through cryptographically sound techniques.
 
@@ -863,7 +863,7 @@ Key and tweak sizes for each variant:
 
 *This section is to be removed before publishing as an RFC.*
 
-This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in {{!RFC7942}}. The description of implementations in this section is intended to assist the Independent Submissions Editor in judging whether the specification is suitable for publication.
+This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in {{!RFC7942}}. The description of implementations in this section is intended to assist draft document reviewers in judging whether the specification is suitable for publication.
 
 Please note that the listing of any individual implementation here does not imply endorsement. Furthermore, no effort has been spent to verify the information presented here that was supplied by contributors. This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
 
