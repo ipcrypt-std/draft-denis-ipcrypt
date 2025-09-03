@@ -502,13 +502,13 @@ The following diagrams illustrate the key processes described in this specificat
 ### IPv4 Address Conversion Diagram {#ipv4-address-conversion-diagram}
 
 ~~~
-       IPv4: 192.0.2.1
-           |
-           v
-  Octets:  C0  00  02  01
-           |
-           v
-   16-Byte Array:
+                 IPv4: 192.0.2.1
+                        |
+                        v
+               Octets:  C0 00 02 01
+                        |
+                        v
+                  16-Byte Array:
 [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
 ~~~
 
