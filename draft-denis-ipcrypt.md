@@ -133,7 +133,7 @@ informative:
 
 --- abstract
 
-IP addresses are personally identifiable information that require protection, yet many anonymization approaches have critical flaws. Simple techniques like truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.
+IP addresses are personally identifiable information that require protection, yet common techniques like truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.
 
 This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. The methods enable data analysis while protecting user privacy from third parties without key access, addressing data minimization concerns raised in {{!RFC6973}}.
 
@@ -145,17 +145,17 @@ Three concrete instantiations are defined: `ipcrypt-deterministic` provides dete
 
 IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing unpredictable privacy levels - a /24 mask may hide one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks like abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and cannot interoperate between systems.
 
-This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information through cryptographically sound techniques rather than flawed approaches.
+This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information through cryptographically sound techniques.
 
 This work directly addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. Unlike existing practices that merely obscure addresses, these methods provide mathematically provable security properties, discussed throughout this document and summarized in {{security-considerations}}.
 
 ## Use Cases and Motivations
 
-Organizations handling IP addresses face a critical dilemma: they must protect user privacy while maintaining operational capabilities. Generic encryption systems, though secure, are poorly suited for IP addresses - they expand data unpredictably, break compatibility with network tools, and operate too slowly for high-volume processing. The specialized methods in this specification resolve these conflicts through purpose-built cryptographic techniques:
+Organizations handling IP addresses must protect user privacy while maintaining operational capabilities. Generic encryption systems, though secure, are poorly suited for IP addresses - they expand data unpredictably, break compatibility with network tools, and operate too slowly for high-volume processing. The specialized methods in this specification resolve these conflicts through purpose-built cryptographic techniques:
 
-- Efficiency and Compactness: All variants operate on exactly 128 bits, achieving single-block encryption speed critical for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead versus potentially hundreds of bytes with generic encryption. This difference enables processing billions of addresses in real-time rather than requiring expensive batch operations.
+- Efficiency and Compactness: All variants operate on exactly 128 bits, achieving single-block encryption speed critical for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead versus potentially hundreds of bytes with generic encryption. This difference enables processing addresses in real-time rather than requiring expensive batch operations.
 
-- High Usage Limits: Non-deterministic variants safely handle massive volumes - approximately 4 billion operations for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` per key - without degrading security. Generic encryption often requires complex key rotation schemes at much lower thresholds.
+- High Usage Limits: Non-deterministic variants safely handle massive volumes - approximately 4 billion operations for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` per key - without degrading security. Generic encryption often requires operationally complex key rotation schemes at much lower thresholds.
 
 - Format Preservation (Deterministic): The `ipcrypt-deterministic` variant produces valid IP addresses, not arbitrary ciphertext. This enables encrypted addresses to flow through existing network infrastructure, monitoring tools, and databases without modification (see {{format-preservation-and-limitations}}).
 
