@@ -745,13 +745,13 @@ IPv4 Address:    192.0.2.1
 
 8.1.1.  IPv4 Address Conversion Diagram
 
-          IPv4: 192.0.2.1
-              |
-              v
-     Octets:  C0  00  02  01
-              |
-              v
-      16-Byte Array:
+                    IPv4: 192.0.2.1
+                           |
+                           v
+                  Octets:  C0 00 02 01
+                           |
+                           v
+                     16-Byte Array:
    [00 00 00 00 00 00 00 00 00 00 | FF FF | C0 00 02 01]
 
 8.1.2.  Deterministic Encryption Flow
