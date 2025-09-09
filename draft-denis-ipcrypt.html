@@ -2624,15 +2624,10 @@ function ipcrypt_pfx_encrypt(ip_address, key):
         // Prepare padded_prefix for next iteration
         // Shift left by 1 bit and insert the next bit from bytes16
         padded_prefix = shift_left_one_bit(padded_prefix)
-        set_bit(padded_prefix, 0, get_bit(bytes16, 127 - prefix_len_bits))
+        set_bit(padded_prefix, 0, get_bit(bytes16, original_bit))
 
     // Convert back to IP format
-    // If the input was an IPv4 address, return an IPv4 address built from the last 32 bits of the encrypted block
-    // If the input was an IPv6 address, return an IPv6 address built from the entire encrypted block
-    if is_ipv4(ip_address):
-        return bytes_4_to_ip(encrypted[12:16])
-    else:
-        return bytes_16_to_ip(encrypted)
+    return bytes_16_to_ip(encrypted)
 </pre><a href="#section-9.6.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2662,6 +2657,9 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
     // If we decrypt an IPv4 address, start where the IPv4 address starts (bit 96)
     if is_ipv4(encrypted_ip):
         prefix_start = 96
+        // Set up the IPv4-mapped IPv6 prefix
+        decrypted[10] = 0xFF
+        decrypted[11] = 0xFF
     else:
         prefix_start = 0
 
@@ -2685,20 +2683,16 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
         // For IPv4: prefix_len_bits=96 decrypts bit 31, prefix_len_bits=97 decrypts bit 30, etc.
         bit_pos = 127 - prefix_len_bits
         encrypted_bit = get_bit(encrypted_bytes, bit_pos)
-        set_bit(decrypted, bit_pos, cipher_bit ^ encrypted_bit)
+        original_bit = cipher_bit ^ encrypted_bit
+        set_bit(decrypted, bit_pos, original_bit)
 
         // Prepare padded_prefix for next iteration
         // Shift left by 1 bit and insert the next bit from decrypted
         padded_prefix = shift_left_one_bit(padded_prefix)
-        set_bit(padded_prefix, 0, get_bit(decrypted, 127 - prefix_len_bits))
+        set_bit(padded_prefix, 0, original_bit)
 
     // Convert back to IP format
-    // If the input was an IPv4 address, return an IPv4 address built from the last 32 bits of the decrypted block
-    // If the input was an IPv6 address, return an IPv6 address built from the entire decrypted block
-    if is_ipv4(encrypted_ip):
-        return bytes_4_to_ip(decrypted[12:16])
-    else:
-        return bytes_16_to_ip(decrypted)
+    return bytes_16_to_ip(decrypted)
 </pre><a href="#section-9.6.2-1" class="pilcrow">¶</a>
 </div>
 </section>
