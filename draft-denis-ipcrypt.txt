@@ -1729,7 +1729,7 @@ IPv4 Address:           192.0.2.1
               <https://eprint.iacr.org/2014/427>.
 
    [IPCRYPT2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
-              tool", 2025, <https://github.com/jedisct1/ipcrypt2>.
+              tool", 2025, <https://github.com/ipcrypt-std/ipcrypt2>.
 
    [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
               Block Ciphers: the TWEAKEY Framework", Cryptology ePrint
