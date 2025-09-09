@@ -440,7 +440,7 @@ The `ipcrypt-pfx` construction improves upon earlier designs like CRYPTO-Pan thr
 
 - Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides security beyond the birthday bound {{SUM-OF-PRPS}}, supporting more than 2^78 distinct IP addresses per key {{REVISITING-SUM}}. This construction ensures that even with billions of encrypted addresses, security remains robust.
 
-- Prefix-Based Context Isolation: Each bit position uses a unique cryptographic context derived from all preceding bits, ensuring that the encryption of each bit depends on the entire prefix history. This prevents related-key attacks and ensures cryptographic isolation between different prefixes.
+- Prefix-Based Context Isolation: Each bit depends on the entire prefix history.
 
 Note: Prefix-preserving encryption intentionally reveals network structure to enable analytics. Organizations requiring complete address obfuscation should use non-prefix-preserving modes.
 
