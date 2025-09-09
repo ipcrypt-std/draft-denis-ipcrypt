@@ -856,13 +856,13 @@ function ipcrypt_pfx_encrypt(ip_address, key):
     // Initialize encrypted result with zeros
     encrypted = [0] * 16
 
-    prefix_start = 0
-
     // If we encrypt an IPv4 address, start where the IPv4 address starts (bit 96)
     // Note the first 12 bytes of bytes16 are set to the prefix for IPv4 mapping in that case
     // This provides domain separation between an IPv4 address and the first 32 bits of an IPv6 address
-    if is_ipv4(ip_address):
+    if is_ipv4(encrypted_ip):
         prefix_start = 96
+    else:
+        prefix_start = 0
 
     // Initialize padded_prefix for the starting prefix length
     padded_prefix = pad_prefix(bytes16, prefix_start)
@@ -917,13 +917,11 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
     // Initialize decrypted result with zeros
     decrypted = [0] * 16
 
-    prefix_start = 0
-
     // If we decrypt an IPv4 address, start where the IPv4 address starts (bit 96)
-    // and copy the IPv4 mapping prefix to match the prefix used during encryption
     if is_ipv4(encrypted_ip):
         prefix_start = 96
-        decrypted[0:12] = encrypted_bytes[0:12]
+    else:
+        prefix_start = 0
 
     // Initialize padded_prefix for the starting prefix length
     padded_prefix = pad_prefix(decrypted, prefix_start)

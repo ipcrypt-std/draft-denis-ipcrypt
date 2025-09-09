@@ -183,10 +183,6 @@ def decrypt(encrypted_ip, key):
     # Determine starting point
     prefix_start = 96 if is_ipv4(encrypted_ip) else 0
 
-    # If IPv4, copy the IPv4-mapped prefix
-    if is_ipv4(encrypted_ip):
-        decrypted[:12] = encrypted_bytes[:12]
-
     # Create AES cipher objects
     cipher1 = AES.new(K1, AES.MODE_ECB)
     cipher2 = AES.new(K2, AES.MODE_ECB)
