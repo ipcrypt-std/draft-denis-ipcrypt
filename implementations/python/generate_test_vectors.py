@@ -10,14 +10,14 @@ Generate test vectors for all ipcrypt variants:
 import json
 import binascii
 import ipaddress
-from ipcrypt_deterministic import (
+from ipcrypt.deterministic import (
     encrypt as det_encrypt,
     decrypt as det_decrypt,
     ip_to_bytes,
 )
-from ipcrypt_nd import decrypt as nd_decrypt, kiasu_bc_encrypt
-from ipcrypt_ndx import decrypt as ndx_decrypt, aes_xts_encrypt
-from ipcrypt_pfx import encrypt as pfx_encrypt, decrypt as pfx_decrypt
+from ipcrypt.nd import decrypt as nd_decrypt, kiasu_bc_encrypt
+from ipcrypt.ndx import decrypt as ndx_decrypt, aes_xts_encrypt
+from ipcrypt.pfx import encrypt as pfx_encrypt, decrypt as pfx_decrypt
 
 
 def normalize_ip(ip):

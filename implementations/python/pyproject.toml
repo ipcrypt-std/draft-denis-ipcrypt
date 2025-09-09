@@ -2,10 +2,37 @@
 name = "ipcrypt"
 version = "0.1.0"
 description = "IP address encryption and obfuscation methods"
-requires-python = ">=3.8"
-dependencies = [
-    "cryptography>=41.0.0",
+authors = [
+    {name = "Frank Denis", email = "j@pureftpd.org"},
 ]
+readme = "README.md"
+license = {text = "ISC"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: ISC License (ISCL)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security :: Cryptography",
+    "Topic :: System :: Networking",
+]
+keywords = ["ip", "encryption", "obfuscation", "privacy", "network", "cryptography"]
+dependencies = [
+    "pycryptodome>=3.18.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ipcrypt-std/draft-denis-ipcrypt"
+Documentation = "https://ipcrypt-std.github.io/draft-denis-ipcrypt/"
+"Bug Tracker" = "https://github.com/ipcrypt-std/draft-denis-ipcrypt/issues"
+Repository = "https://github.com/ipcrypt-std/draft-denis-ipcrypt"
 
 [project.optional-dependencies]
 dev = [
@@ -20,4 +47,12 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["."]
+packages = ["ipcrypt"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "ipcrypt/**/*.py",
+    "LICENSE",
+    "README.md",
+    "pyproject.toml",
+]

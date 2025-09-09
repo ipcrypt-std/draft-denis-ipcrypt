@@ -3,13 +3,13 @@
 
 import json
 import ipaddress
-from ipcrypt_deterministic import (
+from ipcrypt.deterministic import (
     encrypt as deterministic_encrypt,
     decrypt as deterministic_decrypt,
 )
-from ipcrypt_nd import encrypt as nd_encrypt, decrypt as nd_decrypt
-from ipcrypt_ndx import aes_xts_encrypt, decrypt as ndx_decrypt, ip_to_bytes
-from ipcrypt_pfx import encrypt as pfx_encrypt, decrypt as pfx_decrypt
+from ipcrypt.nd import encrypt as nd_encrypt, decrypt as nd_decrypt
+from ipcrypt.ndx import aes_xts_encrypt, decrypt as ndx_decrypt, ip_to_bytes
+from ipcrypt.pfx import encrypt as pfx_encrypt, decrypt as pfx_decrypt
 
 
 def verify_deterministic(test_vector):
