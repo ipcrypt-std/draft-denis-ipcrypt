@@ -891,7 +891,7 @@ function ipcrypt_pfx_encrypt(ip_address, key):
         // Prepare padded_prefix for next iteration
         // Shift left by 1 bit and insert the next bit from bytes16
         padded_prefix = shift_left_one_bit(padded_prefix)
-        set_bit(padded_prefix, 0, get_bit(bytes16, original_bit))
+        set_bit(padded_prefix, 0, original_bit)
 
     // Convert back to IP format
     return bytes_16_to_ip(encrypted)
@@ -1196,9 +1196,9 @@ function pad_tweak(tweak):
     // Input: 8-byte tweak
     // Output: 16-byte padded tweak
     padded = [0] * 16
-    for i in range(0, 8, 2):
-        padded[i*2] = tweak[i]
-        padded[i*2+1] = tweak[i+1]
+    for i in range(0, 4):
+        padded[i*4] = tweak[i*2]
+        padded[i*4+1] = tweak[i*2+1]
     return padded
 
 function kiasu_bc_encrypt(key, tweak, plaintext):
