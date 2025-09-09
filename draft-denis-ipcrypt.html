@@ -1923,7 +1923,7 @@ IPv4 Address:    192.0.2.1
               <p id="section-6.2.4-2.1.1">Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides security beyond the birthday bound <span>[<a href="#SUM-OF-PRPS" class="cite xref">SUM-OF-PRPS</a>]</span>, supporting more than 2^78 distinct IP addresses per key <span>[<a href="#REVISITING-SUM" class="cite xref">REVISITING-SUM</a>]</span>. This construction ensures that even with billions of encrypted addresses, security remains robust.<a href="#section-6.2.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.2.4-2.2">
-              <p id="section-6.2.4-2.2.1">Prefix-Based Context Isolation: Each bit position uses a unique cryptographic context derived from all preceding bits, ensuring that the encryption of each bit depends on the entire prefix history. This prevents related-key attacks and ensures cryptographic isolation between different prefixes.<a href="#section-6.2.4-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-6.2.4-2.2.1">Prefix-Based Context Isolation: Each bit depends on the entire prefix history.<a href="#section-6.2.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-6.2.4-3">Note: Prefix-preserving encryption intentionally reveals network structure to enable analytics. Organizations requiring complete address obfuscation should use non-prefix-preserving modes.<a href="#section-6.2.4-3" class="pilcrow">¶</a></p>
