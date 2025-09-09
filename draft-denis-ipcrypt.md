@@ -162,7 +162,7 @@ Four concrete instantiations are defined: `ipcrypt-deterministic` provides deter
 
 # Introduction
 
-IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing variable privacy levels - a /24 mask may obscure one user or thousands depending on network allocation. Hashing produces non-reversible outputs that are unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and have limited interoperability between systems.
+IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing variable privacy levels; A /24 mask may obscure one user or thousands depending on network allocation. Hashing produces non-reversible outputs that are unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and have limited interoperability between systems.
 
 This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation. The objective is to enable network operators, researchers, and privacy advocates to share or analyze data while protecting sensitive address information through cryptographically sound techniques.
 
@@ -170,7 +170,7 @@ This specification addresses concerns raised in {{!RFC7624}} regarding confident
 
 ## Use Cases and Motivations
 
-Organizations handling IP addresses require mechanisms to protect user privacy while maintaining operational capabilities. Generic encryption systems present challenges for IP addresses - such systems expand data unpredictably, lack compatibility with network tools, and operate at reduced speeds for high-volume processing. The specialized methods in this specification address these requirements through cryptographic techniques designed for IP addresses:
+Organizations handling IP addresses require mechanisms to protect user privacy while maintaining operational capabilities. Generic encryption systems present challenges for IP addresses: such systems expand data unpredictably, lack compatibility with network tools, and operate at reduced speeds for high-volume processing. The specialized methods in this specification address these requirements through cryptographic techniques designed for IP addresses:
 
 - Efficiency and Compactness: All variants operate on 128 bits, achieving single-block encryption speed required for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead versus potentially hundreds of bytes with generic encryption. This characteristic enables processing addresses in real-time rather than requiring batch operations.
 
@@ -226,7 +226,7 @@ IPv6 addresses are natively 128 bits and are converted directly using network by
 _Example:_
 
 ~~~
-IPv6 Address:    2001:0db8:85a3:0000:0000:8a2e:0370:7334
+IPv6 Address:           2001:0db8:85a3:0000:0000:8a2e:0370:7334
 16-Byte Representation: [20 01 0d b8 85 a3 00 00 00 00 8a 2e 03 70 73 34]
 ~~~
 
@@ -235,7 +235,7 @@ IPv6 Address:    2001:0db8:85a3:0000:0000:8a2e:0370:7334
 IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6 format as specified in {{!RFC4291}}:
 
 ~~~
-IPv4 Address:    192.0.2.1
+IPv4 Address:           192.0.2.1
 16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
 ~~~
 
