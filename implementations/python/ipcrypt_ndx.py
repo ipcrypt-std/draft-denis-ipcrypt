@@ -13,7 +13,7 @@ def ip_to_bytes(ip):
 
     if isinstance(ip, ipaddress.IPv4Address):
         # Convert IPv4 to IPv4-mapped IPv6 format (::ffff:0:0/96)
-        return b'\x00' * 10 + b'\xff\xff' + ip.packed
+        return b"\x00" * 10 + b"\xff\xff" + ip.packed
     else:
         return ip.packed
 
@@ -24,7 +24,7 @@ def bytes_to_ip(bytes16):
         raise ValueError("Input must be 16 bytes")
 
     # Check for IPv4-mapped IPv6 format
-    if bytes16[:10] == b'\x00' * 10 and bytes16[10:12] == b'\xff\xff':
+    if bytes16[:10] == b"\x00" * 10 and bytes16[10:12] == b"\xff\xff":
         return ipaddress.IPv4Address(bytes16[12:])
     else:
         return ipaddress.IPv6Address(bytes16)
