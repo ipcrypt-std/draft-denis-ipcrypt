@@ -186,7 +186,7 @@ def decrypt(encrypted_ip, key):
 
     # If this was originally IPv4, set up the IPv4-mapped IPv6 prefix
     if prefix_start == 96:
-        decrypted[10:12] = b'\xff\xff'
+        decrypted[10:12] = b"\xff\xff"
 
     # Create AES cipher objects
     cipher1 = AES.new(K1, AES.MODE_ECB)

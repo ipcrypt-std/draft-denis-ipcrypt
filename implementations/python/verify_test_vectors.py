@@ -3,9 +3,12 @@
 
 import json
 import ipaddress
-from ipcrypt_deterministic import encrypt as deterministic_encrypt, decrypt as deterministic_decrypt
+from ipcrypt_deterministic import (
+    encrypt as deterministic_encrypt,
+    decrypt as deterministic_decrypt,
+)
 from ipcrypt_nd import encrypt as nd_encrypt, decrypt as nd_decrypt
-from ipcrypt_ndx import aes_xts_encrypt, decrypt as ndx_decrypt, ip_to_bytes, bytes_to_ip
+from ipcrypt_ndx import aes_xts_encrypt, decrypt as ndx_decrypt, ip_to_bytes
 from ipcrypt_pfx import encrypt as pfx_encrypt, decrypt as pfx_decrypt
 
 
@@ -28,7 +31,9 @@ def verify_deterministic(test_vector):
     decrypted_str = str(decrypted)
 
     if decrypted_str != ip:
-        print(f"✗ ipcrypt-deterministic decrypt: {encrypted} -> expected {ip}, got {decrypted_str}")
+        print(
+            f"✗ ipcrypt-deterministic decrypt: {encrypted} -> expected {ip}, got {decrypted_str}"
+        )
         return False
 
     print(f"✓ ipcrypt-deterministic: {ip} -> {result} -> {decrypted_str}")
@@ -55,7 +60,9 @@ def verify_nd(test_vector):
     decrypted_str = str(decrypted)
 
     if decrypted_str != ip:
-        print(f"✗ ipcrypt-nd decrypt: {result[:40]}... -> expected {ip}, got {decrypted_str}")
+        print(
+            f"✗ ipcrypt-nd decrypt: {result[:40]}... -> expected {ip}, got {decrypted_str}"
+        )
         return False
 
     print(f"✓ ipcrypt-nd: {ip} -> {result[:40]}... -> {decrypted_str}")
@@ -86,7 +93,9 @@ def verify_ndx(test_vector):
     decrypted_str = str(decrypted)
 
     if decrypted_str != ip:
-        print(f"✗ ipcrypt-ndx decrypt: {result[:40]}... -> expected {ip}, got {decrypted_str}")
+        print(
+            f"✗ ipcrypt-ndx decrypt: {result[:40]}... -> expected {ip}, got {decrypted_str}"
+        )
         return False
 
     print(f"✓ ipcrypt-ndx: {ip} -> {result[:40]}... -> {decrypted_str}")
@@ -109,7 +118,7 @@ def verify_pfx(test_vector):
 
     # Test decryption
     decrypted = pfx_decrypt(encrypted, key)
-    
+
     # Compare as IP address objects for proper equality check
     original_ip = ipaddress.ip_address(ip)
     if decrypted != original_ip:
