@@ -3,7 +3,7 @@ name = "ipcrypt"
 version = "0.1.0"
 description = "IP address encryption and obfuscation methods"
 authors = [
-    {name = "Frank Denis", email = "j@pureftpd.org"},
+    {name = "Frank Denis", email = "github@pureftpd.org"},
 ]
 readme = "README.md"
 license = {text = "ISC"}
