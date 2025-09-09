@@ -989,13 +989,13 @@ function pad_prefix(data, prefix_len_bits):
     // Specialized for the only two cases used: 0 and 96
     // For prefix_len_bits=0: Returns a block with only bit 0 set (position 0 = LSB of byte 15)
     // For prefix_len_bits=96: Returns the IPv4-mapped prefix with separator at position 96
-    
+
     if prefix_len_bits == 0:
         // For IPv6 addresses starting from bit 0
         padded_prefix = [0] * 16
         padded_prefix[15] = 0x01  // Set bit at position 0 (LSB of byte 15)
         return padded_prefix
-    
+
     else if prefix_len_bits == 96:
         // For IPv4 addresses, always returns the same value since all IPv4 addresses
         // share the same IPv4-mapped prefix (00...00 ffff)
@@ -1004,7 +1004,7 @@ function pad_prefix(data, prefix_len_bits):
         padded_prefix[14] = 0xFF  // IPv4-mapped prefix
         padded_prefix[15] = 0xFF  // IPv4-mapped prefix
         return padded_prefix
-    
+
     else:
         raise Error("pad_prefix only supports prefix_len_bits of 0 or 96")
 
@@ -1013,14 +1013,14 @@ function shift_left_one_bit(data):
     // The most significant bit is lost, and a zero bit is shifted in from the right
     result = [0] * 16
     carry = 0
-    
+
     // Process from least significant byte (byte 15) to most significant (byte 0)
     for i from 15 down to 0:
         // Current byte shifted left by 1, with carry from previous byte
         result[i] = ((data[i] << 1) | carry) & 0xFF
         // Extract the bit that will be carried to the next byte
         carry = (data[i] >> 7) & 1
-    
+
     return result
 ~~~
 
