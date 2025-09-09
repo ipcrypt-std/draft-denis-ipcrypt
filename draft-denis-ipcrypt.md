@@ -879,7 +879,8 @@ function ipcrypt_pfx_encrypt(ip_address, key):
         cipher_bit = get_bit(e, 0)
 
         // Encrypt the current bit position (processing from MSB to LSB)
-        // For prefix_len_bits=0, encrypts bit 127; for prefix_len_bits=1, encrypts bit 126, etc.
+        // For IPv6: prefix_len_bits=0 encrypts bit 127, prefix_len_bits=1 encrypts bit 126, etc.
+        // For IPv4: prefix_len_bits=96 encrypts bit 31, prefix_len_bits=97 encrypts bit 30, etc.
         bit_pos = 127 - prefix_len_bits
         original_bit = get_bit(bytes16, bit_pos)
         set_bit(encrypted, bit_pos, cipher_bit ^ original_bit)
@@ -940,7 +941,8 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
         cipher_bit = get_bit(e, 0)
 
         // Decrypt the current bit position (processing from MSB to LSB)
-        // For prefix_len_bits=0, decrypts bit 127; for prefix_len_bits=1, decrypts bit 126, etc.
+        // For IPv6: prefix_len_bits=0 decrypts bit 127, prefix_len_bits=1 decrypts bit 126, etc.
+        // For IPv4: prefix_len_bits=96 decrypts bit 31, prefix_len_bits=97 decrypts bit 30, etc.
         bit_pos = 127 - prefix_len_bits
         encrypted_bit = get_bit(encrypted_bytes, bit_pos)
         set_bit(decrypted, bit_pos, cipher_bit ^ encrypted_bit)
@@ -1014,7 +1016,7 @@ function shift_left_one_bit(data):
     result = [0] * 16
     carry = 0
 
-    // Process from least significant byte (byte 15) to most significant (byte 0)
+    // Process from least significant byte (byte 15) to most significant byte (byte 0)
     for i from 15 down to 0:
         // Current byte shifted left by 1, with carry from previous byte
         result[i] = ((data[i] << 1) | carry) & 0xFF
@@ -1122,7 +1124,7 @@ function AES_XTS_decrypt(key, tweak, block):
     // Encrypt the tweak with the second half of the key
     ET = AES128_encrypt(K2, tweak)
 
-    // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
+    // Decrypt the block: AES128_decrypt(block ⊕ ET, K1) ⊕ ET
     return AES128_decrypt(K1, block ⊕ ET) ⊕ ET
 ~~~
 
@@ -1236,7 +1238,7 @@ Key and tweak sizes for each variant:
 - `ipcrypt-deterministic`: Key: 16 bytes (128 bits), no tweak, Output: 16 bytes
 - `ipcrypt-pfx`: Key: 32 bytes (256 bits, split into two independent AES-128 keys), no external tweak (uses prefix as cryptographic context), Output: 4 bytes for IPv4, 16 bytes for IPv6
 - `ipcrypt-nd`: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits), Output: 24 bytes
-- `ipcrypt-ndx`: Key: 32 bytes (256 bits, two AES-128 keys), Tweak: 16 bytes (128 bits), Output: 32 bytes
+- `ipcrypt-ndx`: Key: 32 bytes (256 bits, split into two AES-128 keys), Tweak: 16 bytes (128 bits), Output: 32 bytes
 
 # Implementation Status
 
