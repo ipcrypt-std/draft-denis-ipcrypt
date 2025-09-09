@@ -1,4 +1,4 @@
 # License
 
 See the
-[guidelines for contributions](https://github.com/jedisct1/draft-denis-ipcrypt/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/ipcrypt-std/draft-denis-ipcrypt/blob/main/CONTRIBUTING.md).

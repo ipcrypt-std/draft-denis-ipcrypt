@@ -4,10 +4,10 @@
 
 This is the working area for the individual Internet-Draft, "Methods for IP Address Encryption and Obfuscation".
 
-* [Editor's Copy](https://jedisct1.github.io/draft-denis-ipcrypt/#go.draft-denis-ipcrypt.html)
+* [Editor's Copy](https://ipcrypt-std.github.io/draft-denis-ipcrypt/#go.draft-denis-ipcrypt.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-denis-ipcrypt)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-denis-ipcrypt)
-* [Compare Editor's Copy to Individual Draft](https://jedisct1.github.io/draft-denis-ipcrypt/#go.draft-denis-ipcrypt.diff)
+* [Compare Editor's Copy to Individual Draft](https://ipcrypt-std.github.io/draft-denis-ipcrypt/#go.draft-denis-ipcrypt.diff)
 
 ## Known Implementations
 
@@ -16,7 +16,7 @@ The project website maintains a list of [known ipcrypt implementations](https://
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/jedisct1/draft-denis-ipcrypt/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/ipcrypt-std/draft-denis-ipcrypt/blob/main/CONTRIBUTING.md).
 
 Contributions can be made by creating pull requests.
 The GitHub interface supports creating pull requests using the Edit (✏) button.

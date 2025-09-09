@@ -142,7 +142,7 @@ informative:
     author:
       - ins: F. Denis
     date: 2025
-    target: https://github.com/jedisct1/ipcrypt2
+    target: https://github.com/ipcrypt-std/ipcrypt2
   RSSAC040:
     title: "RSSAC040: Recommendations on Anonymization Processes for Source IP Addresses Submitted for Future Analysis"
     author:
