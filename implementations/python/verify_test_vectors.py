@@ -2,11 +2,11 @@
 """Verify all test vectors from test_vectors.json."""
 
 import json
-from ipcrypt_deterministic import encrypt as deterministic_encrypt
-from ipcrypt_nd import encrypt as nd_encrypt
-from ipcrypt_ndx import aes_xts_encrypt
-from ipcrypt_pfx import encrypt as pfx_encrypt
-from ipcrypt_ndx import ip_to_bytes
+import ipaddress
+from ipcrypt_deterministic import encrypt as deterministic_encrypt, decrypt as deterministic_decrypt
+from ipcrypt_nd import encrypt as nd_encrypt, decrypt as nd_decrypt
+from ipcrypt_ndx import aes_xts_encrypt, decrypt as ndx_decrypt, ip_to_bytes, bytes_to_ip
+from ipcrypt_pfx import encrypt as pfx_encrypt, decrypt as pfx_decrypt
 
 
 def verify_deterministic(test_vector):
@@ -15,15 +15,24 @@ def verify_deterministic(test_vector):
     ip = test_vector["ip"]
     expected = test_vector["encrypted_ip"]
 
+    # Test encryption
     encrypted = deterministic_encrypt(ip, key)
     result = str(encrypted)
 
-    if result == expected:
-        print(f"✓ ipcrypt-deterministic: {ip} -> {result}")
-        return True
-    else:
+    if result != expected:
         print(f"✗ ipcrypt-deterministic: {ip} -> expected {expected}, got {result}")
         return False
+
+    # Test decryption
+    decrypted = deterministic_decrypt(encrypted, key)
+    decrypted_str = str(decrypted)
+
+    if decrypted_str != ip:
+        print(f"✗ ipcrypt-deterministic decrypt: {encrypted} -> expected {ip}, got {decrypted_str}")
+        return False
+
+    print(f"✓ ipcrypt-deterministic: {ip} -> {result} -> {decrypted_str}")
+    return True
 
 
 def verify_nd(test_vector):
@@ -33,15 +42,24 @@ def verify_nd(test_vector):
     tweak = bytes.fromhex(test_vector["tweak"])
     expected = test_vector["output"]
 
+    # Test encryption
     encrypted = nd_encrypt(ip, key, tweak)
     result = encrypted.hex()
 
-    if result == expected:
-        print(f"✓ ipcrypt-nd: {ip} -> {result[:40]}...")
-        return True
-    else:
+    if result != expected:
         print(f"✗ ipcrypt-nd: {ip} -> expected {expected}, got {result}")
         return False
+
+    # Test decryption
+    decrypted = nd_decrypt(encrypted, key)
+    decrypted_str = str(decrypted)
+
+    if decrypted_str != ip:
+        print(f"✗ ipcrypt-nd decrypt: {result[:40]}... -> expected {ip}, got {decrypted_str}")
+        return False
+
+    print(f"✓ ipcrypt-nd: {ip} -> {result[:40]}... -> {decrypted_str}")
+    return True
 
 
 def verify_ndx(test_vector):
@@ -58,12 +76,21 @@ def verify_ndx(test_vector):
     # Concatenate tweak and ciphertext
     result = (tweak + ciphertext).hex()
 
-    if result == expected:
-        print(f"✓ ipcrypt-ndx: {ip} -> {result[:40]}...")
-        return True
-    else:
+    if result != expected:
         print(f"✗ ipcrypt-ndx: {ip} -> expected {expected}, got {result}")
         return False
+
+    # Test decryption
+    binary_output = bytes.fromhex(result)
+    decrypted = ndx_decrypt(binary_output, key)
+    decrypted_str = str(decrypted)
+
+    if decrypted_str != ip:
+        print(f"✗ ipcrypt-ndx decrypt: {result[:40]}... -> expected {ip}, got {decrypted_str}")
+        return False
+
+    print(f"✓ ipcrypt-ndx: {ip} -> {result[:40]}... -> {decrypted_str}")
+    return True
 
 
 def verify_pfx(test_vector):
@@ -72,15 +99,25 @@ def verify_pfx(test_vector):
     ip = test_vector["ip"]
     expected = test_vector["encrypted_ip"]
 
+    # Test encryption
     encrypted = pfx_encrypt(ip, key)
     result = str(encrypted)
 
-    if result == expected:
-        print(f"✓ ipcrypt-pfx: {ip} -> {result}")
-        return True
-    else:
+    if result != expected:
         print(f"✗ ipcrypt-pfx: {ip} -> expected {expected}, got {result}")
         return False
+
+    # Test decryption
+    decrypted = pfx_decrypt(encrypted, key)
+    
+    # Compare as IP address objects for proper equality check
+    original_ip = ipaddress.ip_address(ip)
+    if decrypted != original_ip:
+        print(f"✗ ipcrypt-pfx decrypt: {encrypted} -> expected {ip}, got {decrypted}")
+        return False
+
+    print(f"✓ ipcrypt-pfx: {ip} -> {result} -> {decrypted}")
+    return True
 
 
 def main():

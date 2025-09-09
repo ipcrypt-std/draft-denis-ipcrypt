@@ -155,8 +155,7 @@ def encrypt(ip, key):
         # Prepare padded_prefix for next iteration
         # Shift left by 1 bit and insert the next bit from bytes16
         padded_prefix = shift_left_one_bit(padded_prefix)
-        bit_to_insert = get_bit(bytes16, 127 - prefix_len_bits)
-        set_bit(padded_prefix, 0, bit_to_insert)
+        set_bit(padded_prefix, 0, original_bit)
 
     return bytes_to_ip(bytes(encrypted))
 
@@ -177,11 +176,17 @@ def decrypt(encrypted_ip, key):
     # Convert encrypted IP to 16-byte representation
     encrypted_bytes = ip_to_bytes(encrypted_ip)
 
-    # Initialize decrypted result with zeros
+    # Initialize decrypted result
     decrypted = bytearray(16)
 
-    # Determine starting point
+    # For decryption, we need to determine if this was originally IPv4
+    # IPv4 addresses are encrypted with prefix_start=96, so if the encrypted
+    # IP is an IPv4 address, we know the original was also IPv4
     prefix_start = 96 if is_ipv4(encrypted_ip) else 0
+
+    # If this was originally IPv4, set up the IPv4-mapped IPv6 prefix
+    if prefix_start == 96:
+        decrypted[10:12] = b'\xff\xff'
 
     # Create AES cipher objects
     cipher1 = AES.new(K1, AES.MODE_ECB)
@@ -209,12 +214,12 @@ def decrypt(encrypted_ip, key):
 
         # Set the bit in the decrypted result
         encrypted_bit = get_bit(encrypted_bytes, current_bit_pos)
-        set_bit(decrypted, current_bit_pos, cipher_bit ^ encrypted_bit)
+        original_bit = cipher_bit ^ encrypted_bit
+        set_bit(decrypted, current_bit_pos, original_bit)
 
         # Prepare padded_prefix for next iteration
         # Shift left by 1 bit and insert the next bit from decrypted
         padded_prefix = shift_left_one_bit(padded_prefix)
-        bit_to_insert = get_bit(decrypted, 127 - prefix_len_bits)
-        set_bit(padded_prefix, 0, bit_to_insert)
+        set_bit(padded_prefix, 0, original_bit)
 
     return bytes_to_ip(bytes(decrypted))
