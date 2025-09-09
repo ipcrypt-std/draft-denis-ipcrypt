@@ -1192,10 +1192,13 @@ IPv4 Address:           192.0.2.1
        encrypted = [0] * 16
 
        // If we encrypt an IPv4 address, start where the IPv4 address starts (bit 96)
-       // Note the first 12 bytes of bytes16 are set to the prefix for IPv4 mapping in that case
+       // Note the first 12 bytes of bytes16 are already set to the prefix for IPv4 mapping in that case
        // This provides domain separation between an IPv4 address and the first 32 bits of an IPv6 address
-       if is_ipv4(encrypted_ip):
+       if is_ipv4(ip_address):
            prefix_start = 96
+           // Set up the IPv4-mapped IPv6 prefix
+           encrypted[10] = 0xFF
+           encrypted[11] = 0xFF
        else:
            prefix_start = 0
 
