@@ -82,7 +82,7 @@ PAD_PREFIX_0 = bytearray(
 )  # Separator bit at position 0 (LSB of byte 15)
 PAD_PREFIX_96 = bytearray(
     [0, 0, 0, 0x01] + [0] * 10 + [0xFF, 0xFF]
-)  # Separator at pos 96, then IPv4-mapped prefix
+)  # Separator in byte 3, then IPv4-mapped prefix at the end
 
 
 def encrypt(ip, key):
