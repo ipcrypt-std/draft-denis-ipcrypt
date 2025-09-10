@@ -241,10 +241,17 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Throughout this document, the following terms and conventions apply:
 
 - IP Address: An IPv4 or IPv6 address as defined in {{!RFC4291}}.
+- IPv4-mapped IPv6 Address: An IPv6 address format (::ffff:a.b.c.d) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.
 - 16-Byte Representation: A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
+- Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits in this specification) using a secret key.
+- Permutation: A bijective function where each distinct input maps to a unique output, ensuring reversibility.
+- Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from truly random values.
+- Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.
 - Tweak: A non-secret, additional input to a tweakable block cipher that further randomizes the output.
 - Deterministic Encryption: Encryption that always produces the same ciphertext for a given input and key.
 - Non-Deterministic Encryption: Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.
+- Prefix-Preserving Encryption: An encryption mode where IP addresses from the same network produce ciphertexts that share a common encrypted prefix, maintaining network relationships while obscuring actual network identities.
+- Birthday Bound: The point at which collisions become statistically likely in a random sampling process, approximately 2<sup>(n/2)</sup> operations for n-bit values.
 - (Input, Tweak) Collision: A scenario where the same input is encrypted with the same tweak. This reveals that the input was repeated but not the input's value.
 
 # IP Address Conversion
