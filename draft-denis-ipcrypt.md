@@ -465,7 +465,7 @@ Complete pseudocode implementation is provided in {{prefix-preserving-encryption
 
 ### Key Requirements
 
-CRITICAL: The two 16-byte halves of the 32-byte key (K1 and K2) MUST NOT be identical. Using identical values for K1 and K2 (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.
+CRITICAL: The two 16-byte halves of the 32-byte key (`K1` and `K2`) MUST NOT be identical. Using identical values for `K1` and `K2` (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.
 
 ### Security Properties
 
@@ -486,7 +486,7 @@ Key implementation characteristics:
   - IPv6: 256 AES-128 operations per address (2 encryptions × 128 bits)
 
 - Performance Optimizations:
-  - Caching encrypted prefix values (e1 and e2) significantly improves performance for addresses sharing common prefixes
+  - Caching encrypted prefix values (`e1` and `e2`) significantly improves performance for addresses sharing common prefixes
   - The encryption algorithm is inherently parallelizable since AES computations for different bit positions are independent
   - The padded prefix computation can be optimized by maintaining state across iterations: instead of recomputing the padded prefix from scratch for each bit position, implementations can shift the previous padded prefix left by one bit and insert the next input bit.
 
