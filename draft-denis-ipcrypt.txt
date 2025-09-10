@@ -1889,15 +1889,15 @@ A.2.2.  Prefix-Preserving Test Vectors
 
    # IPv6 addresses from same /32 but different /48 networks
    Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
-   Input IP:     2001:db8:3a5c::e7d1:4b9f:2c8a:f673
+   Input IP:     2001:db8:3a5c:0:e7d1:4b9f:2c8a:f673
    Encrypted IP: 7cec:702c:3503:bef:e616:96bd:be33:a9b9
 
    Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
-   Input IP:     2001:db8:9f27::b4e2:7a3d:5f91:c8e6
+   Input IP:     2001:db8:9f27:0:b4e2:7a3d:5f91:c8e6
    Encrypted IP: 7cec:702c:a504:b74e:194a:3d90:b047:2d1a
 
    Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
-   Input IP:     2001:db8:d8b4::193c:a5e7:8b2f:46d1
+   Input IP:     2001:db8:d8b4:0:193c:a5e7:8b2f:46d1
    Encrypted IP: 7cec:702c:f840:aa67:1b8:e84f:ac9d:77fb
 
 A.3.  ipcrypt-nd Test Vectors
