@@ -170,11 +170,11 @@ This specification addresses concerns raised in {{!RFC7624}} regarding confident
 
 ## Use Cases and Motivations
 
-Organizations handling IP addresses require mechanisms to protect user privacy while maintaining operational capabilities. Generic encryption systems present challenges for IP addresses: such systems expand data unpredictably, lack compatibility with network tools, and operate at reduced speeds for high-volume processing. The specialized methods in this specification address these requirements through cryptographic techniques designed for IP addresses:
+Organizations handling IP addresses require mechanisms to protect user privacy while maintaining operational capabilities. Generic encryption systems present challenges for IP addresses: such systems expand data unpredictably, lack compatibility with network tools, and are not designed for high-volume processing. The specialized methods in this specification address these requirements through cryptographic techniques designed for IP addresses:
 
-- Efficiency and Compactness: All variants operate on 128 bits, achieving single-block encryption speed required for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead versus potentially hundreds of bytes with generic encryption. This characteristic enables processing addresses in real-time rather than requiring batch operations.
+- Efficiency and Compactness: All variants operate on 128 bits, achieving single-block encryption speed required for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead. This characteristic enables processing addresses in real-time rather than requiring batch operations.
 
-- High Usage Limits: Non-deterministic variants safely handle massive volumes - approximately 4 billion operations for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` per key - without degrading security. Generic encryption often requires complex key rotation schemes at lower thresholds.
+- High Usage Limits: Non-deterministic variants safely handle massive volumes: approximately 4 billion operations for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` per key, without degrading security. Generic encryption often requires complex key rotation schemes at lower thresholds.
 
 - Format Preservation: The `ipcrypt-deterministic` and `ipcrypt-pfx` variants produce valid IP addresses rather than arbitrary ciphertext, enabling encrypted addresses to pass through existing network infrastructure, monitoring tools, and databases without modification. The `ipcrypt-pfx` variant uniquely preserves network prefix relationships while maintaining the original address type and size, enabling network-level analytics while protecting individual address identity (see {{format-preservation-and-limitations}}).
 
@@ -186,13 +186,13 @@ These specialized encryption methods enable several use cases:
 
 - Correlation Attack Resistance: While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see {{non-deterministic-encryption}}).
 
-- Privacy-Preserving Analytics: Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without revealing the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in {{RSSAC040}}, enabling research while protecting source IP privacy. The `ipcrypt-pfx` variant specifically preserves network prefixes for network-level analytics, while other methods completely scramble network hierarchy. Organizations requiring geographic or ASN metadata with non-prefix-preserving modes SHOULD extract and store such data separately (e.g., country, ASN) rather than utilizing IP address truncation, which provides inconsistent privacy protection and irreversibly destroys information.
+- Privacy-Preserving Analytics: Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without revealing the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in {{RSSAC040}}, enabling research while protecting source IP privacy. The `ipcrypt-pfx` variant specifically preserves network prefixes for network-level analytics, while other methods completely scramble network hierarchy.
 
 - Third-Party Integration: Encrypted IP addresses can serve as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
 
 Each mode offers different privacy and operational characteristics. The following examples demonstrate how the same IP addresses transform under each method:
 
-Format-preserving: Valid IP addresses, same input always produces same output:
+- Format-preserving: Valid IP addresses, same input always produces same output:
 
 ~~~
 192.168.1.1   -> d1e9:518:d5bc:4487:51c6:c51f:44ed:e9f6
@@ -200,7 +200,7 @@ Format-preserving: Valid IP addresses, same input always produces same output:
 192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Same output
 ~~~
 
-Prefix-preserving: Maintains network structure, same prefix when IPs share prefix:
+- Prefix-preserving: Maintains network structure, same prefix when IPs share prefix:
 
 ~~~
 192.168.1.1   -> 251.81.131.124
@@ -208,7 +208,7 @@ Prefix-preserving: Maintains network structure, same prefix when IPs share prefi
 172.16.69.42  -> 165.228.146.177
 ~~~
 
-Non-deterministic: Compact 24-byte output, different each time:
+- Non-deterministic: Compact 24-byte output, different each time:
 
 ~~~
 192.168.1.1   -> f0ea0bbd...03aa9fcb
@@ -216,7 +216,7 @@ Non-deterministic: Compact 24-byte output, different each time:
 192.168.1.254 -> 35fc2338...25abed5d  # Same input, different outputs
 ~~~
 
-Extended non-deterministic: 32-byte output, unlimited operations per key:
+- Extended non-deterministic: 32-byte output, unlimited operations per key:
 
 ~~~
 192.168.1.1   -> 5862dc6d...ddb3693f
