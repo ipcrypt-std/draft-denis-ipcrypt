@@ -464,7 +464,9 @@ Complete pseudocode implementation is provided in {{prefix-preserving-encryption
 
 ### Key Requirements
 
-CRITICAL: The two 16-byte halves of the 32-byte key (`K1` and `K2`) MUST NOT be identical. Using identical values for `K1` and `K2` (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.
+The two 16-byte halves of the 32-byte key (`K1` and `K2`) MUST NOT be identical. Using identical values for `K1` and `K2` (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.
+
+When the 32-byte key is randomly sampled from a uniform distribution, the probability that `K1 = K2` is statistically negligible.
 
 ### Security Properties
 
