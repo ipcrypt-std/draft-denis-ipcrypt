@@ -1967,7 +1967,7 @@ IPv4 Address:           192.0.2.1
           <h4 id="name-key-requirements">
 <a href="#section-6.2.3" class="section-number selfRef">6.2.3. </a><a href="#name-key-requirements" class="section-name selfRef">Key Requirements</a>
           </h4>
-<p id="section-6.2.3-1">CRITICAL: The two 16-byte halves of the 32-byte key (K1 and K2) MUST NOT be identical. Using identical values for K1 and K2 (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-1">CRITICAL: The two 16-byte halves of the 32-byte key (<code>K1</code> and <code>K2</code>) MUST NOT be identical. Using identical values for <code>K1</code> and <code>K2</code> (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-properties">
@@ -2009,7 +2009,7 @@ IPv4 Address:           192.0.2.1
               <p id="section-6.2.5-2.2.1">Performance Optimizations:<a href="#section-6.2.5-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2.5-2.2.2.1">
-                  <p id="section-6.2.5-2.2.2.1.1">Caching encrypted prefix values (e1 and e2) significantly improves performance for addresses sharing common prefixes<a href="#section-6.2.5-2.2.2.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-6.2.5-2.2.2.1.1">Caching encrypted prefix values (<code>e1</code> and <code>e2</code>) significantly improves performance for addresses sharing common prefixes<a href="#section-6.2.5-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-6.2.5-2.2.2.2">
                   <p id="section-6.2.5-2.2.2.2.1">The encryption algorithm is inherently parallelizable since AES computations for different bit positions are independent<a href="#section-6.2.5-2.2.2.2.1" class="pilcrow">¶</a></p>
