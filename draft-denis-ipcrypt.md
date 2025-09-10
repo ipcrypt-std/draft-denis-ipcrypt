@@ -190,11 +190,9 @@ These specialized encryption methods enable several use cases:
 
 - Third-Party Integration: Encrypted IP addresses can serve as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.
 
-Each mode offers different privacy and operational characteristics. The following examples demonstrate how the same IP addresses transform under each method using the same encryption key:
+Each mode offers different privacy and operational characteristics. The following examples demonstrate how the same IP addresses transform under each method:
 
-### ipcrypt-deterministic
-
-Format-preserving: Valid IP addresses, same input always produces same output
+Format-preserving: Valid IP addresses, same input always produces same output:
 
 ~~~
 192.168.1.1   -> d1e9:518:d5bc:4487:51c6:c51f:44ed:e9f6
@@ -202,9 +200,7 @@ Format-preserving: Valid IP addresses, same input always produces same output
 192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Same output
 ~~~
 
-### ipcrypt-pfx
-
-Prefix-preserving: Maintains network structure, same prefix when IPs share prefix
+Prefix-preserving: Maintains network structure, same prefix when IPs share prefix:
 
 ~~~
 192.168.1.1   -> 251.81.131.124
@@ -212,9 +208,7 @@ Prefix-preserving: Maintains network structure, same prefix when IPs share prefi
 172.16.69.42  -> 165.228.146.177
 ~~~
 
-### ipcrypt-nd
-
-Non-deterministic: Compact 24-byte output, different each time
+Non-deterministic: Compact 24-byte output, different each time:
 
 ~~~
 192.168.1.1   -> f0ea0bbd...03aa9fcb
@@ -222,9 +216,7 @@ Non-deterministic: Compact 24-byte output, different each time
 192.168.1.254 -> 35fc2338...25abed5d  # Same input, different outputs
 ~~~
 
-### ipcrypt-ndx
-
-Extended non-deterministic: 32-byte output, unlimited operations per key
+Extended non-deterministic: 32-byte output, unlimited operations per key:
 
 ~~~
 192.168.1.1   -> 5862dc6d...ddb3693f
