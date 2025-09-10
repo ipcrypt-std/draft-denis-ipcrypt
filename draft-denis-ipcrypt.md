@@ -771,17 +771,15 @@ A diagram of this conversion process is provided in {{ipv4-address-conversion-di
 
 ~~~pseudocode
 function ipv4_to_16_bytes(ipv4_address):
-    // Split the IPv4 address into its octets
-    parts = ipv4_address.split(".")
-    if length(parts) != 4:
-         raise Error("Invalid IPv4 address")
+    // Parse the IPv4 address into 4 octets
+    octets = parseIPv4(ipv4_address)  // Returns 4 octets
     // Create a 16-byte array with the IPv4-mapped prefix
     bytes16 = [0x00] * 10         // 10 bytes of 0x00
     bytes16.append(0xFF)          // 11th byte: 0xFF
     bytes16.append(0xFF)          // 12th byte: 0xFF
     // Append each octet (converted to an 8-bit integer)
-    for part in parts:
-         bytes16.append(int(part))
+    for octet in octets:
+         bytes16.append(octet)
     return bytes16
 ~~~
 
@@ -808,7 +806,9 @@ function ipv6_to_16_bytes(ipv6_address):
 
 _Example:_ For `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"`, the output is the corresponding 16-byte sequence.
 
-## Conversion from a 16-Byte Array to an IP Address
+## Conversion from a 16-Byte Array to an IP Address String
+
+This function converts a 16-byte array back to an IP address string. For IPv6 addresses, the output conforms to {{!RFC5952}} for canonical text representation, including zero compression. Implementers SHOULD use existing IP address formatting functions from their programming language's standard library or networking libraries rather than implementing this logic from scratch.
 
 ~~~pseudocode
 function bytes_16_to_ip(bytes16):
@@ -829,14 +829,50 @@ function bytes_16_to_ip(bytes16):
          ipv4_address = join(ipv4_parts, ".")
          return ipv4_address
     else:
-         // Convert the 16 bytes to an IPv6 address
+         // Convert the 16 bytes to an IPv6 address with canonical representation
          words = []
          for i from 0 to 16 step 2:
              word = (bytes16[i] << 8) | bytes16[i+1]
-             // Format words without leading zeros for canonical IPv6 representation
-             words.append(format_hex_no_leading_zeros(word))
-         ipv6_address = join(words, ":")
-         return ipv6_address
+             words.append(word)
+         
+         // Find longest run of consecutive zeros for compression
+         best_run_start = -1
+         best_run_length = 0
+         run_start = -1
+         
+         for i from 0 to 8:
+             if words[i] == 0:
+                 if run_start == -1:
+                     run_start = i
+             else:
+                 if run_start != -1:
+                     run_length = i - run_start
+                     if run_length > best_run_length:
+                         best_run_start = run_start
+                         best_run_length = run_length
+                     run_start = -1
+         
+         // Check final run
+         if run_start != -1:
+             run_length = 8 - run_start
+             if run_length > best_run_length:
+                 best_run_start = run_start
+                 best_run_length = run_length
+         
+         // Build IPv6 string with zero compression
+         parts = []
+         i = 0
+         while i < 8:
+             if best_run_length > 1 and i == best_run_start:
+                 // Insert :: for compressed zeros
+                 parts.append("" if i == 0 else ":")
+                 parts.append("")
+                 i += best_run_length
+             else:
+                 parts.append(format_hex(words[i]))
+                 i += 1
+         
+         return join(parts, ":")
 ~~~
 
 ## Deterministic Encryption (ipcrypt-deterministic)
