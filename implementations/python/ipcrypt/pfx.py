@@ -76,27 +76,13 @@ def shift_left_one_bit(data):
     return result
 
 
-def pad_prefix_0():
-    """Pad prefix for prefix_len_bits=0 (IPv6).
-    Sets separator bit at position 0 (LSB of byte 15).
-    """
-    padded = bytearray(16)
-    padded[15] = 0x01  # Set bit at position 0 (LSB of byte 15)
-    return padded
-
-
-def pad_prefix_96(data):
-    """Pad prefix for prefix_len_bits=96 (IPv4).
-    For IPv4, the data always has format: 00...00 ffff xxxx (IPv4-mapped)
-    Result: 00000001 00...00 0000ffff (separator at pos 96, then 96 bits)
-    """
-    # The result is always the same for IPv4 addresses since they all have
-    # the same IPv4-mapped prefix (00...00 ffff)
-    padded = bytearray(16)
-    padded[3] = 0x01  # Set bit at position 96 (bit 0 of byte 4)
-    padded[14] = 0xFF
-    padded[15] = 0xFF
-    return padded
+# Constants for padding prefixes
+PAD_PREFIX_0 = bytearray(
+    [0] * 15 + [0x01]
+)  # Separator bit at position 0 (LSB of byte 15)
+PAD_PREFIX_96 = bytearray(
+    [0, 0, 0, 0x01] + [0] * 10 + [0xFF, 0xFF]
+)  # Separator at pos 96, then IPv4-mapped prefix
 
 
 def encrypt(ip, key):
@@ -132,9 +118,9 @@ def encrypt(ip, key):
 
     # Initialize padded_prefix for the starting prefix length
     if is_ipv4_mapped(bytes16):
-        padded_prefix = pad_prefix_96(bytes16)
+        padded_prefix = PAD_PREFIX_96.copy()
     else:  # prefix_start == 0
-        padded_prefix = pad_prefix_0()
+        padded_prefix = PAD_PREFIX_0.copy()
 
     # Process each bit position
     for prefix_len_bits in range(prefix_start, 128):
@@ -196,9 +182,9 @@ def decrypt(encrypted_ip, key):
 
     # Initialize padded_prefix for the starting prefix length
     if prefix_start == 0:
-        padded_prefix = pad_prefix_0()
+        padded_prefix = PAD_PREFIX_0.copy()
     else:  # prefix_start == 96
-        padded_prefix = pad_prefix_96(decrypted)
+        padded_prefix = PAD_PREFIX_96.copy()
 
     # Process each bit position
     for prefix_len_bits in range(prefix_start, 128):
