@@ -470,9 +470,9 @@ When the 32-byte key is randomly sampled from a uniform distribution, the probab
 
 ### Security Properties
 
-The `ipcrypt-pfx` construction improves upon earlier designs like CRYPTO-Pan through enhanced cryptographic security:
+The `ipcrypt-pfx` construction improves upon earlier designs such as CRYPTO-Pan through enhanced cryptographic security:
 
-- Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides security beyond the birthday bound {{SUM-OF-PRPS}}, supporting more than 2^78 distinct IP addresses per key {{REVISITING-SUM}}. This construction ensures that even with billions of encrypted addresses, security remains robust.
+- Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides security beyond the birthday bound {{SUM-OF-PRPS}}, supporting more than 2<sup>78</sup> distinct IP addresses per key {{REVISITING-SUM}}. This construction ensures that even with billions of encrypted addresses, security remains robust.
 
 - Prefix-Based Context Isolation: Each bit depends on the entire prefix history.
 
@@ -544,7 +544,7 @@ Test vectors are provided in {{ipcrypt-nd-test-vectors}} and {{ipcrypt-ndx-test-
 
 The `ipcrypt-nd` instantiation uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. Implementation details are provided in {{implementing-kiasu-bc}}. The output is 24 bytes total, consisting of an 8-byte tweak concatenated with a 16-byte ciphertext.
 
-Random sampling of an 8-byte tweak yields an expected collision after about 2^32 operations (approximately 4 billion). An `(input, tweak)` collision indicates repetition without revealing the input's value.
+Random sampling of an 8-byte tweak yields an expected collision after about 2<sup>32</sup> operations (approximately 4 billion). An `(input, tweak)` collision indicates repetition without revealing the input's value.
 
 These collision bounds apply per cryptographic key. Regular key rotation can extend secure usage beyond these bounds. The effective security is determined by the underlying block cipher's strength.
 
@@ -554,9 +554,9 @@ Test vectors are provided in {{ipcrypt-nd-test-vectors}}.
 
 The `ipcrypt-ndx` instantiation uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. The output is 32 bytes total, consisting of a 16-byte tweak concatenated with a 16-byte ciphertext.
 
-For single-block AES-XTS, independent sampling of a 16-byte tweak results in an expected collision after about 2^64 operations (approximately 18 quintillion).
+For single-block AES-XTS, independent sampling of a 16-byte tweak results in an expected collision after about 2<sup>64</sup> operations (approximately 18 quintillion).
 
-Similar to `ipcrypt-nd`, collisions reveal repetition without compromising the input value. These limits are per key, and regular key rotation extends secure usage. The effective security is governed by AES-128 strength (approximately 2^128 operations).
+Similar to `ipcrypt-nd`, collisions reveal repetition without compromising the input value. These limits are per key, and regular key rotation extends secure usage. The effective security is governed by AES-128 strength (approximately 2<sup>128</sup> operations).
 
 ### Comparison of Modes
 
@@ -624,7 +624,7 @@ This makes deterministic encryption suitable for applications where format prese
 
 The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs. An `(input, tweak)` collision reveals only that the same input was processed with that tweak, not the input's value.
 
-Security is determined by the underlying block cipher (≈2^128 for AES-128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.
+Security is determined by the underlying block cipher (≈2<sup>128</sup> for AES-128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.
 
 ## Implementation Security
 
