@@ -804,7 +804,7 @@ function ipv6_to_16_bytes(ipv6_address):
     return bytes16
 ~~~
 
-_Example:_ For `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"`, the output is the corresponding 16-byte sequence.
+_Example:_ For `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"`, the output is the corresponding 16-byte sequence `{0x20, 0x01, 0x0d, 0xb8, ..., 0x34}`.
 
 ## Conversion from a 16-Byte Array to an IP Address String
 
