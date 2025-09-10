@@ -51,8 +51,8 @@ def set_bit(data, position, value):
     """
     byte_index = 15 - (position // 8)
     bit_index = position % 8
-    if value:
-        data[byte_index] |= 1 << bit_index
+    data[byte_index] |= value << bit_index
+    # Clearing can be done but is not necessary for ipcrypt-pfx
 
 
 def shift_left_one_bit(data):
