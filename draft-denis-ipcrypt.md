@@ -831,15 +831,15 @@ function bytes_16_to_ip(bytes16):
     else:
          // Convert the 16 bytes to an IPv6 address with canonical representation
          words = []
-         for i from 0 to 16 step 2:
-             word = (bytes16[i] << 8) | bytes16[i+1]
+         for i from 0 to 8:
+             word = (bytes16[i*2] << 8) | bytes16[i*2+1]
              words.append(word)
-         
+
          // Find longest run of consecutive zeros for compression
          best_run_start = -1
          best_run_length = 0
          run_start = -1
-         
+
          for i from 0 to 8:
              if words[i] == 0:
                  if run_start == -1:
@@ -851,14 +851,14 @@ function bytes_16_to_ip(bytes16):
                          best_run_start = run_start
                          best_run_length = run_length
                      run_start = -1
-         
+
          // Check final run
          if run_start != -1:
              run_length = 8 - run_start
              if run_length > best_run_length:
                  best_run_start = run_start
                  best_run_length = run_length
-         
+
          // Build IPv6 string with zero compression
          parts = []
          i = 0
@@ -871,7 +871,7 @@ function bytes_16_to_ip(bytes16):
              else:
                  parts.append(format_hex(words[i]))
                  i += 1
-         
+
          return join(parts, ":")
 ~~~
 
