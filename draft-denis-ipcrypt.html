@@ -1302,7 +1302,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-ipv6-address-conversion" class="internal xref">IPv6 Address Conversion</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-conversion-from-a-16-byte-a" class="internal xref">Conversion from a 16-Byte Array to an IP Address</a></p>
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-conversion-from-a-16-byte-a" class="internal xref">Conversion from a 16-Byte Array to an IP Address String</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.5">
                 <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="auto internal xref">9.5</a>.  <a href="#name-deterministic-encryption-ip" class="internal xref">Deterministic Encryption (ipcrypt-deterministic)</a></p>
@@ -1504,7 +1504,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </div>
 <ul class="normal">
 <li class="normal" id="section-1.1-10.1">
-            <p id="section-1.1-10.1.1">Non-deterministic: Compact 24-byte output, different each time:<a href="#section-1.1-10.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-10.1.1">Non-deterministic: Larger output, different each time:<a href="#section-1.1-10.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <div class="alignLeft art-text artwork" id="section-1.1-11">
@@ -1514,19 +1514,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 192.168.1.254 -&gt; 35fc2338...25abed5d  # Same input, different outputs
 </pre><a href="#section-1.1-11" class="pilcrow">¶</a>
 </div>
-<ul class="normal">
-<li class="normal" id="section-1.1-12.1">
-            <p id="section-1.1-12.1.1">Extended non-deterministic: 32-byte output, unlimited operations per key:<a href="#section-1.1-12.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<div class="alignLeft art-text artwork" id="section-1.1-13">
-<pre>
-192.168.1.1   -&gt; 5862dc6d...ddb3693f
-192.168.1.254 -&gt; e697ca59...e5c41875
-192.168.1.254 -&gt; 9b11a0aa...39de0a77  # Same input, different outputs
-</pre><a href="#section-1.1-13" class="pilcrow">¶</a>
-</div>
-<p id="section-1.1-14">For implementation guidelines, see <a href="#implementation-details" class="auto internal xref">Section 9</a>.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
+<p id="section-1.1-12">For implementation guidelines, see <a href="#implementation-details" class="auto internal xref">Section 9</a>.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="relationship-to-ietf-work">
@@ -2507,17 +2495,15 @@ IPv4 Address:           192.0.2.1
 <div class="lang-pseudocode sourcecode" id="section-9.2-2">
 <pre>
 function ipv4_to_16_bytes(ipv4_address):
-    // Split the IPv4 address into its octets
-    parts = ipv4_address.split(".")
-    if length(parts) != 4:
-         raise Error("Invalid IPv4 address")
+    // Parse the IPv4 address into 4 octets
+    octets = parseIPv4(ipv4_address)  // Returns 4 octets
     // Create a 16-byte array with the IPv4-mapped prefix
     bytes16 = [0x00] * 10         // 10 bytes of 0x00
     bytes16.append(0xFF)          // 11th byte: 0xFF
     bytes16.append(0xFF)          // 12th byte: 0xFF
     // Append each octet (converted to an 8-bit integer)
-    for part in parts:
-         bytes16.append(int(part))
+    for octet in octets:
+         bytes16.append(octet)
     return bytes16
 </pre><a href="#section-9.2-2" class="pilcrow">¶</a>
 </div>
@@ -2551,12 +2537,13 @@ function ipv6_to_16_bytes(ipv6_address):
 <p id="section-9.3-2"><em>Example:</em> For <code>"2001:0db8:85a3:0000:0000:8a2e:0370:7334"</code>, the output is the corresponding 16-byte sequence.<a href="#section-9.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="conversion-from-a-16-byte-array-to-an-ip-address">
+<div id="conversion-from-a-16-byte-array-to-an-ip-address-string">
 <section id="section-9.4">
         <h3 id="name-conversion-from-a-16-byte-a">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-conversion-from-a-16-byte-a" class="section-name selfRef">Conversion from a 16-Byte Array to an IP Address</a>
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-conversion-from-a-16-byte-a" class="section-name selfRef">Conversion from a 16-Byte Array to an IP Address String</a>
         </h3>
-<div class="lang-pseudocode sourcecode" id="section-9.4-1">
+<p id="section-9.4-1">This function converts a 16-byte array back to an IP address string. For IPv6 addresses, the output conforms to <span>[<a href="#RFC5952" class="cite xref">RFC5952</a>]</span> for canonical text representation, including zero compression. Implementers SHOULD use existing IP address formatting functions from their programming language’s standard library or networking libraries rather than implementing this logic from scratch.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
+<div class="breakable lang-pseudocode sourcecode" id="section-9.4-2">
 <pre>
 function bytes_16_to_ip(bytes16):
     if length(bytes16) != 16:
@@ -2576,15 +2563,51 @@ function bytes_16_to_ip(bytes16):
          ipv4_address = join(ipv4_parts, ".")
          return ipv4_address
     else:
-         // Convert the 16 bytes to an IPv6 address
+         // Convert the 16 bytes to an IPv6 address with canonical representation
          words = []
-         for i from 0 to 16 step 2:
-             word = (bytes16[i] &lt;&lt; 8) | bytes16[i+1]
-             // Format words without leading zeros for canonical IPv6 representation
-             words.append(format_hex_no_leading_zeros(word))
-         ipv6_address = join(words, ":")
-         return ipv6_address
-</pre><a href="#section-9.4-1" class="pilcrow">¶</a>
+         for i from 0 to 8:
+             word = (bytes16[i*2] &lt;&lt; 8) | bytes16[i*2+1]
+             words.append(word)
+
+         // Find longest run of consecutive zeros for compression
+         best_run_start = -1
+         best_run_length = 0
+         run_start = -1
+
+         for i from 0 to 8:
+             if words[i] == 0:
+                 if run_start == -1:
+                     run_start = i
+             else:
+                 if run_start != -1:
+                     run_length = i - run_start
+                     if run_length &gt; best_run_length:
+                         best_run_start = run_start
+                         best_run_length = run_length
+                     run_start = -1
+
+         // Check final run
+         if run_start != -1:
+             run_length = 8 - run_start
+             if run_length &gt; best_run_length:
+                 best_run_start = run_start
+                 best_run_length = run_length
+
+         // Build IPv6 string with zero compression
+         parts = []
+         i = 0
+         while i &lt; 8:
+             if best_run_length &gt; 1 and i == best_run_start:
+                 // Insert :: for compressed zeros
+                 parts.append("" if i == 0 else ":")
+                 parts.append("")
+                 i += best_run_length
+             else:
+                 parts.append(format_hex(words[i]))
+                 i += 1
+
+         return join(parts, ":")
+</pre><a href="#section-9.4-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -3305,6 +3328,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <dt id="RFC4291">[RFC4291]</dt>
         <dd>
 <span class="refAuthor">Hinden, R.</span> and <span class="refAuthor">S. Deering</span>, <span class="refTitle">"IP Version 6 Addressing Architecture"</span>, <span class="seriesInfo">RFC 4291</span>, <span class="seriesInfo">DOI 10.17487/RFC4291</span>, <time datetime="2006-02" class="refDate">February 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4291">https://www.rfc-editor.org/rfc/rfc4291</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5952">[RFC5952]</dt>
+        <dd>
+<span class="refAuthor">Kawamura, S.</span> and <span class="refAuthor">M. Kawashima</span>, <span class="refTitle">"A Recommendation for IPv6 Address Text Representation"</span>, <span class="seriesInfo">RFC 5952</span>, <span class="seriesInfo">DOI 10.17487/RFC5952</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5952">https://www.rfc-editor.org/rfc/rfc5952</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6973">[RFC6973]</dt>
         <dd>
