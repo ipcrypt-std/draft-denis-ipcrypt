@@ -412,7 +412,7 @@ Unlike standard encryption that completely scrambles addresses, prefix-preservin
 
 This mode balances privacy with analytical capability: individual addresses remain encrypted and network identities are cryptographically transformed, but network relationships remain visible through shared encrypted prefixes.
 
-## Prefix-Preserving Encryption Algorithm
+## Prefix-Preserving Construction
 
 The encryption process achieves prefix preservation through a bit-by-bit transformation that maintains consistency across addresses with shared prefixes. For any two IP addresses sharing the first N bits, their encrypted forms also share the first N bits. This property holds recursively for all prefix lengths.
 
