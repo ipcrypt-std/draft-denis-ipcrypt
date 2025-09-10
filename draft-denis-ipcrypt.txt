@@ -187,20 +187,19 @@ Table of Contents
    user privacy while maintaining operational capabilities.  Generic
    encryption systems present challenges for IP addresses: such systems
    expand data unpredictably, lack compatibility with network tools, and
-   operate at reduced speeds for high-volume processing.  The
-   specialized methods in this specification address these requirements
-   through cryptographic techniques designed for IP addresses:
+   are not designed for high-volume processing.  The specialized methods
+   in this specification address these requirements through
+   cryptographic techniques designed for IP addresses:
 
    *  Efficiency and Compactness: All variants operate on 128 bits,
       achieving single-block encryption speed required for network-rate
       processing.  Non-deterministic variants add only 8-16 bytes of
-      tweak overhead versus potentially hundreds of bytes with generic
-      encryption.  This characteristic enables processing addresses in
-      real-time rather than requiring batch operations.
+      tweak overhead.  This characteristic enables processing addresses
+      in real-time rather than requiring batch operations.
 
    *  High Usage Limits: Non-deterministic variants safely handle
-      massive volumes - approximately 4 billion operations for ipcrypt-
-      nd and 18 quintillion for ipcrypt-ndx per key - without degrading
+      massive volumes: approximately 4 billion operations for ipcrypt-nd
+      and 18 quintillion for ipcrypt-ndx per key, without degrading
       security.  Generic encryption often requires complex key rotation
       schemes at lower thresholds.
 
@@ -240,11 +239,7 @@ Table of Contents
       [RSSAC040], enabling research while protecting source IP privacy.
       The ipcrypt-pfx variant specifically preserves network prefixes
       for network-level analytics, while other methods completely
-      scramble network hierarchy.  Organizations requiring geographic or
-      ASN metadata with non-prefix-preserving modes SHOULD extract and
-      store such data separately (e.g., country, ASN) rather than
-      utilizing IP address truncation, which provides inconsistent
-      privacy protection and irreversibly destroys information.
+      scramble network hierarchy.
 
    *  Third-Party Integration: Encrypted IP addresses can serve as
       privacy-preserving identifiers when interacting with untrusted
@@ -254,28 +249,28 @@ Table of Contents
    The following examples demonstrate how the same IP addresses
    transform under each method:
 
-   Format-preserving: Valid IP addresses, same input always produces
-   same output:
+   *  Format-preserving: Valid IP addresses, same input always produces
+      same output:
 
  192.168.1.1   -> d1e9:518:d5bc:4487:51c6:c51f:44ed:e9f6
  192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696
  192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Same output
 
-   Prefix-preserving: Maintains network structure, same prefix when IPs
-   share prefix:
+   *  Prefix-preserving: Maintains network structure, same prefix when
+      IPs share prefix:
 
    192.168.1.1   -> 251.81.131.124
    192.168.1.254 -> 251.81.131.159       # Prefix is preserved
    172.16.69.42  -> 165.228.146.177
 
-   Non-deterministic: Compact 24-byte output, different each time:
+   *  Non-deterministic: Compact 24-byte output, different each time:
 
    192.168.1.1   -> f0ea0bbd...03aa9fcb
    192.168.1.254 -> 620b58d8...2ff8086f
    192.168.1.254 -> 35fc2338...25abed5d  # Same input, different outputs
 
-   Extended non-deterministic: 32-byte output, unlimited operations per
-   key:
+   *  Extended non-deterministic: 32-byte output, unlimited operations
+      per key:
 
    192.168.1.1   -> 5862dc6d...ddb3693f
    192.168.1.254 -> e697ca59...e5c41875
@@ -310,8 +305,27 @@ Table of Contents
 
    *  IP Address: An IPv4 or IPv6 address as defined in [RFC4291].
 
+   *  IPv4-mapped IPv6 Address: An IPv6 address format (::ffff:a.b.c.d)
+      used to represent IPv4 addresses within the IPv6 address space,
+      enabling uniform processing of both address types.
+
    *  16-Byte Representation: A fixed-length representation used for
       both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
+
+   *  Block Cipher: A deterministic cryptographic algorithm that
+      encrypts fixed-size blocks of data (128 bits in this
+      specification) using a secret key.
+
+   *  Permutation: A bijective function where each distinct input maps
+      to a unique output, ensuring reversibility.
+
+   *  Pseudorandom Function (PRF): A deterministic function that
+      produces output computationally indistinguishable from truly
+      random values.
+
+   *  Tweakable Block Cipher (TBC): A block cipher that accepts an
+      additional non-secret parameter (tweak) along with the key and
+      plaintext, allowing domain separation without changing keys.
 
    *  Tweak: A non-secret, additional input to a tweakable block cipher
       that further randomizes the output.
@@ -322,6 +336,15 @@ Table of Contents
    *  Non-Deterministic Encryption: Encryption that produces different
       ciphertexts for the same input due to the inclusion of a randomly
       sampled tweak.
+
+   *  Prefix-Preserving Encryption: An encryption mode where IP
+      addresses from the same network produce ciphertexts that share a
+      common encrypted prefix, maintaining network relationships while
+      obscuring actual network identities.
+
+   *  Birthday Bound: The point at which collisions become statistically
+      likely in a random sampling process, approximately 2^(n/2)
+      operations for n-bit values.
 
    *  (Input, Tweak) Collision: A scenario where the same input is
       encrypted with the same tweak.  This reveals that the input was

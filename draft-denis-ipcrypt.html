@@ -1447,13 +1447,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
         <h3 id="name-use-cases-and-motivations">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-use-cases-and-motivations" class="section-name selfRef">Use Cases and Motivations</a>
         </h3>
-<p id="section-1.1-1">Organizations handling IP addresses require mechanisms to protect user privacy while maintaining operational capabilities. Generic encryption systems present challenges for IP addresses: such systems expand data unpredictably, lack compatibility with network tools, and operate at reduced speeds for high-volume processing. The specialized methods in this specification address these requirements through cryptographic techniques designed for IP addresses:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-1">Organizations handling IP addresses require mechanisms to protect user privacy while maintaining operational capabilities. Generic encryption systems present challenges for IP addresses: such systems expand data unpredictably, lack compatibility with network tools, and are not designed for high-volume processing. The specialized methods in this specification address these requirements through cryptographic techniques designed for IP addresses:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-2.1">
-            <p id="section-1.1-2.1.1">Efficiency and Compactness: All variants operate on 128 bits, achieving single-block encryption speed required for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead versus potentially hundreds of bytes with generic encryption. This characteristic enables processing addresses in real-time rather than requiring batch operations.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.1.1">Efficiency and Compactness: All variants operate on 128 bits, achieving single-block encryption speed required for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead. This characteristic enables processing addresses in real-time rather than requiring batch operations.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.2">
-            <p id="section-1.1-2.2.1">High Usage Limits: Non-deterministic variants safely handle massive volumes - approximately 4 billion operations for <code>ipcrypt-nd</code> and 18 quintillion for <code>ipcrypt-ndx</code> per key - without degrading security. Generic encryption often requires complex key rotation schemes at lower thresholds.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.2.1">High Usage Limits: Non-deterministic variants safely handle massive volumes: approximately 4 billion operations for <code>ipcrypt-nd</code> and 18 quintillion for <code>ipcrypt-ndx</code> per key, without degrading security. Generic encryption often requires complex key rotation schemes at lower thresholds.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.3">
             <p id="section-1.1-2.3.1">Format Preservation: The <code>ipcrypt-deterministic</code> and <code>ipcrypt-pfx</code> variants produce valid IP addresses rather than arbitrary ciphertext, enabling encrypted addresses to pass through existing network infrastructure, monitoring tools, and databases without modification. The <code>ipcrypt-pfx</code> variant uniquely preserves network prefix relationships while maintaining the original address type and size, enabling network-level analytics while protecting individual address identity (see <a href="#format-preservation-and-limitations" class="auto internal xref">Section 5.2</a>).<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
@@ -1471,14 +1471,18 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-1.1-4.2.1">Correlation Attack Resistance: While deterministic encryption can reveal repeated inputs, the non-deterministic variants leverage random tweaks to hide patterns and enhance confidentiality (see <a href="#non-deterministic-encryption" class="auto internal xref">Section 7</a>).<a href="#section-1.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-4.3">
-            <p id="section-1.1-4.3.1">Privacy-Preserving Analytics: Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without revealing the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in <span>[<a href="#RSSAC040" class="cite xref">RSSAC040</a>]</span>, enabling research while protecting source IP privacy. The <code>ipcrypt-pfx</code> variant specifically preserves network prefixes for network-level analytics, while other methods completely scramble network hierarchy. Organizations requiring geographic or ASN metadata with non-prefix-preserving modes SHOULD extract and store such data separately (e.g., country, ASN) rather than utilizing IP address truncation, which provides inconsistent privacy protection and irreversibly destroys information.<a href="#section-1.1-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.3.1">Privacy-Preserving Analytics: Encrypted IP addresses can be used directly for operations such as counting unique clients, rate limiting, or deduplication—without revealing the original values to third-party processors. This approach addresses the anonymization requirements for DNS query data sharing outlined in <span>[<a href="#RSSAC040" class="cite xref">RSSAC040</a>]</span>, enabling research while protecting source IP privacy. The <code>ipcrypt-pfx</code> variant specifically preserves network prefixes for network-level analytics, while other methods completely scramble network hierarchy.<a href="#section-1.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-4.4">
             <p id="section-1.1-4.4.1">Third-Party Integration: Encrypted IP addresses can serve as privacy-preserving identifiers when interacting with untrusted services, cloud providers, or external platforms.<a href="#section-1.1-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.1-5">Each mode offers different privacy and operational characteristics. The following examples demonstrate how the same IP addresses transform under each method:<a href="#section-1.1-5" class="pilcrow">¶</a></p>
-<p id="section-1.1-6">Format-preserving: Valid IP addresses, same input always produces same output:<a href="#section-1.1-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-6.1">
+            <p id="section-1.1-6.1.1">Format-preserving: Valid IP addresses, same input always produces same output:<a href="#section-1.1-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 <div class="alignLeft art-text artwork" id="section-1.1-7">
 <pre>
 192.168.1.1   -&gt; d1e9:518:d5bc:4487:51c6:c51f:44ed:e9f6
@@ -1486,7 +1490,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 192.168.1.254 -&gt; fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Same output
 </pre><a href="#section-1.1-7" class="pilcrow">¶</a>
 </div>
-<p id="section-1.1-8">Prefix-preserving: Maintains network structure, same prefix when IPs share prefix:<a href="#section-1.1-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-8.1">
+            <p id="section-1.1-8.1.1">Prefix-preserving: Maintains network structure, same prefix when IPs share prefix:<a href="#section-1.1-8.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 <div class="alignLeft art-text artwork" id="section-1.1-9">
 <pre>
 192.168.1.1   -&gt; 251.81.131.124
@@ -1494,7 +1502,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 172.16.69.42  -&gt; 165.228.146.177
 </pre><a href="#section-1.1-9" class="pilcrow">¶</a>
 </div>
-<p id="section-1.1-10">Non-deterministic: Compact 24-byte output, different each time:<a href="#section-1.1-10" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-10.1">
+            <p id="section-1.1-10.1.1">Non-deterministic: Compact 24-byte output, different each time:<a href="#section-1.1-10.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 <div class="alignLeft art-text artwork" id="section-1.1-11">
 <pre>
 192.168.1.1   -&gt; f0ea0bbd...03aa9fcb
@@ -1502,7 +1514,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 192.168.1.254 -&gt; 35fc2338...25abed5d  # Same input, different outputs
 </pre><a href="#section-1.1-11" class="pilcrow">¶</a>
 </div>
-<p id="section-1.1-12">Extended non-deterministic: 32-byte output, unlimited operations per key:<a href="#section-1.1-12" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-12.1">
+            <p id="section-1.1-12.1.1">Extended non-deterministic: 32-byte output, unlimited operations per key:<a href="#section-1.1-12.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 <div class="alignLeft art-text artwork" id="section-1.1-13">
 <pre>
 192.168.1.1   -&gt; 5862dc6d...ddb3693f
@@ -1537,19 +1553,40 @@ svg :is([fill="white"], [fill^="#fff"]) {
           <p id="section-2-3.1.1">IP Address: An IPv4 or IPv6 address as defined in <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.2">
-          <p id="section-2-3.2.1">16-Byte Representation: A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.2.1">IPv4-mapped IPv6 Address: An IPv6 address format (::ffff:a.b.c.d) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.3">
-          <p id="section-2-3.3.1">Tweak: A non-secret, additional input to a tweakable block cipher that further randomizes the output.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.3.1">16-Byte Representation: A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.4">
-          <p id="section-2-3.4.1">Deterministic Encryption: Encryption that always produces the same ciphertext for a given input and key.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.4.1">Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits in this specification) using a secret key.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.5">
-          <p id="section-2-3.5.1">Non-Deterministic Encryption: Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.<a href="#section-2-3.5.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.5.1">Permutation: A bijective function where each distinct input maps to a unique output, ensuring reversibility.<a href="#section-2-3.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.6">
-          <p id="section-2-3.6.1">(Input, Tweak) Collision: A scenario where the same input is encrypted with the same tweak. This reveals that the input was repeated but not the input’s value.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.6.1">Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from truly random values.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-3.7">
+          <p id="section-2-3.7.1">Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.<a href="#section-2-3.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-3.8">
+          <p id="section-2-3.8.1">Tweak: A non-secret, additional input to a tweakable block cipher that further randomizes the output.<a href="#section-2-3.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-3.9">
+          <p id="section-2-3.9.1">Deterministic Encryption: Encryption that always produces the same ciphertext for a given input and key.<a href="#section-2-3.9.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-3.10">
+          <p id="section-2-3.10.1">Non-Deterministic Encryption: Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.<a href="#section-2-3.10.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-3.11">
+          <p id="section-2-3.11.1">Prefix-Preserving Encryption: An encryption mode where IP addresses from the same network produce ciphertexts that share a common encrypted prefix, maintaining network relationships while obscuring actual network identities.<a href="#section-2-3.11.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-3.12">
+          <p id="section-2-3.12.1">Birthday Bound: The point at which collisions become statistically likely in a random sampling process, approximately 2<sup>(n/2)</sup> operations for n-bit values.<a href="#section-2-3.12.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-2-3.13">
+          <p id="section-2-3.13.1">(Input, Tweak) Collision: A scenario where the same input is encrypted with the same tweak. This reveals that the input was repeated but not the input’s value.<a href="#section-2-3.13.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
