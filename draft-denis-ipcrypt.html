@@ -1966,7 +1966,8 @@ IPv4 Address:           192.0.2.1
           <h4 id="name-key-requirements">
 <a href="#section-6.2.3" class="section-number selfRef">6.2.3. </a><a href="#name-key-requirements" class="section-name selfRef">Key Requirements</a>
           </h4>
-<p id="section-6.2.3-1">CRITICAL: The two 16-byte halves of the 32-byte key (<code>K1</code> and <code>K2</code>) MUST NOT be identical. Using identical values for <code>K1</code> and <code>K2</code> (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-1">The two 16-byte halves of the 32-byte key (<code>K1</code> and <code>K2</code>) MUST NOT be identical. Using identical values for <code>K1</code> and <code>K2</code> (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-2">When the 32-byte key is randomly sampled from a uniform distribution, the probability that <code>K1 = K2</code> is statistically negligible.<a href="#section-6.2.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-properties">
