@@ -28,11 +28,12 @@ def bytes_to_ip(bytes16):
         return ipaddress.IPv6Address(bytes16)
 
 
-def is_ipv4(ip):
-    """Check if an IP address is IPv4."""
-    if isinstance(ip, str):
-        ip = ipaddress.ip_address(ip)
-    return isinstance(ip, ipaddress.IPv4Address)
+def is_ipv4_mapped(bytes16):
+    """Check if a 16-byte array has the IPv4-mapped IPv6 prefix (::ffff:0:0/96)."""
+    if len(bytes16) != 16:
+        return False
+    # Check for IPv4-mapped prefix: first 10 bytes are 0x00, bytes 10-11 are 0xFF
+    return bytes16[:10] == b"\x00" * 10 and bytes16[10:12] == b"\xff\xff"
 
 
 def get_bit(data, position):
@@ -118,18 +119,19 @@ def encrypt(ip, key):
     encrypted = bytearray(16)
 
     # Determine starting point
-    prefix_start = 96 if is_ipv4(ip) else 0
-
-    # If IPv4, copy the IPv4-mapped prefix
-    if is_ipv4(ip):
+    if is_ipv4_mapped(bytes16):
+        prefix_start = 96
+        # If IPv4-mapped, copy the IPv4-mapped prefix
         encrypted[:12] = bytes16[:12]
+    else:
+        prefix_start = 0
 
     # Create AES cipher objects
     cipher1 = AES.new(K1, AES.MODE_ECB)
     cipher2 = AES.new(K2, AES.MODE_ECB)
 
     # Initialize padded_prefix for the starting prefix length
-    if is_ipv4(ip):
+    if is_ipv4_mapped(bytes16):
         padded_prefix = pad_prefix_96(bytes16)
     else:  # prefix_start == 0
         padded_prefix = pad_prefix_0()
@@ -179,14 +181,14 @@ def decrypt(encrypted_ip, key):
     # Initialize decrypted result
     decrypted = bytearray(16)
 
-    # For decryption, we need to determine if this was originally IPv4
-    # IPv4 addresses are encrypted with prefix_start=96, so if the encrypted
-    # IP is an IPv4 address, we know the original was also IPv4
-    prefix_start = 96 if is_ipv4(encrypted_ip) else 0
-
-    # If this was originally IPv4, set up the IPv4-mapped IPv6 prefix
-    if prefix_start == 96:
+    # For decryption, we need to determine if this was originally IPv4-mapped
+    # IPv4-mapped addresses are encrypted with prefix_start=96
+    if is_ipv4_mapped(encrypted_bytes):
+        prefix_start = 96
+        # If this was originally IPv4, set up the IPv4-mapped IPv6 prefix
         decrypted[10:12] = b"\xff\xff"
+    else:
+        prefix_start = 0
 
     # Create AES cipher objects
     cipher1 = AES.new(K1, AES.MODE_ECB)
