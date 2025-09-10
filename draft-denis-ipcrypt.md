@@ -272,6 +272,10 @@ IPv4 Address:           192.0.2.1
 16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
 ~~~
 
+Note on representation equivalence: For all `ipcrypt` variants, encrypting an IPv4 address and encrypting its IPv4-mapped IPv6 form (`::FFFF:a.b.c.d`) produce the same encrypted output.
+
+This behavior is intentional: in the intended use cases, IP addresses function as identifiers, and producing a single encrypted identifier for the same endpoint across representations avoids ambiguity.
+
 ## Converting from a 16-Byte Representation to an IP Address
 
 Conversion algorithm:
