@@ -1266,7 +1266,7 @@ function pad_tweak(tweak):
     // Output: 16-byte padded tweak
     padded = [0] * 16
     for i in range(0, 4):
-        padded[i*4] = tweak[i*2]
+        padded[i*4]   = tweak[i*2]
         padded[i*4+1] = tweak[i*2+1]
     return padded
 
