@@ -661,7 +661,7 @@ IPv4 Address:           192.0.2.1
 
 6.2.4.  Security Properties
 
-   The ipcrypt-pfx construction improves upon earlier designs like
+   The ipcrypt-pfx construction improves upon earlier designs such as
    CRYPTO-Pan through enhanced cryptographic security:
 
    *  Sum-of-Permutations: The XOR of two independently keyed AES-128
