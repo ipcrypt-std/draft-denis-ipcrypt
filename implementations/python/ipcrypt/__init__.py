@@ -5,7 +5,7 @@ and obfuscation algorithms as defined in the IPCrypt specification.
 """
 
 __version__ = "0.1.0"
-__author__ = "IPCrypt Contributors"
+__author__ = "Frank Denis"
 
 from .deterministic import encrypt as deterministic_encrypt
 from .deterministic import decrypt as deterministic_decrypt
