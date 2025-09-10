@@ -162,7 +162,7 @@ Four concrete instantiations are defined: `ipcrypt-deterministic` provides deter
 
 # Introduction
 
-IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing variable privacy levels; A /24 mask may obscure one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and have limited interoperability.
+IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing variable privacy levels; a /24 mask may obscure one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and have limited interoperability.
 
 This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation.
 
@@ -323,7 +323,7 @@ Implementation details are provided in {{implementation-details}}.
 
 ## ipcrypt-deterministic
 
-The `ipcrypt-deterministic` instantiation employs AES-128 in a single-block operation. The key MUST be 16 bytes (128 bits). As AES-128 is a permutation, each distinct input maps to a unique ciphertext, preserving the IP address format.
+The `ipcrypt-deterministic` instantiation employs AES-128 in a single-block operation. The key MUST be 16 bytes (128 bits). As AES-128 is a permutation, each distinct input maps to a unique ciphertext, producing a valid IP address representation.
 
 Test vectors are provided in {{ipcrypt-deterministic-test-vectors}}.
 
@@ -399,7 +399,7 @@ Example storage schema:
 ~~~
 
 
-# Prefix-Preserving Encryption
+# Prefix-Preserving Encryption {#prefix-preserving-encryption}
 
 Prefix-preserving encryption maintains network structure in encrypted IP addresses. Addresses from the same network produce encrypted addresses that share a common prefix, enabling privacy-preserving network analytics while preventing identification of specific networks or users.
 
@@ -596,7 +596,7 @@ While this specification recommends uniformly random tweaks for non-deterministi
 
 Although the birthday bound presents considerations with random tweaks, random tweaks remain the recommended approach for practical deployments.
 
-# Security Considerations
+# Security Considerations {#security-considerations}
 
 The methods specified in this document provide strong confidentiality guarantees but explicitly do not provide integrity protection:
 
@@ -929,7 +929,7 @@ function ipcrypt_pfx_encrypt(ip_address, key):
     // If we encrypt an IPv4 address, start where the IPv4 address starts (bit 96)
     // Note the first 12 bytes of bytes16 are already set to the prefix for IPv4 mapping in that case
     // This provides domain separation between an IPv4 address and the first 32 bits of an IPv6 address
-    if is_ipv4(ip_address):
+    if is_ipv4_mapped(bytes16):
         prefix_start = 96
         // Set up the IPv4-mapped IPv6 prefix
         encrypted[10] = 0xFF
@@ -986,7 +986,7 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
     decrypted = [0] * 16
 
     // If we decrypt an IPv4 address, start where the IPv4 address starts (bit 96)
-    if is_ipv4(encrypted_ip):
+    if is_ipv4_mapped(encrypted_bytes):
         prefix_start = 96
         // Set up the IPv4-mapped IPv6 prefix
         decrypted[10] = 0xFF
@@ -1031,10 +1031,10 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
 The following helper functions are used in the `ipcrypt-pfx` implementation:
 
 ~~~pseudocode
-function is_ipv4(ip_address):
-    // Check if the IP address is IPv4 based on its byte length
-    // IPv4 addresses are 4 bytes, IPv6 addresses are 16 bytes
-    return length(ip_address) == 4
+function is_ipv4_mapped(bytes16):
+    // Returns true if the 16-byte array has the IPv4-mapped IPv6 prefix (::ffff:0:0/96)
+    ipv4_mapped_prefix = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF]
+    return bytes16[0..12] == ipv4_mapped_prefix
 
 function get_bit(data, position):
     // Extract bit at position from 16-byte array representing an IPv6 address in network byte order
