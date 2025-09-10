@@ -417,9 +417,9 @@ def generate_test_vectors():
 
     # Prefix-preserving test vectors (IPv6 /32)
     pfx_ipv6_32 = [
-        "2001:db8:3a5c::e7d1:4b9f:2c8a:f673",
-        "2001:db8:9f27::b4e2:7a3d:5f91:c8e6",
-        "2001:db8:d8b4::193c:a5e7:8b2f:46d1",
+        "2001:db8:3a5c:0:e7d1:4b9f:2c8a:f673",
+        "2001:db8:9f27:0:b4e2:7a3d:5f91:c8e6",
+        "2001:db8:d8b4:0:193c:a5e7:8b2f:46d1",
     ]
 
     for ip in pfx_ipv6_32:
