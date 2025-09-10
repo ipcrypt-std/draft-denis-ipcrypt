@@ -868,7 +868,7 @@ function bytes_16_to_ip(bytes16):
          parts = []
          i = 0
          while i < 8:
-             if best_run_length > 1 and i == best_run_start:
+             if best_run_length >= 2 and i == best_run_start:
                  // Insert :: for compressed zeros
                  parts.append("" if i == 0 else ":")
                  parts.append("")
