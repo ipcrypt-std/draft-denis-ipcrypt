@@ -208,20 +208,12 @@ Each mode offers different privacy and operational characteristics. The followin
 172.16.69.42  -> 165.228.146.177
 ~~~
 
-- Non-deterministic: Compact 24-byte output, different each time:
+- Non-deterministic: Larger output, different each time:
 
 ~~~
 192.168.1.1   -> f0ea0bbd...03aa9fcb
 192.168.1.254 -> 620b58d8...2ff8086f
 192.168.1.254 -> 35fc2338...25abed5d  # Same input, different outputs
-~~~
-
-- Extended non-deterministic: 32-byte output, unlimited operations per key:
-
-~~~
-192.168.1.1   -> 5862dc6d...ddb3693f
-192.168.1.254 -> e697ca59...e5c41875
-192.168.1.254 -> 9b11a0aa...39de0a77  # Same input, different outputs
 ~~~
 
 For implementation guidelines, see {{implementation-details}}.
