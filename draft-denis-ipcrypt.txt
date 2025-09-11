@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                         10 September 2025
-Expires: 14 March 2026
+Intended status: Informational                         11 September 2025
+Expires: 15 March 2026
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 March 2026.
+   This Internet-Draft will expire on 15 March 2026.
 
 Copyright Notice
 
@@ -1676,20 +1676,9 @@ IPv4 Address:           192.0.2.1
 
 12.1.  Normative References
 
-   [FAST]     Doh, Y., Ha, J., and J. Kim, "FAST: Format-Preserving
-              Encryption via Shortened AES Tweakable Block Cipher",
-              Cryptology ePrint Archive Report 2021/1171, 12 September
-              2021, <https://eprint.iacr.org/2021/1171>.
-
    [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
               26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
               NIST.FIPS.197.pdf>.
-
-   [IEEE-P1619]
-              IEEE, "IEEE Standard for Cryptographic Protection of Data
-              on Block-Oriented Storage Devices", IEEE 1619-2007, 18
-              December 2007,
-              <https://standards.ieee.org/ieee/1619/2041/>.
 
    [NIST-SP-800-38G]
               NIST, "Recommendation for Block Cipher Modes of Operation:
@@ -1740,53 +1729,62 @@ IPv4 Address:           192.0.2.1
 
 12.2.  Informative References
 
-   [BRW2005]  Bellare, M., Rogaway, P., and D. Wagner, "Format-
-              Preserving Encryption", CRYPTO 2005, 2005,
+   [BRW2005]  Black, J. and P. Rogaway, "Format-Preserving Encryption",
+              CRYPTO 2005, 2005,
               <https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf>.
 
    [DEOXYS-BC]
               Jean, J., Nikolić, I., and T. Peyrin, "Deoxys-BC: A Highly
               Secure Tweakable Block Cipher", Cryptology ePrint
               Archive Paper 2014/427, 2014,
-              <https://eprint.iacr.org/2014/427>.
+              <https://competitions.cr.yp.to/round3/deoxysv14.pdf>.
 
-   [IPCRYPT2] Denis, F., "ipcrypt2: IP address encryption/obfuscation
-              tool", 2025, <https://github.com/ipcrypt-std/ipcrypt2>.
+   [FAST]     Betul Durak, F., Horst, H., and S. Vaudenay, "FAST:
+              Format-Preserving Encryption via Shortened AES Tweakable
+              Block Cipher", Cryptology ePrint Archive Report 2021/1171,
+              12 September 2021,
+              <https://eprint.iacr.org/2021/1171.pdf>.
+
+   [IEEE-P1619]
+              IEEE, "IEEE Standard for Cryptographic Protection of Data
+              on Block-Oriented Storage Devices", IEEE 1619-2007, 18
+              December 2007,
+              <https://ieeexplore.ieee.org/document/4493450>.
 
    [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
               Block Ciphers: the TWEAKEY Framework", Cryptology ePrint
               Archive Paper 2014/831, 2014,
-              <https://eprint.iacr.org/2014/831>.
+              <https://eprint.iacr.org/2014/831.pdf>.
 
    [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable Block
               Ciphers", Fast Software Encryption 2002, 2002,
-              <https://www.cs.berkeley.edu/~daw/papers/tweak-
-              crypto02.pdf>.
+              <https://people.csail.mit.edu/rivest/pubs/LRW02.pdf>.
 
    [REVISITING-SUM]
-              Bhattacharjee, A., Dutta, A., List, E., and M. Nandi,
-              "Revisiting the Indifferentiability of the Sum of
-              Permutations", CRYPTO 2021, 2021,
-              <https://eprint.iacr.org/2021/840>.
+              Gunsing, A., Bhaumik, R., Jha, A., Mennink, B., and Y.
+              Shen, "Revisiting the Indifferentiability of the Sum of
+              Permutations", 2023,
+              <https://eprint.iacr.org/2023/840.pdf>.
 
    [RSSAC040] ICANN RSSAC, "RSSAC040: Recommendations on Anonymization
               Processes for Source IP Addresses Submitted for Future
               Analysis", 9 March 2021,
               <https://www.icann.org/en/system/files/files/rssac-
-              040-09mar21-en.pdf>.
+              040-07aug18-en.pdf>.
 
-   [SKINNY]   Beierle, C., Biryukov, A., Perrin, L., Udovenko, A.,
-              Velichkov, V., and Q. Wang, "The SKINNY Family of Block
-              Ciphers and its Low-Latency Variant MANTIS", CRYPTO 2016,
-              2016, <https://eprint.iacr.org/2016/660>.
+   [SKINNY]   Beierle, C., Jean, J., Koelbl, S., Leander, G., Moradi,
+              A., Peyrin, T., Sasaki, Y., Sasdrich, P., and S. Meng Sim,
+              "The SKINNY Family of Block Ciphers and its Low-Latency
+              Variant MANTIS", CRYPTO 2016, 2016,
+              <https://eprint.iacr.org/2016/660.pdf>.
 
    [SUM-OF-PRPS]
               Lucks, S., "The Sum of PRPs Is a Secure PRF",
-              EUROCRYPT 2000, 2000, <https://link.springer.com/
-              chapter/10.1007/3-540-45539-6_34>.
+              EUROCRYPT 2000, 2000, <https://link.springer.com/content/
+              pdf/10.1007/3-540-45539-6_34.pdf>.
 
-   [XTS-AES]  Black, J., Dawson, E., Gueron, S., and P. Rogaway, "The
-              XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 2010.
+   [XTS-AES]  "The XTS-AES Mode for Disk Encryption", IEEE 1619-2007,
+              2008, <https://ieeexplore.ieee.org/document/4493450>.
 
 Appendix A.  Test Vectors
 
