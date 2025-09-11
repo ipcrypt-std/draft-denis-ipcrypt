@@ -35,16 +35,18 @@ normative:
     seriesinfo:
       NIST: SP 800-38G
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
+
+informative:
   FAST:
     title: "FAST: Format-Preserving Encryption via Shortened AES Tweakable Block Cipher"
     author:
-      - ins: Y. Doh
-      - ins: J. Ha
-      - ins: J. Kim
+      - ins: F. Betul Durak
+      - ins: H. Horst
+      - ins: S. Vaudenay
     date: 2021-09-12
     seriesinfo:
       Cryptology ePrint Archive: Report 2021/1171
-    target: https://eprint.iacr.org/2021/1171
+    target: https://eprint.iacr.org/2021/1171.pdf
   IEEE-P1619:
     title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
     author:
@@ -52,9 +54,7 @@ normative:
     date: 2007-12-18
     seriesinfo:
       IEEE: 1619-2007
-    target: https://standards.ieee.org/ieee/1619/2041/
-
-informative:
+    target: https://ieeexplore.ieee.org/document/4493450
   SUM-OF-PRPS:
     title: "The Sum of PRPs Is a Secure PRF"
     author:
@@ -62,18 +62,17 @@ informative:
     date: 2000
     seriesinfo:
       EUROCRYPT: 2000
-    target: https://link.springer.com/chapter/10.1007/3-540-45539-6_34
+    target: https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf
   REVISITING-SUM:
     title: "Revisiting the Indifferentiability of the Sum of Permutations"
     author:
-      - ins: A. Bhattacharjee
-      - ins: A. Dutta
-      - ins: E. List
-      - ins: M. Nandi
-    date: 2021
-    seriesinfo:
-      CRYPTO: 2021
-    target: https://eprint.iacr.org/2021/840
+      - ins: A. Gunsing
+      - ins: R. Bhaumik
+      - ins: A. Jha
+      - ins: B. Mennink
+      - ins: Y. Shen
+    date: 2023
+    target: https://eprint.iacr.org/2023/840.pdf
   DEOXYS-BC:
     title: "Deoxys-BC: A Highly Secure Tweakable Block Cipher"
     author:
@@ -83,20 +82,23 @@ informative:
     date: 2014
     seriesinfo:
       Cryptology ePrint Archive: Paper 2014/427
-    target: https://eprint.iacr.org/2014/427
+    target: https://competitions.cr.yp.to/round3/deoxysv14.pdf
   SKINNY:
     title: "The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"
     author:
       - ins: C. Beierle
-      - ins: A. Biryukov
-      - ins: L. Perrin
-      - ins: A. Udovenko
-      - ins: V. Velichkov
-      - ins: Q. Wang
+      - ins: J. Jean
+      - ins: S. Koelbl
+      - ins: G. Leander
+      - ins: A. Moradi
+      - ins: T. Peyrin
+      - ins: Y. Sasaki
+      - ins: P. Sasdrich
+      - ins: S. Meng Sim
     date: 2016
     seriesinfo:
       CRYPTO: 2016
-    target: https://eprint.iacr.org/2016/660
+    target: https://eprint.iacr.org/2016/660.pdf
   LRW2002:
     title: "Tweakable Block Ciphers"
     author:
@@ -106,13 +108,12 @@ informative:
     date: 2002
     seriesinfo:
       Fast Software Encryption: 2002
-    target: https://www.cs.berkeley.edu/~daw/papers/tweak-crypto02.pdf
+    target: https://people.csail.mit.edu/rivest/pubs/LRW02.pdf
   BRW2005:
     title: "Format-Preserving Encryption"
     author:
-      - ins: M. Bellare
+      - ins: J. Black
       - ins: P. Rogaway
-      - ins: D. Wagner
     date: 2005
     seriesinfo:
       CRYPTO: 2005
@@ -126,29 +127,19 @@ informative:
     date: 2014
     seriesinfo:
       Cryptology ePrint Archive: Paper 2014/831
-    target: https://eprint.iacr.org/2014/831
+    target: https://eprint.iacr.org/2014/831.pdf
   XTS-AES:
     title: "The XTS-AES Mode for Disk Encryption"
-    author:
-      - ins: J. Black
-      - ins: E. Dawson
-      - ins: S. Gueron
-      - ins: P. Rogaway
-    date: 2010
+    date: 2008
     seriesinfo:
       IEEE: 1619-2007
-  IPCRYPT2:
-    title: "ipcrypt2: IP address encryption/obfuscation tool"
-    author:
-      - ins: F. Denis
-    date: 2025
-    target: https://github.com/ipcrypt-std/ipcrypt2
+    target: https://ieeexplore.ieee.org/document/4493450
   RSSAC040:
     title: "RSSAC040: Recommendations on Anonymization Processes for Source IP Addresses Submitted for Future Analysis"
     author:
       - ins: ICANN RSSAC
     date: 2021-03-09
-    target: https://www.icann.org/en/system/files/files/rssac-040-09mar21-en.pdf
+    target: https://www.icann.org/en/system/files/files/rssac-040-07aug18-en.pdf
 
 --- abstract
 
