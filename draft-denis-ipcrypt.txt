@@ -408,7 +408,7 @@ IPv4 Address:           192.0.2.1
 
    *  SKINNY (see [SKINNY])
 
-   *  DEOXYS-BC (see [DEOXYS-BC])
+   *  DEOXYS-TBC (see [DEOXYS-TBC])
 
    *  KIASU-BC (see Section 9.9 for implementation details)
 
@@ -1730,61 +1730,65 @@ IPv4 Address:           192.0.2.1
 12.2.  Informative References
 
    [BRW2005]  Black, J. and P. Rogaway, "Format-Preserving Encryption",
-              CRYPTO 2005, 2005,
+              CT-RSA 2002, LNCS 2271, pp. 114–130 , 8 February 2002,
               <https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf>.
 
-   [DEOXYS-BC]
-              Jean, J., Nikolić, I., and T. Peyrin, "Deoxys-BC: A Highly
-              Secure Tweakable Block Cipher", Cryptology ePrint
-              Archive Paper 2014/427, 2014,
-              <https://competitions.cr.yp.to/round3/deoxysv14.pdf>.
+   [DEOXYS-TBC]
+              Jean, J., Nikolić, I., Peyrin, T., and Y. Seurin, "The
+              Deoxys AEAD Family", Journal of Cryptology 34, 31 (2021) ,
+              10 June 2021,
+              <https://thomaspeyrin.github.io/web/assets/docs/papers/
+              Jean-etal-JoC2021.pdf>.
 
    [FAST]     Betul Durak, F., Horst, H., and S. Vaudenay, "FAST:
               Format-Preserving Encryption via Shortened AES Tweakable
-              Block Cipher", Cryptology ePrint Archive Report 2021/1171,
-              12 September 2021,
+              Block Cipher", Cryptology ePrint Archive Paper 2021/1171,
+              14 September 2021,
               <https://eprint.iacr.org/2021/1171.pdf>.
 
    [IEEE-P1619]
               IEEE, "IEEE Standard for Cryptographic Protection of Data
-              on Block-Oriented Storage Devices", IEEE 1619-2007, 18
-              December 2007,
+              on Block-Oriented Storage Devices", IEEE 1619-2007, 4
+              March 2008,
               <https://ieeexplore.ieee.org/document/4493450>.
 
    [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
-              Block Ciphers: the TWEAKEY Framework", Cryptology ePrint
-              Archive Paper 2014/831, 2014,
+              Block Ciphers: the TWEAKEY Framework", ASIACRYPT 2014,
+              LNCS 8874, pp. 274–288 , December 2014,
               <https://eprint.iacr.org/2014/831.pdf>.
 
    [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable Block
-              Ciphers", Fast Software Encryption 2002, 2002,
+              Ciphers", CRYPTO 2002, LNCS 2442, pp. 31–46 , 18 August
+              2002,
               <https://people.csail.mit.edu/rivest/pubs/LRW02.pdf>.
 
    [REVISITING-SUM]
               Gunsing, A., Bhaumik, R., Jha, A., Mennink, B., and Y.
               Shen, "Revisiting the Indifferentiability of the Sum of
-              Permutations", 2023,
-              <https://eprint.iacr.org/2023/840.pdf>.
+              Permutations", CRYPTO 2023, LNCS 14083, pp. 628–660 , 9
+              August 2023, <https://eprint.iacr.org/2023/840.pdf>.
 
    [RSSAC040] ICANN RSSAC, "RSSAC040: Recommendations on Anonymization
               Processes for Source IP Addresses Submitted for Future
-              Analysis", 9 March 2021,
+              Analysis", ICANN RSSAC RSSAC040, 7 August 2018,
               <https://www.icann.org/en/system/files/files/rssac-
               040-07aug18-en.pdf>.
 
    [SKINNY]   Beierle, C., Jean, J., Koelbl, S., Leander, G., Moradi,
               A., Peyrin, T., Sasaki, Y., Sasdrich, P., and S. Meng Sim,
               "The SKINNY Family of Block Ciphers and its Low-Latency
-              Variant MANTIS", CRYPTO 2016, 2016,
-              <https://eprint.iacr.org/2016/660.pdf>.
+              Variant MANTIS", CRYPTO 2016, LNCS 9815, pp. 123–153 , 14
+              August 2016, <https://eprint.iacr.org/2016/660.pdf>.
 
    [SUM-OF-PRPS]
-              Lucks, S., "The Sum of PRPs Is a Secure PRF",
-              EUROCRYPT 2000, 2000, <https://link.springer.com/content/
+              Lucks, S., "The Sum of PRPs Is a Secure PRF", EUROCRYPT
+              2000, LNCS 1807, pp. 470–484 , 14 May 2000,
+              <https://link.springer.com/content/
               pdf/10.1007/3-540-45539-6_34.pdf>.
 
-   [XTS-AES]  "The XTS-AES Mode for Disk Encryption", IEEE 1619-2007,
-              2008, <https://ieeexplore.ieee.org/document/4493450>.
+   [XTS-AES]  "The XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 4
+              March 2008,
+              <https://ieeexplore.ieee.org/document/4493450>.
 
 Appendix A.  Test Vectors
 
