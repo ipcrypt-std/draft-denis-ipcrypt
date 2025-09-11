@@ -9,7 +9,7 @@
 <meta content="
        IP addresses are personally identifiable information that requires protection, yet common techniques such as truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis. 
        This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics, addressing data minimization concerns raised in  . 
-       Four concrete instantiations are defined:  ipcrypt-deterministic  provides deterministic, format-preserving encryption with 16-byte outputs;  ipcrypt-pfx  provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes (4 bytes for IPv4, 16 bytes for IPv6); while  ipcrypt-nd  and  ipcrypt-ndx  introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds. 
+       Four concrete instantiations are defined:  ipcrypt-deterministic  provides deterministic, format-preserving encryption with 16-byte outputs;  ipcrypt-pfx  provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes; while  ipcrypt-nd  and  ipcrypt-ndx  introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds. 
     " name="description">
 <meta content="xml2rfc 3.30.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1083,7 +1083,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">IP addresses are personally identifiable information that requires protection, yet common techniques such as truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics, addressing data minimization concerns raised in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">Four concrete instantiations are defined: <code>ipcrypt-deterministic</code> provides deterministic, format-preserving encryption with 16-byte outputs; <code>ipcrypt-pfx</code> provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes (4 bytes for IPv4, 16 bytes for IPv6); while <code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code> introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">Four concrete instantiations are defined: <code>ipcrypt-deterministic</code> provides deterministic, format-preserving encryption with 16-byte outputs; <code>ipcrypt-pfx</code> provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes; while <code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code> introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1441,7 +1441,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       </h2>
 <p id="section-1-1">IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing variable privacy levels; a /24 mask may obscure one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and have limited interoperability.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This specification addresses concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality when sharing data with third parties. Unlike existing practices that obscure addresses, these methods provide mathematically provable security properties, which are discussed throughout this document and summarized in <a href="#security-considerations" class="auto internal xref">Section 8</a>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-3">This specification addresses concerns raised in <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span> regarding confidentiality when sharing data with third parties. Unlike existing practices that obscure addresses, these methods provide well-defined security properties, which are discussed throughout this document and summarized in <a href="#security-considerations" class="auto internal xref">Section 8</a>.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <div id="use-cases-and-motivations">
 <section id="section-1.1">
         <h3 id="name-use-cases-and-motivations">
@@ -1524,7 +1524,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         </h3>
 <p id="section-1.2-1"><em>This section is to be removed before publishing as an RFC.</em><a href="#section-1.2-1" class="pilcrow">¶</a></p>
 <p id="section-1.2-2">This document does not conflict with active IETF working group efforts. While the IETF has produced several RFCs related to privacy (<span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>, <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span>, <span>[<a href="#RFC7624" class="cite xref">RFC7624</a>]</span>), there is no current standardization effort for IP address encryption methods. This specification complements existing IETF privacy guidance by providing implementation methods.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
-<p id="section-1.2-3">The cryptographic primitives used (AES, format-preserving encryption) align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
+<p id="section-1.2-3">The AES-based cryptographic primitives used align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1541,19 +1541,19 @@ svg :is([fill="white"], [fill^="#fff"]) {
           <p id="section-2-3.1.1">IP Address: An IPv4 or IPv6 address as defined in <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.2">
-          <p id="section-2-3.2.1">IPv4-mapped IPv6 Address: An IPv6 address format (::ffff:a.b.c.d) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.2.1">IPv4-mapped IPv6 Address: An IPv6 address format (<code>::FFFF:a.b.c.d</code>) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.3">
           <p id="section-2-3.3.1">16-Byte Representation: A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.4">
-          <p id="section-2-3.4.1">Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits in this specification) using a secret key.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.4.1">Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits with AES) using a secret key.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.5">
           <p id="section-2-3.5.1">Permutation: A bijective function where each distinct input maps to a unique output, ensuring reversibility.<a href="#section-2-3.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.6">
-          <p id="section-2-3.6.1">Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from truly random values.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.6.1">Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from random values.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.7">
           <p id="section-2-3.7.1">Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.<a href="#section-2-3.7.1" class="pilcrow">¶</a></p>
