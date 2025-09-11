@@ -1818,19 +1818,29 @@ IPv4 Address:           192.0.2.1
 </li>
           </ol>
 <p id="section-5.2.3-3">Both approaches provide advantages over IP address truncation, which provides inconsistent protection and irreversibly destroys data.<a href="#section-5.2.3-3" class="pilcrow">¶</a></p>
-<p id="section-5.2.3-4">Recommended approach:
-1. Extract metadata (geographic location, ASN, network type) from the original IP address
-2. Store this information as separate fields alongside the encrypted IP address
-3. Apply appropriate privacy-preserving aggregation to the metadata itself<a href="#section-5.2.3-4" class="pilcrow">¶</a></p>
-<p id="section-5.2.3-5">Example storage schema:
-~~~
+<p id="section-5.2.3-4">Recommended approach:<a href="#section-5.2.3-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.2.3-5">
+<li id="section-5.2.3-5.1">
+              <p id="section-5.2.3-5.1.1">Extract metadata (geographic location, ASN, network type) from the original IP address<a href="#section-5.2.3-5.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-5.2.3-5.2">
+              <p id="section-5.2.3-5.2.1">Store this information as separate fields alongside the encrypted IP address<a href="#section-5.2.3-5.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-5.2.3-5.3">
+              <p id="section-5.2.3-5.3.1">Apply appropriate privacy-preserving aggregation to the metadata itself<a href="#section-5.2.3-5.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+<p id="section-5.2.3-6">Example storage schema:<a href="#section-5.2.3-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.2.3-7">
+<pre>
 {
-  “encrypted_ip”: “bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb”,
-  “country”: “US”,
-  “asn”: 15169,
-  “network_type”: “cloud_provider”
+  "encrypted_ip": "bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb",
+  "country": "US",
+  "asn": 15169,
+  "network_type": "cloud_provider"
 }
-~~~<a href="#section-5.2.3-5" class="pilcrow">¶</a></p>
+</pre><a href="#section-5.2.3-7" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 </section>
