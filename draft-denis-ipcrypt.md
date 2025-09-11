@@ -152,7 +152,7 @@ IP addresses are personally identifiable information that requires protection, y
 
 This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics, addressing data minimization concerns raised in {{!RFC6973}}.
 
-Four concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption with 16-byte outputs; `ipcrypt-pfx` provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes (4 bytes for IPv4, 16 bytes for IPv6); while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.
+Four concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption with 16-byte outputs; `ipcrypt-pfx` provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes; while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.
 
 --- middle
 
@@ -162,7 +162,7 @@ IP addresses are personally identifiable information requiring protection, yet c
 
 This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation.
 
-This specification addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. Unlike existing practices that obscure addresses, these methods provide mathematically provable security properties, which are discussed throughout this document and summarized in {{security-considerations}}.
+This specification addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. Unlike existing practices that obscure addresses, these methods provide well-defined security properties, which are discussed throughout this document and summarized in {{security-considerations}}.
 
 ## Use Cases and Motivations
 
@@ -220,7 +220,7 @@ For implementation guidelines, see {{implementation-details}}.
 
 This document does not conflict with active IETF working group efforts. While the IETF has produced several RFCs related to privacy ({{!RFC6973}}, {{!RFC7258}}, {{!RFC7624}}), there is no current standardization effort for IP address encryption methods. This specification complements existing IETF privacy guidance by providing implementation methods.
 
-The cryptographic primitives used (AES, format-preserving encryption) align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.
+The AES-based cryptographic primitives used align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.
 
 # Terminology
 
@@ -229,11 +229,11 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Throughout this document, the following terms and conventions apply:
 
 - IP Address: An IPv4 or IPv6 address as defined in {{!RFC4291}}.
-- IPv4-mapped IPv6 Address: An IPv6 address format (::ffff:a.b.c.d) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.
+- IPv4-mapped IPv6 Address: An IPv6 address format (`::FFFF:a.b.c.d`) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.
 - 16-Byte Representation: A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
-- Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits in this specification) using a secret key.
+- Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits with AES) using a secret key.
 - Permutation: A bijective function where each distinct input maps to a unique output, ensuring reversibility.
-- Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from truly random values.
+- Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from random values.
 - Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.
 - Tweak: A non-secret, additional input to a tweakable block cipher that further randomizes the output.
 - Deterministic Encryption: Encryption that always produces the same ciphertext for a given input and key.
