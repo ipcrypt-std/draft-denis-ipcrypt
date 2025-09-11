@@ -384,11 +384,13 @@ Organizations requiring network metadata for analytics have two options:
 Both approaches provide advantages over IP address truncation, which provides inconsistent protection and irreversibly destroys data.
 
 Recommended approach:
+
 1. Extract metadata (geographic location, ASN, network type) from the original IP address
 2. Store this information as separate fields alongside the encrypted IP address
 3. Apply appropriate privacy-preserving aggregation to the metadata itself
 
 Example storage schema:
+
 ~~~
 {
   "encrypted_ip": "bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb",
@@ -397,7 +399,6 @@ Example storage schema:
   "network_type": "cloud_provider"
 }
 ~~~
-
 
 # Prefix-Preserving Encryption {#prefix-preserving-encryption}
 
