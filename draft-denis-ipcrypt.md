@@ -43,15 +43,15 @@ informative:
       - ins: F. Betul Durak
       - ins: H. Horst
       - ins: S. Vaudenay
-    date: 2021-09-12
+    date: 2021-09-14
     seriesinfo:
-      Cryptology ePrint Archive: Report 2021/1171
+      Cryptology ePrint Archive: Paper 2021/1171
     target: https://eprint.iacr.org/2021/1171.pdf
   IEEE-P1619:
     title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
     author:
       - ins: IEEE
-    date: 2007-12-18
+    date: 2008-03-04
     seriesinfo:
       IEEE: 1619-2007
     target: https://ieeexplore.ieee.org/document/4493450
@@ -59,9 +59,9 @@ informative:
     title: "The Sum of PRPs Is a Secure PRF"
     author:
       - ins: S. Lucks
-    date: 2000
+    date: 2000-05-14
     seriesinfo:
-      EUROCRYPT: 2000
+      EUROCRYPT 2000, LNCS 1807, pp. 470–484
     target: https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf
   REVISITING-SUM:
     title: "Revisiting the Indifferentiability of the Sum of Permutations"
@@ -71,18 +71,21 @@ informative:
       - ins: A. Jha
       - ins: B. Mennink
       - ins: Y. Shen
-    date: 2023
+    date: 2023-08-09
+    seriesinfo:
+      CRYPTO 2023, LNCS 14083, pp. 628–660
     target: https://eprint.iacr.org/2023/840.pdf
-  DEOXYS-BC:
-    title: "Deoxys-BC: A Highly Secure Tweakable Block Cipher"
+  DEOXYS-TBC:
+    title: "The Deoxys AEAD Family"
     author:
       - ins: J. Jean
       - ins: I. Nikolić
       - ins: T. Peyrin
-    date: 2014
+      - ins: Y. Seurin
+    date: 2021-06-10
     seriesinfo:
-      Cryptology ePrint Archive: Paper 2014/427
-    target: https://competitions.cr.yp.to/round3/deoxysv14.pdf
+      Journal of Cryptology 34, 31 (2021)
+    target: https://thomaspeyrin.github.io/web/assets/docs/papers/Jean-etal-JoC2021.pdf
   SKINNY:
     title: "The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"
     author:
@@ -95,9 +98,9 @@ informative:
       - ins: Y. Sasaki
       - ins: P. Sasdrich
       - ins: S. Meng Sim
-    date: 2016
+    date: 2016-08-14
     seriesinfo:
-      CRYPTO: 2016
+      CRYPTO 2016, LNCS 9815, pp. 123–153
     target: https://eprint.iacr.org/2016/660.pdf
   LRW2002:
     title: "Tweakable Block Ciphers"
@@ -105,18 +108,18 @@ informative:
       - ins: M. Liskov
       - ins: R. Rivest
       - ins: D. Wagner
-    date: 2002
+    date: 2002-08-18
     seriesinfo:
-      Fast Software Encryption: 2002
+      CRYPTO 2002, LNCS 2442, pp. 31–46
     target: https://people.csail.mit.edu/rivest/pubs/LRW02.pdf
   BRW2005:
     title: "Format-Preserving Encryption"
     author:
       - ins: J. Black
       - ins: P. Rogaway
-    date: 2005
+    date: 2002-02-08
     seriesinfo:
-      CRYPTO: 2005
+      CT-RSA 2002, LNCS 2271, pp. 114–130
     target: https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf
   KIASU-BC:
     title: "Tweaks and Keys for Block Ciphers: the TWEAKEY Framework"
@@ -124,13 +127,13 @@ informative:
       - ins: J. Jean
       - ins: I. Nikolić
       - ins: T. Peyrin
-    date: 2014
+    date: 2014-12
     seriesinfo:
-      Cryptology ePrint Archive: Paper 2014/831
+      ASIACRYPT 2014, LNCS 8874, pp. 274–288
     target: https://eprint.iacr.org/2014/831.pdf
   XTS-AES:
     title: "The XTS-AES Mode for Disk Encryption"
-    date: 2008
+    date: 2008-03-04
     seriesinfo:
       IEEE: 1619-2007
     target: https://ieeexplore.ieee.org/document/4493450
@@ -138,7 +141,9 @@ informative:
     title: "RSSAC040: Recommendations on Anonymization Processes for Source IP Addresses Submitted for Future Analysis"
     author:
       - ins: ICANN RSSAC
-    date: 2021-03-09
+    date: 2018-08-07
+    seriesinfo:
+      ICANN RSSAC: RSSAC040
     target: https://www.icann.org/en/system/files/files/rssac-040-07aug18-en.pdf
 
 --- abstract
@@ -295,7 +300,7 @@ This specification defines two generic cryptographic constructions:
 Valid options for implementing a tweakable block cipher include, but are not limited to:
 
 - SKINNY (see {{SKINNY}})
-- DEOXYS-BC (see {{DEOXYS-BC}})
+- DEOXYS-TBC (see {{DEOXYS-TBC}})
 - KIASU-BC (see {{implementing-kiasu-bc}} for implementation details)
 - AES-XTS (see {{ipcrypt-ndx}} for usage)
 
