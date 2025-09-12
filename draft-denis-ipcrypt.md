@@ -340,7 +340,7 @@ Test vectors are provided in {{ipcrypt-deterministic-test-vectors}}.
                  |
                  v
       +---------------------+
-      |   AES128 Encrypt    |
+      |   AES-128 Encrypt   |
       |   (Single Block)    |
       +---------------------+
                  |
