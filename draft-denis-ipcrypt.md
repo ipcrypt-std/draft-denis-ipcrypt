@@ -421,28 +421,21 @@ The algorithm maintains native address sizes: IPv4 addresses remain 4 bytes (32 
 
 The `ipcrypt-pfx` instantiation implements prefix-preserving encryption using a pseudorandom function based on the XOR of two independently keyed AES-128 encryptions.
 
-### Pseudorandom Function Construction
+### Encryption Process
 
-The pseudorandom function requires a 32-byte key split into two independent 16-byte AES-128 keys (`K1` and `K2`). For each bit position, the algorithm performs:
+The encryption uses a pseudorandom function based on the XOR of two independently keyed AES-128 encryptions. The 32-byte key is split into two independent 16-byte AES-128 keys (`K1` and `K2`).
 
-1. Padding: The prefix (all bits processed so far from the original IP address) is padded to 128 bits using the format `zeros || 1 || prefix_bits`, where:
+For each bit position (processing from MSB to LSB):
+
+1. Prefix Padding: The prefix (all bits processed so far from the original IP address) is padded to 128 bits using the format `zeros || 1 || prefix_bits`, where:
    - The prefix bits are extracted from the most significant bits of the original IP address
    - A single `1` bit serves as a delimiter at position `prefix_len_bits`
    - The prefix bits are placed immediately after the delimiter, from high to low positions
    - For an empty prefix (processing the first bit), this produces a block with only a single `1` bit at position 0
 
-2. Dual Encryption: The padded prefix is encrypted independently with both `K1` and `K2`, producing two 128-bit outputs (`e1` and `e2`).
+2. Pseudorandom Function Computation: The padded prefix is encrypted independently with both `K1` and `K2`, producing two 128-bit outputs (`e1` and `e2`). The final PRF output is computed as `e = e1 ⊕ e2`.
 
-3. XOR Combination: The final PRF output is computed as `e = e1 ⊕ e2`.
-
-### Bit Encryption Process
-
-For each bit position (processing from MSB to LSB):
-
-1. Pad the prefix (bits processed so far from the original IP) to 128 bits
-2. Compute the PRF output using the padded prefix: `e = AES(K1, padded_prefix) ⊕ AES(K2, padded_prefix)`
-3. Extract the least significant bit from the PRF output as the cipher bit
-4. XOR the cipher bit with the original bit at the current position to produce the encrypted bit
+3. Bit Encryption: The least significant bit is extracted from the PRF output as the cipher bit, which is then XORed with the original bit at the current position to produce the encrypted bit.
 
 Complete pseudocode implementation is provided in {{prefix-preserving-encryption-ipcrypt-pfx}}.
 
