@@ -35,87 +35,91 @@ normative:
     seriesinfo:
       NIST: SP 800-38G
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
+
+informative:
   FAST:
     title: "FAST: Format-Preserving Encryption via Shortened AES Tweakable Block Cipher"
     author:
-      - ins: Y. Doh
-      - ins: J. Ha
-      - ins: J. Kim
-    date: 2021-09-12
+      - ins: F. Betul Durak
+      - ins: H. Horst
+      - ins: S. Vaudenay
+    date: 2021-09-14
     seriesinfo:
-      Cryptology ePrint Archive: Report 2021/1171
-    target: https://eprint.iacr.org/2021/1171
+      Cryptology ePrint Archive: Paper 2021/1171
+    target: https://eprint.iacr.org/2021/1171.pdf
   IEEE-P1619:
     title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
     author:
       - ins: IEEE
-    date: 2007-12-18
+    date: 2008-03-04
     seriesinfo:
       IEEE: 1619-2007
-    target: https://standards.ieee.org/ieee/1619/2041/
-
-informative:
+    target: https://ieeexplore.ieee.org/document/4493450
   SUM-OF-PRPS:
     title: "The Sum of PRPs Is a Secure PRF"
     author:
       - ins: S. Lucks
-    date: 2000
+    date: 2000-05-14
     seriesinfo:
-      EUROCRYPT: 2000
-    target: https://link.springer.com/chapter/10.1007/3-540-45539-6_34
+      EUROCRYPT 2000, LNCS 1807, pp. 470–484
+    target: https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf
   REVISITING-SUM:
     title: "Revisiting the Indifferentiability of the Sum of Permutations"
     author:
-      - ins: A. Bhattacharjee
-      - ins: A. Dutta
-      - ins: E. List
-      - ins: M. Nandi
-    date: 2021
+      - ins: A. Gunsing
+      - ins: R. Bhaumik
+      - ins: A. Jha
+      - ins: B. Mennink
+      - ins: Y. Shen
+    date: 2023-08-09
     seriesinfo:
-      CRYPTO: 2021
-    target: https://eprint.iacr.org/2021/840
-  DEOXYS-BC:
-    title: "Deoxys-BC: A Highly Secure Tweakable Block Cipher"
+      CRYPTO 2023, LNCS 14083, pp. 628–660
+    target: https://eprint.iacr.org/2023/840.pdf
+  DEOXYS-TBC:
+    title: "The Deoxys AEAD Family"
     author:
       - ins: J. Jean
       - ins: I. Nikolić
       - ins: T. Peyrin
-    date: 2014
+      - ins: Y. Seurin
+    date: 2021-06-10
     seriesinfo:
-      Cryptology ePrint Archive: Paper 2014/427
-    target: https://eprint.iacr.org/2014/427
+      Journal of Cryptology 34, 31 (2021)
+    target: https://thomaspeyrin.github.io/web/assets/docs/papers/Jean-etal-JoC2021.pdf
   SKINNY:
     title: "The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"
     author:
       - ins: C. Beierle
-      - ins: A. Biryukov
-      - ins: L. Perrin
-      - ins: A. Udovenko
-      - ins: V. Velichkov
-      - ins: Q. Wang
-    date: 2016
+      - ins: J. Jean
+      - ins: S. Koelbl
+      - ins: G. Leander
+      - ins: A. Moradi
+      - ins: T. Peyrin
+      - ins: Y. Sasaki
+      - ins: P. Sasdrich
+      - ins: S. Meng Sim
+    date: 2016-08-14
     seriesinfo:
-      CRYPTO: 2016
-    target: https://eprint.iacr.org/2016/660
+      CRYPTO 2016, LNCS 9815, pp. 123–153
+    target: https://eprint.iacr.org/2016/660.pdf
   LRW2002:
     title: "Tweakable Block Ciphers"
     author:
       - ins: M. Liskov
       - ins: R. Rivest
       - ins: D. Wagner
-    date: 2002
+    date: 2002-08-18
     seriesinfo:
-      Fast Software Encryption: 2002
-    target: https://www.cs.berkeley.edu/~daw/papers/tweak-crypto02.pdf
+      CRYPTO 2002, LNCS 2442, pp. 31–46
+    target: https://people.csail.mit.edu/rivest/pubs/LRW02.pdf
   BRW2005:
     title: "Format-Preserving Encryption"
     author:
-      - ins: M. Bellare
+      - ins: J. Black
       - ins: P. Rogaway
-      - ins: D. Wagner
-    date: 2005
+    date: 2002-02-08
     seriesinfo:
-      CRYPTO: 2005
+      CT-RSA 2002, LNCS 2271, pp. 114–130
     target: https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf
   KIASU-BC:
     title: "Tweaks and Keys for Block Ciphers: the TWEAKEY Framework"
@@ -123,32 +127,24 @@ informative:
       - ins: J. Jean
       - ins: I. Nikolić
       - ins: T. Peyrin
-    date: 2014
+    date: 2014-12
     seriesinfo:
-      Cryptology ePrint Archive: Paper 2014/831
-    target: https://eprint.iacr.org/2014/831
+      ASIACRYPT 2014, LNCS 8874, pp. 274–288
+    target: https://eprint.iacr.org/2014/831.pdf
   XTS-AES:
     title: "The XTS-AES Mode for Disk Encryption"
-    author:
-      - ins: J. Black
-      - ins: E. Dawson
-      - ins: S. Gueron
-      - ins: P. Rogaway
-    date: 2010
+    date: 2008-03-04
     seriesinfo:
       IEEE: 1619-2007
-  IPCRYPT2:
-    title: "ipcrypt2: IP address encryption/obfuscation tool"
-    author:
-      - ins: F. Denis
-    date: 2025
-    target: https://github.com/ipcrypt-std/ipcrypt2
+    target: https://ieeexplore.ieee.org/document/4493450
   RSSAC040:
     title: "RSSAC040: Recommendations on Anonymization Processes for Source IP Addresses Submitted for Future Analysis"
     author:
       - ins: ICANN RSSAC
-    date: 2021-03-09
-    target: https://www.icann.org/en/system/files/files/rssac-040-09mar21-en.pdf
+    date: 2018-08-07
+    seriesinfo:
+      ICANN RSSAC: RSSAC040
+    target: https://www.icann.org/en/system/files/files/rssac-040-07aug18-en.pdf
 
 --- abstract
 
@@ -156,7 +152,7 @@ IP addresses are personally identifiable information that requires protection, y
 
 This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics, addressing data minimization concerns raised in {{!RFC6973}}.
 
-Four concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption with 16-byte outputs; `ipcrypt-pfx` provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes (4 bytes for IPv4, 16 bytes for IPv6); while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.
+Four concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption with 16-byte outputs; `ipcrypt-pfx` provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes; while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.
 
 --- middle
 
@@ -166,7 +162,7 @@ IP addresses are personally identifiable information requiring protection, yet c
 
 This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation.
 
-This specification addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. Unlike existing practices that obscure addresses, these methods provide mathematically provable security properties, which are discussed throughout this document and summarized in {{security-considerations}}.
+This specification addresses concerns raised in {{!RFC7624}} regarding confidentiality when sharing data with third parties. Unlike existing practices that obscure addresses, these methods provide well-defined security properties, which are discussed throughout this document and summarized in {{security-considerations}}.
 
 ## Use Cases and Motivations
 
@@ -224,7 +220,7 @@ For implementation guidelines, see {{implementation-details}}.
 
 This document does not conflict with active IETF working group efforts. While the IETF has produced several RFCs related to privacy ({{!RFC6973}}, {{!RFC7258}}, {{!RFC7624}}), there is no current standardization effort for IP address encryption methods. This specification complements existing IETF privacy guidance by providing implementation methods.
 
-The cryptographic primitives used (AES, format-preserving encryption) align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.
+The AES-based cryptographic primitives used align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.
 
 # Terminology
 
@@ -233,11 +229,11 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Throughout this document, the following terms and conventions apply:
 
 - IP Address: An IPv4 or IPv6 address as defined in {{!RFC4291}}.
-- IPv4-mapped IPv6 Address: An IPv6 address format (::ffff:a.b.c.d) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.
+- IPv4-mapped IPv6 Address: An IPv6 address format (`::FFFF:a.b.c.d`) used to represent IPv4 addresses within the IPv6 address space, enabling uniform processing of both address types.
 - 16-Byte Representation: A fixed-length representation used for both IPv4 (via IPv4-mapped IPv6) and IPv6 addresses.
-- Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits in this specification) using a secret key.
+- Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits with AES) using a secret key.
 - Permutation: A bijective function where each distinct input maps to a unique output, ensuring reversibility.
-- Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from truly random values.
+- Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from random values.
 - Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.
 - Tweak: A non-secret, additional input to a tweakable block cipher that further randomizes the output.
 - Deterministic Encryption: Encryption that always produces the same ciphertext for a given input and key.
@@ -304,7 +300,7 @@ This specification defines two generic cryptographic constructions:
 Valid options for implementing a tweakable block cipher include, but are not limited to:
 
 - SKINNY (see {{SKINNY}})
-- DEOXYS-BC (see {{DEOXYS-BC}})
+- DEOXYS-TBC (see {{DEOXYS-TBC}})
 - KIASU-BC (see {{implementing-kiasu-bc}} for implementation details)
 - AES-XTS (see {{ipcrypt-ndx}} for usage)
 
@@ -388,11 +384,13 @@ Organizations requiring network metadata for analytics have two options:
 Both approaches provide advantages over IP address truncation, which provides inconsistent protection and irreversibly destroys data.
 
 Recommended approach:
+
 1. Extract metadata (geographic location, ASN, network type) from the original IP address
 2. Store this information as separate fields alongside the encrypted IP address
 3. Apply appropriate privacy-preserving aggregation to the metadata itself
 
 Example storage schema:
+
 ~~~
 {
   "encrypted_ip": "bde9:6789:d353:824c:d7c6:f58a:6bd2:26eb",
@@ -401,7 +399,6 @@ Example storage schema:
   "network_type": "cloud_provider"
 }
 ~~~
-
 
 # Prefix-Preserving Encryption {#prefix-preserving-encryption}
 
