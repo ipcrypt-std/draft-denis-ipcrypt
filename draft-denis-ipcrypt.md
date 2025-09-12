@@ -549,7 +549,7 @@ Mode selection depends on specific privacy requirements and operational constrai
   - Output size: 4 bytes for IPv4, 16 bytes for IPv6 (maintains native sizes)
   - Privacy: Preserves network prefix relationships while encrypting actual network identities
   - Use case: Network analytics, traffic pattern analysis, subnet monitoring, DDoS mitigation
-  - Performance: Bit-by-bit processing (64 AES operations for IPv4, 256 for IPv6)
+  - Performance: Bit-by-bit processing (64 AES operations for IPv4, 256 for IPv6), fully parallelizable
 
 - Non-Deterministic `ipcrypt-nd` (KIASU-BC):
   - Output size: 24 bytes (16-byte ciphertext + 8-byte tweak)
