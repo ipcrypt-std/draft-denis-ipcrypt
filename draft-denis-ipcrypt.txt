@@ -461,7 +461,7 @@ IPv4 Address:           192.0.2.1
                     |
                     v
          +---------------------+
-         |   AES128 Encrypt    |
+         |   AES-128 Encrypt   |
          |   (Single Block)    |
          +---------------------+
                     |
