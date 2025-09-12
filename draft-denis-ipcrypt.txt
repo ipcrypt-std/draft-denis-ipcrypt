@@ -832,7 +832,7 @@ IPv4 Address:           192.0.2.1
          monitoring, DDoS mitigation
 
       -  Performance: Bit-by-bit processing (64 AES operations for IPv4,
-         256 for IPv6)
+         256 for IPv6), fully parallelizable
 
    *  Non-Deterministic ipcrypt-nd (KIASU-BC):
 
