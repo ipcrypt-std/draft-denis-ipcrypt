@@ -212,6 +212,8 @@ The following examples demonstrate how the same IP addresses transform under eac
 192.168.1.254 -> 35fc2338...25abed5d  # Same input, different outputs
 ~~~
 
+These methods achieve optimal efficiency for their security goals: each variant uses the minimum ciphertext expansion and fewest cryptographic operations needed for its properties (format preservation, prefix preservation, or correlation resistance).
+
 For implementation guidelines, see {{implementation-details}}.
 
 ## Relationship to IETF Work
