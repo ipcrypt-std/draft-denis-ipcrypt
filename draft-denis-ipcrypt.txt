@@ -87,11 +87,10 @@ Table of Contents
    6.  Prefix-Preserving Encryption
      6.1.  Prefix-Preserving Construction
      6.2.  Concrete Instantiation: ipcrypt-pfx
-       6.2.1.  Pseudorandom Function Construction
-       6.2.2.  Bit Encryption Process
-       6.2.3.  Key Requirements
-       6.2.4.  Security Properties
-       6.2.5.  Implementation Considerations
+       6.2.1.  Encryption Process
+       6.2.2.  Key Requirements
+       6.2.3.  Security Properties
+       6.2.4.  Implementation Considerations
    7.  Non-Deterministic Encryption
      7.1.  Encryption Process
      7.2.  Decryption Process
@@ -602,15 +601,17 @@ IPv4 Address:           192.0.2.1
    using a pseudorandom function based on the XOR of two independently
    keyed AES-128 encryptions.
 
-6.2.1.  Pseudorandom Function Construction
+6.2.1.  Encryption Process
 
-   The pseudorandom function requires a 32-byte key split into two
-   independent 16-byte AES-128 keys (K1 and K2).  For each bit position,
-   the algorithm performs:
+   The encryption uses a pseudorandom function based on the XOR of two
+   independently keyed AES-128 encryptions.  The 32-byte key is split
+   into two independent 16-byte AES-128 keys (K1 and K2).
 
-   1.  Padding: The prefix (all bits processed so far from the original
-       IP address) is padded to 128 bits using the format zeros || 1 ||
-       prefix_bits, where:
+   For each bit position (processing from MSB to LSB):
+
+   1.  Prefix Padding: The prefix (all bits processed so far from the
+       original IP address) is padded to 128 bits using the format
+       zeros || 1 || prefix_bits, where:
 
        *  The prefix bits are extracted from the most significant bits
           of the original IP address
@@ -624,30 +625,18 @@ IPv4 Address:           192.0.2.1
        *  For an empty prefix (processing the first bit), this produces
           a block with only a single 1 bit at position 0
 
-   2.  Dual Encryption: The padded prefix is encrypted independently
-       with both K1 and K2, producing two 128-bit outputs (e1 and e2).
+   2.  Pseudorandom Function Computation: The padded prefix is encrypted
+       independently with both K1 and K2, producing two 128-bit outputs
+       (e1 and e2).  The final PRF output is computed as e = e1 ⊕ e2.
 
-   3.  XOR Combination: The final PRF output is computed as e = e1 ⊕ e2.
-
-6.2.2.  Bit Encryption Process
-
-   For each bit position (processing from MSB to LSB):
-
-   1.  Pad the prefix (bits processed so far from the original IP) to
-       128 bits
-
-   2.  Compute the PRF output using the padded prefix: e = AES(K1,
-       padded_prefix) ⊕ AES(K2, padded_prefix)
-
-   3.  Extract the least significant bit from the PRF output as the
-       cipher bit
-
-   4.  XOR the cipher bit with the original bit at the current position
-       to produce the encrypted bit
+   3.  Bit Encryption: The least significant bit is extracted from the
+       PRF output as the cipher bit, which is then XORed with the
+       original bit at the current position to produce the encrypted
+       bit.
 
    Complete pseudocode implementation is provided in Section 9.6.
 
-6.2.3.  Key Requirements
+6.2.2.  Key Requirements
 
    The two 16-byte halves of the 32-byte key (K1 and K2) MUST NOT be
    identical.  Using identical values for K1 and K2 (e.g., repeating the
@@ -657,7 +646,7 @@ IPv4 Address:           192.0.2.1
    When the 32-byte key is randomly sampled from a uniform distribution,
    the probability that K1 = K2 is statistically negligible.
 
-6.2.4.  Security Properties
+6.2.3.  Security Properties
 
    The ipcrypt-pfx construction improves upon earlier designs such as
    CRYPTO-Pan through enhanced cryptographic security:
@@ -675,7 +664,7 @@ IPv4 Address:           192.0.2.1
    structure to enable analytics.  Organizations requiring complete
    address obfuscation should use non-prefix-preserving modes.
 
-6.2.5.  Implementation Considerations
+6.2.4.  Implementation Considerations
 
    Key implementation characteristics:
 

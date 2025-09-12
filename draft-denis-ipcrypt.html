@@ -1206,19 +1206,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-concrete-instantiation-ipcr" class="internal xref">Concrete Instantiation: ipcrypt-pfx</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
-                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-pseudorandom-function-const" class="internal xref">Pseudorandom Function Construction</a></p>
+                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-encryption-process" class="internal xref">Encryption Process</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.2">
-                    <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="auto internal xref">6.2.2</a>.  <a href="#name-bit-encryption-process" class="internal xref">Bit Encryption Process</a></p>
+                    <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="auto internal xref">6.2.2</a>.  <a href="#name-key-requirements" class="internal xref">Key Requirements</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.3">
-                    <p id="section-toc.1-1.6.2.2.2.3.1"><a href="#section-6.2.3" class="auto internal xref">6.2.3</a>.  <a href="#name-key-requirements" class="internal xref">Key Requirements</a></p>
+                    <p id="section-toc.1-1.6.2.2.2.3.1"><a href="#section-6.2.3" class="auto internal xref">6.2.3</a>.  <a href="#name-security-properties" class="internal xref">Security Properties</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.4">
-                    <p id="section-toc.1-1.6.2.2.2.4.1"><a href="#section-6.2.4" class="auto internal xref">6.2.4</a>.  <a href="#name-security-properties" class="internal xref">Security Properties</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.5">
-                    <p id="section-toc.1-1.6.2.2.2.5.1"><a href="#section-6.2.5" class="auto internal xref">6.2.5</a>.  <a href="#name-implementation-consideratio" class="internal xref">Implementation Considerations</a></p>
+                    <p id="section-toc.1-1.6.2.2.2.4.1"><a href="#section-6.2.4" class="auto internal xref">6.2.4</a>.  <a href="#name-implementation-consideratio" class="internal xref">Implementation Considerations</a></p>
 </li>
                 </ul>
 </li>
@@ -1228,7 +1225,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-non-deterministic-encryptio" class="internal xref">Non-Deterministic Encryption</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-encryption-process" class="internal xref">Encryption Process</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-encryption-process-2" class="internal xref">Encryption Process</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-decryption-process" class="internal xref">Decryption Process</a></p>
@@ -1894,117 +1891,96 @@ IPv4 Address:           192.0.2.1
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-concrete-instantiation-ipcr" class="section-name selfRef">Concrete Instantiation: ipcrypt-pfx</a>
         </h3>
 <p id="section-6.2-1">The <code>ipcrypt-pfx</code> instantiation implements prefix-preserving encryption using a pseudorandom function based on the XOR of two independently keyed AES-128 encryptions.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<div id="pseudorandom-function-construction">
+<div id="encryption-process">
 <section id="section-6.2.1">
-          <h4 id="name-pseudorandom-function-const">
-<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-pseudorandom-function-const" class="section-name selfRef">Pseudorandom Function Construction</a>
+          <h4 id="name-encryption-process">
+<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-encryption-process" class="section-name selfRef">Encryption Process</a>
           </h4>
-<p id="section-6.2.1-1">The pseudorandom function requires a 32-byte key split into two independent 16-byte AES-128 keys (<code>K1</code> and <code>K2</code>). For each bit position, the algorithm performs:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6.2.1-2">
-<li id="section-6.2.1-2.1">
-              <p id="section-6.2.1-2.1.1">Padding: The prefix (all bits processed so far from the original IP address) is padded to 128 bits using the format <code>zeros || 1 || prefix_bits</code>, where:<a href="#section-6.2.1-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-1">The encryption uses a pseudorandom function based on the XOR of two independently keyed AES-128 encryptions. The 32-byte key is split into two independent 16-byte AES-128 keys (<code>K1</code> and <code>K2</code>).<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">For each bit position (processing from MSB to LSB):<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.2.1-3">
+<li id="section-6.2.1-3.1">
+              <p id="section-6.2.1-3.1.1">Prefix Padding: The prefix (all bits processed so far from the original IP address) is padded to 128 bits using the format <code>zeros || 1 || prefix_bits</code>, where:<a href="#section-6.2.1-3.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.1-2.1.2.1">
-                  <p id="section-6.2.1-2.1.2.1.1">The prefix bits are extracted from the most significant bits of the original IP address<a href="#section-6.2.1-2.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2.1-3.1.2.1">
+                  <p id="section-6.2.1-3.1.2.1.1">The prefix bits are extracted from the most significant bits of the original IP address<a href="#section-6.2.1-3.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.2.1-2.1.2.2">
-                  <p id="section-6.2.1-2.1.2.2.1">A single <code>1</code> bit serves as a delimiter at position <code>prefix_len_bits</code><a href="#section-6.2.1-2.1.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.1-3.1.2.2">
+                  <p id="section-6.2.1-3.1.2.2.1">A single <code>1</code> bit serves as a delimiter at position <code>prefix_len_bits</code><a href="#section-6.2.1-3.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.2.1-2.1.2.3">
-                  <p id="section-6.2.1-2.1.2.3.1">The prefix bits are placed immediately after the delimiter, from high to low positions<a href="#section-6.2.1-2.1.2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.1-3.1.2.3">
+                  <p id="section-6.2.1-3.1.2.3.1">The prefix bits are placed immediately after the delimiter, from high to low positions<a href="#section-6.2.1-3.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.2.1-2.1.2.4">
-                  <p id="section-6.2.1-2.1.2.4.1">For an empty prefix (processing the first bit), this produces a block with only a single <code>1</code> bit at position 0<a href="#section-6.2.1-2.1.2.4.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.1-3.1.2.4">
+                  <p id="section-6.2.1-3.1.2.4.1">For an empty prefix (processing the first bit), this produces a block with only a single <code>1</code> bit at position 0<a href="#section-6.2.1-3.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
-            <li id="section-6.2.1-2.2">
-              <p id="section-6.2.1-2.2.1">Dual Encryption: The padded prefix is encrypted independently with both <code>K1</code> and <code>K2</code>, producing two 128-bit outputs (<code>e1</code> and <code>e2</code>).<a href="#section-6.2.1-2.2.1" class="pilcrow">¶</a></p>
+            <li id="section-6.2.1-3.2">
+              <p id="section-6.2.1-3.2.1">Pseudorandom Function Computation: The padded prefix is encrypted independently with both <code>K1</code> and <code>K2</code>, producing two 128-bit outputs (<code>e1</code> and <code>e2</code>). The final PRF output is computed as <code>e = e1 ⊕ e2</code>.<a href="#section-6.2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li id="section-6.2.1-2.3">
-              <p id="section-6.2.1-2.3.1">XOR Combination: The final PRF output is computed as <code>e = e1 ⊕ e2</code>.<a href="#section-6.2.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          </ol>
-</section>
-</div>
-<div id="bit-encryption-process">
-<section id="section-6.2.2">
-          <h4 id="name-bit-encryption-process">
-<a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-bit-encryption-process" class="section-name selfRef">Bit Encryption Process</a>
-          </h4>
-<p id="section-6.2.2-1">For each bit position (processing from MSB to LSB):<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6.2.2-2">
-<li id="section-6.2.2-2.1">
-              <p id="section-6.2.2-2.1.1">Pad the prefix (bits processed so far from the original IP) to 128 bits<a href="#section-6.2.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li id="section-6.2.2-2.2">
-              <p id="section-6.2.2-2.2.1">Compute the PRF output using the padded prefix: <code>e = AES(K1, padded_prefix) ⊕ AES(K2, padded_prefix)</code><a href="#section-6.2.2-2.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li id="section-6.2.2-2.3">
-              <p id="section-6.2.2-2.3.1">Extract the least significant bit from the PRF output as the cipher bit<a href="#section-6.2.2-2.3.1" class="pilcrow">¶</a></p>
-</li>
-            <li id="section-6.2.2-2.4">
-              <p id="section-6.2.2-2.4.1">XOR the cipher bit with the original bit at the current position to produce the encrypted bit<a href="#section-6.2.2-2.4.1" class="pilcrow">¶</a></p>
+            <li id="section-6.2.1-3.3">
+              <p id="section-6.2.1-3.3.1">Bit Encryption: The least significant bit is extracted from the PRF output as the cipher bit, which is then XORed with the original bit at the current position to produce the encrypted bit.<a href="#section-6.2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-6.2.2-3">Complete pseudocode implementation is provided in <a href="#prefix-preserving-encryption-ipcrypt-pfx" class="auto internal xref">Section 9.6</a>.<a href="#section-6.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-4">Complete pseudocode implementation is provided in <a href="#prefix-preserving-encryption-ipcrypt-pfx" class="auto internal xref">Section 9.6</a>.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-requirements">
-<section id="section-6.2.3">
+<section id="section-6.2.2">
           <h4 id="name-key-requirements">
-<a href="#section-6.2.3" class="section-number selfRef">6.2.3. </a><a href="#name-key-requirements" class="section-name selfRef">Key Requirements</a>
+<a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-key-requirements" class="section-name selfRef">Key Requirements</a>
           </h4>
-<p id="section-6.2.3-1">The two 16-byte halves of the 32-byte key (<code>K1</code> and <code>K2</code>) MUST NOT be identical. Using identical values for <code>K1</code> and <code>K2</code> (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.3-2">When the 32-byte key is randomly sampled from a uniform distribution, the probability that <code>K1 = K2</code> is statistically negligible.<a href="#section-6.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-1">The two 16-byte halves of the 32-byte key (<code>K1</code> and <code>K2</code>) MUST NOT be identical. Using identical values for <code>K1</code> and <code>K2</code> (e.g., repeating the same 16 bytes twice) causes the XOR operation to cancel out, returning the original IP address unchanged.<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-2">When the 32-byte key is randomly sampled from a uniform distribution, the probability that <code>K1 = K2</code> is statistically negligible.<a href="#section-6.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-properties">
-<section id="section-6.2.4">
+<section id="section-6.2.3">
           <h4 id="name-security-properties">
-<a href="#section-6.2.4" class="section-number selfRef">6.2.4. </a><a href="#name-security-properties" class="section-name selfRef">Security Properties</a>
+<a href="#section-6.2.3" class="section-number selfRef">6.2.3. </a><a href="#name-security-properties" class="section-name selfRef">Security Properties</a>
           </h4>
-<p id="section-6.2.4-1">The <code>ipcrypt-pfx</code> construction improves upon earlier designs such as CRYPTO-Pan through enhanced cryptographic security:<a href="#section-6.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-1">The <code>ipcrypt-pfx</code> construction improves upon earlier designs such as CRYPTO-Pan through enhanced cryptographic security:<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.4-2.1">
-              <p id="section-6.2.4-2.1.1">Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides security beyond the birthday bound <span>[<a href="#SUM-OF-PRPS" class="cite xref">SUM-OF-PRPS</a>]</span>, supporting more than 2<sup>78</sup> distinct IP addresses per key <span>[<a href="#REVISITING-SUM" class="cite xref">REVISITING-SUM</a>]</span>. This construction ensures that even with billions of encrypted addresses, security remains robust.<a href="#section-6.2.4-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2.3-2.1">
+              <p id="section-6.2.3-2.1.1">Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides security beyond the birthday bound <span>[<a href="#SUM-OF-PRPS" class="cite xref">SUM-OF-PRPS</a>]</span>, supporting more than 2<sup>78</sup> distinct IP addresses per key <span>[<a href="#REVISITING-SUM" class="cite xref">REVISITING-SUM</a>]</span>. This construction ensures that even with billions of encrypted addresses, security remains robust.<a href="#section-6.2.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.2.4-2.2">
-              <p id="section-6.2.4-2.2.1">Prefix-Based Context Isolation: Each bit depends on the entire prefix history.<a href="#section-6.2.4-2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.2.3-2.2">
+              <p id="section-6.2.3-2.2.1">Prefix-Based Context Isolation: Each bit depends on the entire prefix history.<a href="#section-6.2.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-6.2.4-3">Note: Prefix-preserving encryption intentionally reveals network structure to enable analytics. Organizations requiring complete address obfuscation should use non-prefix-preserving modes.<a href="#section-6.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-3">Note: Prefix-preserving encryption intentionally reveals network structure to enable analytics. Organizations requiring complete address obfuscation should use non-prefix-preserving modes.<a href="#section-6.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementation-considerations">
-<section id="section-6.2.5">
+<section id="section-6.2.4">
           <h4 id="name-implementation-consideratio">
-<a href="#section-6.2.5" class="section-number selfRef">6.2.5. </a><a href="#name-implementation-consideratio" class="section-name selfRef">Implementation Considerations</a>
+<a href="#section-6.2.4" class="section-number selfRef">6.2.4. </a><a href="#name-implementation-consideratio" class="section-name selfRef">Implementation Considerations</a>
           </h4>
-<p id="section-6.2.5-1">Key implementation characteristics:<a href="#section-6.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.4-1">Key implementation characteristics:<a href="#section-6.2.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.5-2.1">
-              <p id="section-6.2.5-2.1.1">Computational Requirements:<a href="#section-6.2.5-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2.4-2.1">
+              <p id="section-6.2.4-2.1.1">Computational Requirements:<a href="#section-6.2.4-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.5-2.1.2.1">
-                  <p id="section-6.2.5-2.1.2.1.1">IPv4: 64 AES-128 operations per address (2 encryptions × 32 bits)<a href="#section-6.2.5-2.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2.4-2.1.2.1">
+                  <p id="section-6.2.4-2.1.2.1.1">IPv4: 64 AES-128 operations per address (2 encryptions × 32 bits)<a href="#section-6.2.4-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.2.5-2.1.2.2">
-                  <p id="section-6.2.5-2.1.2.2.1">IPv6: 256 AES-128 operations per address (2 encryptions × 128 bits)<a href="#section-6.2.5-2.1.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.4-2.1.2.2">
+                  <p id="section-6.2.4-2.1.2.2.1">IPv6: 256 AES-128 operations per address (2 encryptions × 128 bits)<a href="#section-6.2.4-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
-            <li class="normal" id="section-6.2.5-2.2">
-              <p id="section-6.2.5-2.2.1">Performance Optimizations:<a href="#section-6.2.5-2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.2.4-2.2">
+              <p id="section-6.2.4-2.2.1">Performance Optimizations:<a href="#section-6.2.4-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.5-2.2.2.1">
-                  <p id="section-6.2.5-2.2.2.1.1">Caching encrypted prefix values (<code>e1</code> and <code>e2</code>) significantly improves performance for addresses sharing common prefixes<a href="#section-6.2.5-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2.4-2.2.2.1">
+                  <p id="section-6.2.4-2.2.2.1.1">Caching encrypted prefix values (<code>e1</code> and <code>e2</code>) significantly improves performance for addresses sharing common prefixes<a href="#section-6.2.4-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.2.5-2.2.2.2">
-                  <p id="section-6.2.5-2.2.2.2.1">The encryption algorithm is inherently parallelizable since AES computations for different bit positions are independent<a href="#section-6.2.5-2.2.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.4-2.2.2.2">
+                  <p id="section-6.2.4-2.2.2.2.1">The encryption algorithm is inherently parallelizable since AES computations for different bit positions are independent<a href="#section-6.2.4-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.2.5-2.2.2.3">
-                  <p id="section-6.2.5-2.2.2.3.1">The padded prefix computation can be optimized by maintaining state across iterations: instead of recomputing the padded prefix from scratch for each bit position, implementations can shift the previous padded prefix left by one bit and insert the next input bit.<a href="#section-6.2.5-2.2.2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.4-2.2.2.3">
+                  <p id="section-6.2.4-2.2.2.3.1">The padded prefix computation can be optimized by maintaining state across iterations: instead of recomputing the padded prefix from scratch for each bit position, implementations can shift the previous padded prefix left by one bit and insert the next input bit.<a href="#section-6.2.4-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
@@ -2037,10 +2013,10 @@ IPv4 Address:           192.0.2.1
 </li>
       </ul>
 <p id="section-7-4">Implementation details are provided in <a href="#implementation-details" class="auto internal xref">Section 9</a>.<a href="#section-7-4" class="pilcrow">¶</a></p>
-<div id="encryption-process">
+<div id="encryption-process-1">
 <section id="section-7.1">
-        <h3 id="name-encryption-process">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-encryption-process" class="section-name selfRef">Encryption Process</a>
+        <h3 id="name-encryption-process-2">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-encryption-process-2" class="section-name selfRef">Encryption Process</a>
         </h3>
 <p id="section-7.1-1">Encryption process for non-deterministic modes:<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-7.1-2">
