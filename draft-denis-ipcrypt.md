@@ -63,6 +63,22 @@ informative:
     seriesinfo:
       EUROCRYPT 2000, LNCS 1807, pp. 470–484
     target: https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf
+  PATARIN-2008:
+    title: "A Proof of Security in O(2^n) for the Xor of Two Random Permutations"
+    author:
+      - ins: J. Patarin
+    date: 2008
+    seriesinfo:
+      ICITS 2008, LNCS 5155, pp. 232–248
+    target: https://link.springer.com/chapter/10.1007/978-3-540-85093-9_22
+  PATARIN-H-COEFFICIENTS:
+    title: "The 'Coefficients H' Technique"
+    author:
+      - ins: J. Patarin
+    date: 2009
+    seriesinfo:
+      SAC 2008, LNCS 5381, pp. 328–345
+    target: https://link.springer.com/chapter/10.1007/978-3-642-04159-4_21
   DEOXYS-TBC:
     title: "The Deoxys AEAD Family"
     author:
@@ -437,7 +453,7 @@ When the 32-byte key is randomly sampled from a uniform distribution, the probab
 
 The `ipcrypt-pfx` construction improves upon earlier designs such as CRYPTO-Pan through enhanced cryptographic security:
 
-- Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides 128-bit PRF security {{SUM-OF-PRPS}}, with distinguishing advantage growing on the order of q/2<sup>128</sup> for q queries. This construction ensures robust security even for massive-scale deployments.
+- Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides 128-bit PRF security {{SUM-OF-PRPS}}{{PATARIN-2008}}{{PATARIN-H-COEFFICIENTS}}, with distinguishing advantage growing on the order of q/2<sup>128</sup> for q queries. This construction ensures robust security even for massive-scale deployments.
 
 - Prefix-based context isolation: shift-and-append updates make each bit depend on the full prefix history and ensure fresh PRF input each round.
 
