@@ -1942,7 +1942,7 @@ IPv4 Address:           192.0.2.1
 <p id="section-6.2.3-1">The <code>ipcrypt-pfx</code> construction improves upon earlier designs such as CRYPTO-Pan through enhanced cryptographic security:<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2.3-2.1">
-              <p id="section-6.2.3-2.1.1">Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides 128-bit PRF security <span>[<a href="#SUM-OF-PRPS" class="cite xref">SUM-OF-PRPS</a>]</span>, with distinguishing advantage growing on the order of q/2<sup>128</sup> for q queries. This construction ensures robust security even for massive-scale deployments.<a href="#section-6.2.3-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.2.3-2.1.1">Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides 128-bit PRF security <span>[<a href="#SUM-OF-PRPS" class="cite xref">SUM-OF-PRPS</a>]</span><span>[<a href="#PATARIN-2008" class="cite xref">PATARIN-2008</a>]</span><span>[<a href="#PATARIN-H-COEFFICIENTS" class="cite xref">PATARIN-H-COEFFICIENTS</a>]</span>, with distinguishing advantage growing on the order of q/2<sup>128</sup> for q queries. This construction ensures robust security even for massive-scale deployments.<a href="#section-6.2.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.2.3-2.2">
               <p id="section-6.2.3-2.2.1">Prefix-based context isolation: shift-and-append updates make each bit depend on the full prefix history and ensure fresh PRF input each round.<a href="#section-6.2.3-2.2.1" class="pilcrow">¶</a></p>
@@ -3296,6 +3296,14 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <dt id="LRW2002">[LRW2002]</dt>
         <dd>
 <span class="refAuthor">Liskov, M.</span>, <span class="refAuthor">Rivest, R.</span>, and <span class="refAuthor">D. Wagner</span>, <span class="refTitle">"Tweakable Block Ciphers"</span>, <span class="seriesInfo">CRYPTO 2002, LNCS 2442, pp. 31–46 </span>, <time datetime="2002-08-18" class="refDate">18 August 2002</time>, <span>&lt;<a href="https://people.csail.mit.edu/rivest/pubs/LRW02.pdf">https://people.csail.mit.edu/rivest/pubs/LRW02.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="PATARIN-2008">[PATARIN-2008]</dt>
+        <dd>
+<span class="refAuthor">Patarin, J.</span>, <span class="refTitle">"A Proof of Security in O(2^n) for the Xor of Two Random Permutations"</span>, <span class="seriesInfo">ICITS 2008, LNCS 5155, pp. 232–248 </span>, <time datetime="2008" class="refDate">2008</time>, <span>&lt;<a href="https://link.springer.com/chapter/10.1007/978-3-540-85093-9_22">https://link.springer.com/chapter/10.1007/978-3-540-85093-9_22</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="PATARIN-H-COEFFICIENTS">[PATARIN-H-COEFFICIENTS]</dt>
+        <dd>
+<span class="refAuthor">Patarin, J.</span>, <span class="refTitle">"The 'Coefficients H' Technique"</span>, <span class="seriesInfo">SAC 2008, LNCS 5381, pp. 328–345 </span>, <time datetime="2009" class="refDate">2009</time>, <span>&lt;<a href="https://link.springer.com/chapter/10.1007/978-3-642-04159-4_21">https://link.springer.com/chapter/10.1007/978-3-642-04159-4_21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RSSAC040">[RSSAC040]</dt>
         <dd>

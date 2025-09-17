@@ -651,7 +651,8 @@ IPv4 Address:           192.0.2.1
    CRYPTO-Pan through enhanced cryptographic security:
 
    *  Sum-of-Permutations: The XOR of two independently keyed AES-128
-      permutations provides 128-bit PRF security [SUM-OF-PRPS], with
+      permutations provides 128-bit PRF security
+      [SUM-OF-PRPS][PATARIN-2008][PATARIN-H-COEFFICIENTS], with
       distinguishing advantage growing on the order of q/2^128 for q
       queries.  This construction ensures robust security even for
       massive-scale deployments.
@@ -1743,6 +1744,17 @@ IPv4 Address:           192.0.2.1
               Ciphers", CRYPTO 2002, LNCS 2442, pp. 31–46 , 18 August
               2002,
               <https://people.csail.mit.edu/rivest/pubs/LRW02.pdf>.
+
+   [PATARIN-2008]
+              Patarin, J., "A Proof of Security in O(2^n) for the Xor of
+              Two Random Permutations", ICITS 2008, LNCS 5155, pp.
+              232–248 , 2008, <https://link.springer.com/
+              chapter/10.1007/978-3-540-85093-9_22>.
+
+   [PATARIN-H-COEFFICIENTS]
+              Patarin, J., "The 'Coefficients H' Technique", SAC 2008,
+              LNCS 5381, pp. 328–345 , 2009, <https://link.springer.com/
+              chapter/10.1007/978-3-642-04159-4_21>.
 
    [RSSAC040] ICANN RSSAC, "RSSAC040: Recommendations on Anonymization
               Processes for Source IP Addresses Submitted for Future
