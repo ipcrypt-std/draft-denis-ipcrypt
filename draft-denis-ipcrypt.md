@@ -63,18 +63,6 @@ informative:
     seriesinfo:
       EUROCRYPT 2000, LNCS 1807, pp. 470–484
     target: https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf
-  REVISITING-SUM:
-    title: "Revisiting the Indifferentiability of the Sum of Permutations"
-    author:
-      - ins: A. Gunsing
-      - ins: R. Bhaumik
-      - ins: A. Jha
-      - ins: B. Mennink
-      - ins: Y. Shen
-    date: 2023-08-09
-    seriesinfo:
-      CRYPTO 2023, LNCS 14083, pp. 628–660
-    target: https://eprint.iacr.org/2023/840.pdf
   DEOXYS-TBC:
     title: "The Deoxys AEAD Family"
     author:
@@ -148,11 +136,9 @@ informative:
 
 --- abstract
 
-IP addresses are personally identifiable information that requires protection, yet common techniques such as truncation destroy data irreversibly while providing inconsistent privacy guarantees, and ad-hoc encryption schemes often lack interoperability and security analysis.
+This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees.
 
-This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics, addressing data minimization concerns raised in {{!RFC6973}}.
-
-Four concrete instantiations are defined: `ipcrypt-deterministic` provides deterministic, format-preserving encryption with 16-byte outputs; `ipcrypt-pfx` provides deterministic, prefix-preserving encryption that maintains network relationships with native address sizes; while `ipcrypt-nd` and `ipcrypt-ndx` introduce randomness to prevent correlation. All methods are reversible with the encryption key and designed for high-performance processing at network speeds.
+Four modes are defined: `ipcrypt-deterministic` (format-preserving, 16-byte output), `ipcrypt-pfx` (prefix-preserving, native address size), `ipcrypt-nd` and `ipcrypt-ndx` (non-deterministic with random tweaks). All support high-performance processing at network speeds and produce interoperable results across implementations.
 
 --- middle
 
@@ -451,7 +437,7 @@ When the 32-byte key is randomly sampled from a uniform distribution, the probab
 
 The `ipcrypt-pfx` construction improves upon earlier designs such as CRYPTO-Pan through enhanced cryptographic security:
 
-- Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides security beyond the birthday bound {{SUM-OF-PRPS}}, supporting more than 2<sup>78</sup> distinct IP addresses per key {{REVISITING-SUM}}. This construction ensures that even with billions of encrypted addresses, security remains robust.
+- Sum-of-Permutations: The XOR of two independently keyed AES-128 permutations provides 128-bit PRF security {{SUM-OF-PRPS}}, with distinguishing advantage growing on the order of q/2<sup>128</sup> for q queries. This construction ensures robust security even for massive-scale deployments.
 
 - Prefix-based context isolation: shift-and-append updates make each bit depend on the full prefix history and ensure fresh PRF input each round.
 
