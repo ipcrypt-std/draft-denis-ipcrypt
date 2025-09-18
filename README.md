@@ -8,6 +8,7 @@ This is the working area for the individual Internet-Draft, "Methods for IP Addr
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-denis-ipcrypt)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-denis-ipcrypt)
 * [Compare Editor's Copy to Individual Draft](https://ipcrypt-std.github.io/draft-denis-ipcrypt/#go.draft-denis-ipcrypt.diff)
+* [IPCrypt Paper](https://eprint.iacr.org/2025/1689)
 
 ## Known Implementations
 
