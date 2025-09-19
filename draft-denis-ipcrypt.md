@@ -37,6 +37,14 @@ normative:
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
 
 informative:
+  IPCRYPT-PAPER:
+    title: "IPCrypt: Optimal, Practical Encryption of IP Addresses for Privacy and Measurement"
+    author:
+      - ins: F. Denis
+    date: 2025-01-09
+    seriesinfo:
+      Cryptology ePrint Archive: Paper 2025/1689
+    target: https://eprint.iacr.org/2025/1689
   FAST:
     title: "FAST: Format-Preserving Encryption via Shortened AES Tweakable Block Cipher"
     author:
@@ -214,7 +222,7 @@ The following examples demonstrate how the same IP addresses transform under eac
 192.168.1.254 -> 35fc2338...25abed5d  # Same input, different outputs
 ~~~
 
-These methods achieve optimal efficiency for their security goals: each variant uses the minimum ciphertext expansion and fewest cryptographic operations needed for its properties (format preservation, prefix preservation, or correlation resistance).
+These methods achieve optimal efficiency for their security goals: each variant uses the minimum ciphertext expansion and fewest cryptographic operations needed for its properties (format preservation, prefix preservation, or correlation resistance). {{IPCRYPT-PAPER}}.
 
 For implementation guidelines, see {{implementation-details}}.
 
