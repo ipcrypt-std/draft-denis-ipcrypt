@@ -250,6 +250,7 @@ Table of Contents
    each variant uses the minimum ciphertext expansion and fewest
    cryptographic operations needed for its properties (format
    preservation, prefix preservation, or correlation resistance).
+   [IPCRYPT-PAPER].
 
    For implementation guidelines, see Section 9.
 
@@ -1776,6 +1777,12 @@ IPv4 Address:           192.0.2.1
               on Block-Oriented Storage Devices", IEEE 1619-2007, 4
               March 2008,
               <https://ieeexplore.ieee.org/document/4493450>.
+
+   [IPCRYPT-PAPER]
+              Denis, F., "IPCrypt: Optimal, Practical Encryption of IP
+              Addresses for Privacy and Measurement", Cryptology ePrint
+              Archive Paper 2025/1689, 9 January 2025,
+              <https://eprint.iacr.org/2025/1689>.
 
    [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
               Block Ciphers: the TWEAKEY Framework", ASIACRYPT 2014,
