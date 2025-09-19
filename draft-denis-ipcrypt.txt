@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                         17 September 2025
-Expires: 21 March 2026
+Intended status: Informational                         19 September 2025
+Expires: 23 March 2026
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 March 2026.
+   This Internet-Draft will expire on 23 March 2026.
 
 Copyright Notice
 
@@ -98,7 +98,8 @@ Table of Contents
      8.1.  Deterministic Mode Security
      8.2.  Non-Deterministic Mode Security
      8.3.  Implementation Security
-     8.4.  Key Management Considerations
+     8.4.  Key Derivation for Multiple Variants
+     8.5.  Key Management Considerations
    9.  Implementation Details
      9.1.  Visual Diagrams
        9.1.1.  IPv4 Address Conversion Diagram
@@ -944,7 +945,47 @@ IPv4 Address:           192.0.2.1
 
    4.  Error handling does not leak sensitive information
 
-8.4.  Key Management Considerations
+8.4.  Key Derivation for Multiple Variants
+
+   When using multiple encryption variants within the same deployment,
+   implementations MUST derive separate keys for each variant to prevent
+   cross-mode correlations.  The RECOMMENDED approach uses HKDF
+   ([RFC5869]) to derive per-variant subkeys from a single master key:
+
+   *  K_deterministic = HKDF-Expand(PRK, "ipcrypt-deterministic", 16)
+
+   *  K_pfx = HKDF-Expand(PRK, "ipcrypt-pfx", 32)
+
+   *  K_nd = HKDF-Expand(PRK, "ipcrypt-nd", 16)
+
+   *  K_ndx = HKDF-Expand(PRK, "ipcrypt-ndx", 32)
+
+   Where:
+
+   *  PRK = HKDF-Extract(salt, K_master) is a pseudorandom key derived
+      from the master key
+
+   *  K_master is a uniformly random master key
+
+   *  salt is either empty or a fixed random value for the application
+
+   *  The strings "ipcrypt-deterministic", etc. are used as the info
+      parameter for domain separation
+
+   *  The third parameter specifies the output length in bytes (16 for
+      single AES keys, 32 for ipcrypt-pfx and ipcrypt-ndx)
+
+   This ensures that:
+
+   1.  Using the same master key across different variants does not
+       enable cross-variant attacks
+
+   2.  Key management is simplified by requiring only a single master
+       key
+
+   3.  Each variant operates with cryptographically independent keys
+
+8.5.  Key Management Considerations
 
    Implementers MUST ensure:
 
@@ -958,10 +999,6 @@ IPv4 Address:           192.0.2.1
        security requirements
 
    4.  Key compromise procedures are defined and tested
-
-   For high-volume deployments processing billions of IP addresses,
-   regular key rotation (e.g., monthly or quarterly) is RECOMMENDED to
-   stay well within the security bounds discussed in this document.
 
 9.  Implementation Details
 
@@ -1678,6 +1715,11 @@ IPv4 Address:           192.0.2.1
    [RFC4291]  Hinden, R. and S. Deering, "IP Version 6 Addressing
               Architecture", RFC 4291, DOI 10.17487/RFC4291, February
               2006, <https://www.rfc-editor.org/rfc/rfc4291>.
+
+   [RFC5869]  Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
+              Key Derivation Function (HKDF)", RFC 5869,
+              DOI 10.17487/RFC5869, May 2010,
+              <https://www.rfc-editor.org/rfc/rfc5869>.
 
    [RFC5952]  Kawamura, S. and M. Kawashima, "A Recommendation for IPv6
               Address Text Representation", RFC 5952,

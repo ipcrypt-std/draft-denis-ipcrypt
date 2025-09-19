@@ -10,11 +10,11 @@
        This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees. 
        Four modes are defined:  ipcrypt-deterministic  (format-preserving, 16-byte output),  ipcrypt-pfx  (prefix-preserving, native address size),  ipcrypt-nd  and  ipcrypt-ndx  (non-deterministic with random tweaks). All support high-performance processing at network speeds and produce interoperable results across implementations. 
     " name="description">
-<meta content="xml2rfc 3.30.1" name="generator">
+<meta content="xml2rfc 3.30.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-denis-ipcrypt-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.1
+  xml2rfc 3.30.2
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Denis</td>
-<td class="center">Expires 21 March 2026</td>
+<td class="center">Expires 23 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-denis-ipcrypt-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-09-17" class="published">17 September 2025</time>
+<time datetime="2025-09-19" class="published">19 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-03-21">21 March 2026</time></dd>
+<dd class="expires"><time datetime="2026-03-23">23 March 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1110,7 +1110,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1263,7 +1263,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-implementation-security" class="internal xref">Implementation Security</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
-                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-key-management-consideratio" class="internal xref">Key Management Considerations</a></p>
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-key-derivation-for-multiple" class="internal xref">Key Derivation for Multiple Variants</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-key-management-consideratio" class="internal xref">Key Management Considerations</a></p>
 </li>
             </ul>
 </li>
@@ -2273,27 +2276,78 @@ IPv4 Address:           192.0.2.1
         </ol>
 </section>
 </div>
-<div id="key-management-considerations">
+<div id="key-derivation-for-multiple-variants">
 <section id="section-8.4">
-        <h3 id="name-key-management-consideratio">
-<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-key-management-consideratio" class="section-name selfRef">Key Management Considerations</a>
+        <h3 id="name-key-derivation-for-multiple">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-key-derivation-for-multiple" class="section-name selfRef">Key Derivation for Multiple Variants</a>
         </h3>
-<p id="section-8.4-1">Implementers MUST ensure:<a href="#section-8.4-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-8.4-2">
-<li id="section-8.4-2.1">
-            <p id="section-8.4-2.1.1">Keys are generated using cryptographically secure random number generators (see <span>[<a href="#RFC4086" class="cite xref">RFC4086</a>]</span>)<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-8.4-1">When using multiple encryption variants within the same deployment, implementations MUST derive separate keys for each variant to prevent cross-mode correlations. The RECOMMENDED approach uses HKDF (<span>[<a href="#RFC5869" class="cite xref">RFC5869</a>]</span>) to derive per-variant subkeys from a single master key:<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.4-2.1">
+            <p id="section-8.4-2.1.1"><code>K_deterministic = HKDF-Expand(PRK, "ipcrypt-deterministic", 16)</code><a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.4-2.2">
-            <p id="section-8.4-2.2.1">Keys are stored securely and access-controlled appropriately for the deployment environment<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.4-2.2">
+            <p id="section-8.4-2.2.1"><code>K_pfx = HKDF-Expand(PRK, "ipcrypt-pfx", 32)</code><a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.4-2.3">
-            <p id="section-8.4-2.3.1">Key rotation policies are established based on usage volume and security requirements<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.4-2.3">
+            <p id="section-8.4-2.3.1"><code>K_nd = HKDF-Expand(PRK, "ipcrypt-nd", 16)</code><a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.4-2.4">
-            <p id="section-8.4-2.4.1">Key compromise procedures are defined and tested<a href="#section-8.4-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.4-2.4">
+            <p id="section-8.4-2.4.1"><code>K_ndx = HKDF-Expand(PRK, "ipcrypt-ndx", 32)</code><a href="#section-8.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-8.4-3">Where:<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.4-4.1">
+            <p id="section-8.4-4.1.1"><code>PRK = HKDF-Extract(salt, K_master)</code> is a pseudorandom key derived from the master key<a href="#section-8.4-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-4.2">
+            <p id="section-8.4-4.2.1"><code>K_master</code> is a uniformly random master key<a href="#section-8.4-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-4.3">
+            <p id="section-8.4-4.3.1"><code>salt</code> is either empty or a fixed random value for the application<a href="#section-8.4-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-4.4">
+            <p id="section-8.4-4.4.1">The strings <code>"ipcrypt-deterministic"</code>, etc. are used as the <code>info</code> parameter for domain separation<a href="#section-8.4-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-4.5">
+            <p id="section-8.4-4.5.1">The third parameter specifies the output length in bytes (16 for single AES keys, 32 for <code>ipcrypt-pfx</code> and <code>ipcrypt-ndx</code>)<a href="#section-8.4-4.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-8.4-5">This ensures that:<a href="#section-8.4-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.4-6">
+<li id="section-8.4-6.1">
+            <p id="section-8.4-6.1.1">Using the same master key across different variants does not enable cross-variant attacks<a href="#section-8.4-6.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-8.4-6.2">
+            <p id="section-8.4-6.2.1">Key management is simplified by requiring only a single master key<a href="#section-8.4-6.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-8.4-6.3">
+            <p id="section-8.4-6.3.1">Each variant operates with cryptographically independent keys<a href="#section-8.4-6.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-8.4-3">For high-volume deployments processing billions of IP addresses, regular key rotation (e.g., monthly or quarterly) is RECOMMENDED to stay well within the security bounds discussed in this document.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="key-management-considerations">
+<section id="section-8.5">
+        <h3 id="name-key-management-consideratio">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-key-management-consideratio" class="section-name selfRef">Key Management Considerations</a>
+        </h3>
+<p id="section-8.5-1">Implementers MUST ensure:<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.5-2">
+<li id="section-8.5-2.1">
+            <p id="section-8.5-2.1.1">Keys are generated using cryptographically secure random number generators (see <span>[<a href="#RFC4086" class="cite xref">RFC4086</a>]</span>)<a href="#section-8.5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-8.5-2.2">
+            <p id="section-8.5-2.2.1">Keys are stored securely and access-controlled appropriately for the deployment environment<a href="#section-8.5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-8.5-2.3">
+            <p id="section-8.5-2.3.1">Key rotation policies are established based on usage volume and security requirements<a href="#section-8.5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-8.5-2.4">
+            <p id="section-8.5-2.4.1">Key compromise procedures are defined and tested<a href="#section-8.5-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
 </section>
 </div>
 </section>
@@ -3239,6 +3293,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <dt id="RFC4291">[RFC4291]</dt>
         <dd>
 <span class="refAuthor">Hinden, R.</span> and <span class="refAuthor">S. Deering</span>, <span class="refTitle">"IP Version 6 Addressing Architecture"</span>, <span class="seriesInfo">RFC 4291</span>, <span class="seriesInfo">DOI 10.17487/RFC4291</span>, <time datetime="2006-02" class="refDate">February 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4291">https://www.rfc-editor.org/rfc/rfc4291</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5869">[RFC5869]</dt>
+        <dd>
+<span class="refAuthor">Krawczyk, H.</span> and <span class="refAuthor">P. Eronen</span>, <span class="refTitle">"HMAC-based Extract-and-Expand Key Derivation Function (HKDF)"</span>, <span class="seriesInfo">RFC 5869</span>, <span class="seriesInfo">DOI 10.17487/RFC5869</span>, <time datetime="2010-05" class="refDate">May 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5869">https://www.rfc-editor.org/rfc/rfc5869</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5952">[RFC5952]</dt>
         <dd>
