@@ -37,7 +37,7 @@ normative:
     target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf
 
 informative:
-  IPCRYPT-PAPER:
+  IPCRYPT:
     title: "IPCrypt: Optimal, Practical Encryption of IP Addresses for Privacy and Measurement"
     author:
       - ins: F. Denis
@@ -222,7 +222,7 @@ The following examples demonstrate how the same IP addresses transform under eac
 192.168.1.254 -> 35fc2338...25abed5d  # Same input, different outputs
 ~~~
 
-These methods achieve optimal efficiency for their security goals: each variant uses the minimum ciphertext expansion and fewest cryptographic operations needed for its properties (format preservation, prefix preservation, or correlation resistance). {{IPCRYPT-PAPER}}.
+These methods achieve optimal efficiency for their security goals: each variant uses the minimum ciphertext expansion and fewest cryptographic operations needed for its properties (format preservation, prefix preservation, or correlation resistance). {{IPCRYPT}}.
 
 For implementation guidelines, see {{implementation-details}}.
 
