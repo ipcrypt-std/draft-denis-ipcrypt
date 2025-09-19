@@ -618,6 +618,29 @@ Implementations MUST ensure that:
 3. Side-channel attacks are mitigated through constant-time operations
 4. Error handling does not leak sensitive information
 
+## Key Derivation for Multiple Variants
+
+When using multiple encryption variants within the same deployment, implementations MUST derive separate keys for each variant to prevent cross-mode correlations. The RECOMMENDED approach uses HKDF ({{!RFC5869}}) to derive per-variant subkeys from a single master key:
+
+- `K_deterministic = HKDF-Expand(PRK, "ipcrypt-deterministic", 16)`
+- `K_pfx = HKDF-Expand(PRK, "ipcrypt-pfx", 32)`
+- `K_nd = HKDF-Expand(PRK, "ipcrypt-nd", 16)`
+- `K_ndx = HKDF-Expand(PRK, "ipcrypt-ndx", 32)`
+
+Where:
+
+- `PRK = HKDF-Extract(salt, K_master)` is a pseudorandom key derived from the master key
+- `K_master` is a uniformly random master key
+- `salt` is either empty or a fixed random value for the application
+- The strings `"ipcrypt-deterministic"`, etc. are used as the `info` parameter for domain separation
+- The third parameter specifies the output length in bytes (16 for single AES keys, 32 for `ipcrypt-pfx` and `ipcrypt-ndx`)
+
+This ensures that:
+
+1. Using the same master key across different variants does not enable cross-variant attacks
+2. Key management is simplified by requiring only a single master key
+3. Each variant operates with cryptographically independent keys
+
 ## Key Management Considerations
 
 Implementers MUST ensure:
@@ -626,8 +649,6 @@ Implementers MUST ensure:
 2. Keys are stored securely and access-controlled appropriately for the deployment environment
 3. Key rotation policies are established based on usage volume and security requirements
 4. Key compromise procedures are defined and tested
-
-For high-volume deployments processing billions of IP addresses, regular key rotation (e.g., monthly or quarterly) is RECOMMENDED to stay well within the security bounds discussed in this document.
 
 # Implementation Details {#implementation-details}
 
