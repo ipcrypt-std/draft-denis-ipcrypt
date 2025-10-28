@@ -395,6 +395,8 @@ Organizations requiring network metadata for analytics have two options:
 
 Both approaches provide advantages over IP address truncation, which provides inconsistent protection and irreversibly destroys data.
 
+When auxiliary information such as AS number and geographical location is required, it SHOULD be stored as metadata at the time of logging. Performing these mappings later may yield different results as network allocations and routing information change over time. This recommendation applies to all encryption modes: even with `ipcrypt-pfx`, the preserved network structure does not retain these additional attributes.
+
 # Prefix-Preserving Encryption {#prefix-preserving-encryption}
 
 Prefix-preserving encryption maintains network structure in encrypted IP addresses. Addresses from the same network produce encrypted addresses that share a common prefix, enabling privacy-preserving network analytics while preventing identification of specific networks or users.
