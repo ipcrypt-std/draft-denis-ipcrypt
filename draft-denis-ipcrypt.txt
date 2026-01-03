@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                               Fastly Inc.
-Intended status: Informational                           28 October 2025
-Expires: 1 May 2026
+Intended status: Informational                            3 January 2025
+Expires: 7 July 2025
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 May 2026.
+   This Internet-Draft will expire on 7 July 2025.
 
 Copyright Notice
 
@@ -807,6 +807,11 @@ IPv4 Address:           192.0.2.1
    The ipcrypt-ndx instantiation uses the AES-XTS tweakable block cipher
    with a 16-byte (128-bit) tweak.  The output is 32 bytes total,
    consisting of a 16-byte tweak concatenated with a 16-byte ciphertext.
+
+   Since only a single block is encrypted, the construction is
+   equivalent to AES-XTX (also known as XEX), and identical to AES-XTS
+   at block index 0, where the tweak is not multiplied by the primitive
+   element α.
 
    For single-block AES-XTS, independent sampling of a 16-byte tweak
    results in an expected collision after about 2^64 operations
