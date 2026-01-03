@@ -547,6 +547,8 @@ Test vectors are provided in {{ipcrypt-nd-test-vectors}}.
 
 The `ipcrypt-ndx` instantiation uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. The output is 32 bytes total, consisting of a 16-byte tweak concatenated with a 16-byte ciphertext.
 
+Since only a single block is encrypted, the construction is equivalent to AES-XTX (also known as XEX), and identical to AES-XTS at block index 0, where the tweak is not multiplied by the primitive element α.
+
 For single-block AES-XTS, independent sampling of a 16-byte tweak results in an expected collision after about 2<sup>64</sup> operations (approximately 18 quintillion).
 
 Similar to `ipcrypt-nd`, collisions reveal repetition without compromising the input value. These limits are per key, and regular key rotation extends secure usage. The effective security is governed by AES-128 strength (approximately 2<sup>128</sup> operations).
