@@ -1686,7 +1686,7 @@ IPv4 Address:           192.0.2.1
 
    Multiple independent, interoperable implementations have been
    developed and include Awk, C, D, Dart, Elixir, Go, Java, JavaScript,
-   Kotlin, PHP, Python, Ruby, Rust, Swift, and Zig.
+   Kotlin, Lua, PHP, Python, Ruby, Rust, Swift, and Zig.
 
    A comprehensive list of implementations and their test results is
    available at: https://ipcrypt-std.github.io/implementations/
