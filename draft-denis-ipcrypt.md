@@ -547,7 +547,7 @@ Test vectors are provided in {{ipcrypt-nd-test-vectors}}.
 
 The `ipcrypt-ndx` instantiation uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. The output is 32 bytes total, consisting of a 16-byte tweak concatenated with a 16-byte ciphertext.
 
-Since only a single block is encrypted, the construction is equivalent to AES-XTX (also known as XEX), and identical to AES-XTS at block index 0, where the tweak is not multiplied by the primitive element α.
+Since only a single block is encrypted, the construction is equivalent to AES-XEX, and identical to AES-XTS at block index 0, where the tweak is not multiplied by the primitive element α.
 
 For single-block AES-XTS, independent sampling of a 16-byte tweak results in an expected collision after about 2<sup>64</sup> operations (approximately 18 quintillion).
 
@@ -1195,7 +1195,7 @@ function AES_XTS_encrypt(key, tweak, block):
     // Encrypt the tweak with the second half of the key
     ET = AES128_encrypt(K2, tweak)
 
-    // Encrypt the block: AES128(block ⊕ ET, K1) ⊕ ET
+    // Encrypt the block: AES128_encrypt(K1, block ⊕ ET) ⊕ ET
     return AES128_encrypt(K1, block ⊕ ET) ⊕ ET
 
 function AES_XTS_decrypt(key, tweak, block):
@@ -1205,7 +1205,7 @@ function AES_XTS_decrypt(key, tweak, block):
     // Encrypt the tweak with the second half of the key
     ET = AES128_encrypt(K2, tweak)
 
-    // Decrypt the block: AES128_decrypt(block ⊕ ET, K1) ⊕ ET
+    // Decrypt the block: AES128_decrypt(K1, block ⊕ ET) ⊕ ET
     return AES128_decrypt(K1, block ⊕ ET) ⊕ ET
 ~~~
 
