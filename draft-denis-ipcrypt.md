@@ -1327,7 +1327,7 @@ Key and tweak sizes for each variant:
 
 This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in {{!RFC7942}}.
 
-Multiple independent, interoperable implementations have been developed and include Awk, C, D, Dart, Elixir, Go, Java, JavaScript, Kotlin, PHP, Python, Ruby, Rust, Swift, and Zig.
+Multiple independent, interoperable implementations have been developed and include Awk, C, D, Dart, Elixir, Go, Java, JavaScript, Kotlin, Lua, PHP, Python, Ruby, Rust, Swift, and Zig.
 
 A comprehensive list of implementations and their test results is available at: https://ipcrypt-std.github.io/implementations/
 
