@@ -22,13 +22,12 @@ pi: [toc, sortrefs, symrefs]
 normative:
   FIPS-197:
     title: "Advanced Encryption Standard (AES)"
+    date: 2023-05
     author:
-      - ins: NIST
-        org: National Institute of Standards and Technology
-    date: 2001-11-26
+      org: NIST
     seriesinfo:
-      FIPS: PUB 197
-    target: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf
+      NIST FIPS: 197
+      DOI: 10.6028/NIST.FIPS.197-upd1
   NIST-SP-800-38G:
     title: "Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption"
     author:
