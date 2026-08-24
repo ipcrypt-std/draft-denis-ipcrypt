@@ -74,24 +74,21 @@ informative:
     author:
       - ins: S. Lucks
     date: 2000-05-14
-    seriesinfo:
-      EUROCRYPT 2000, LNCS 1807, pp. 470-484
+    rc: "EUROCRYPT 2000, LNCS 1807, pp. 470-484"
     target: https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf
   PATARIN-2008:
     title: "A Proof of Security in O(2^n) for the Xor of Two Random Permutations"
     author:
       - ins: J. Patarin
     date: 2008
-    seriesinfo:
-      ICITS 2008, LNCS 5155, pp. 232-248
+    rc: "ICITS 2008, LNCS 5155, pp. 232-248"
     target: https://link.springer.com/chapter/10.1007/978-3-540-85093-9_22
   PATARIN-H-COEFFICIENTS:
     title: "The 'Coefficients H' Technique"
     author:
       - ins: J. Patarin
     date: 2009
-    seriesinfo:
-      SAC 2008, LNCS 5381, pp. 328-345
+    rc: "SAC 2008, LNCS 5381, pp. 328-345"
     target: https://link.springer.com/chapter/10.1007/978-3-642-04159-4_21
   DEOXYS-TBC:
     title: "The Deoxys AEAD Family"
@@ -101,8 +98,7 @@ informative:
       - ins: T. Peyrin
       - ins: Y. Seurin
     date: 2021-06-10
-    seriesinfo:
-      Journal of Cryptology 34, 31 (2021)
+    rc: "Journal of Cryptology 34, 31 (2021)"
     target: https://thomaspeyrin.github.io/web/assets/docs/papers/Jean-etal-JoC2021.pdf
   SKINNY:
     title: "The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"
@@ -117,8 +113,7 @@ informative:
       - ins: P. Sasdrich
       - ins: S. Meng Sim
     date: 2016-08-14
-    seriesinfo:
-      CRYPTO 2016, LNCS 9815, pp. 123-153
+    rc: "CRYPTO 2016, LNCS 9815, pp. 123-153"
     target: https://eprint.iacr.org/2016/660.pdf
   LRW2002:
     title: "Tweakable Block Ciphers"
@@ -127,8 +122,7 @@ informative:
       - ins: R. Rivest
       - ins: D. Wagner
     date: 2002-08-18
-    seriesinfo:
-      CRYPTO 2002, LNCS 2442, pp. 31-46
+    rc: "CRYPTO 2002, LNCS 2442, pp. 31-46"
     target: https://people.csail.mit.edu/rivest/pubs/LRW02.pdf
   BRW2005:
     title: "Format-Preserving Encryption"
@@ -136,8 +130,7 @@ informative:
       - ins: J. Black
       - ins: P. Rogaway
     date: 2002-02-08
-    seriesinfo:
-      CT-RSA 2002, LNCS 2271, pp. 114-130
+    rc: "CT-RSA 2002, LNCS 2271, pp. 114-130"
     target: https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf
   KIASU-BC:
     title: "Tweaks and Keys for Block Ciphers: the TWEAKEY Framework"
@@ -146,8 +139,7 @@ informative:
       - ins: I. Nikolić
       - ins: T. Peyrin
     date: 2014-12
-    seriesinfo:
-      ASIACRYPT 2014, LNCS 8874, pp. 274-288
+    rc: "ASIACRYPT 2014, LNCS 8874, pp. 274-288"
     target: https://eprint.iacr.org/2014/831.pdf
   XTS-AES:
     title: "The XTS-AES Mode for Disk Encryption"
