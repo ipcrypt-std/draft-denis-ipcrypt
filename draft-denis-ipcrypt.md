@@ -166,7 +166,7 @@ informative:
 
 --- abstract
 
-This document specifies secure, efficient methods for IP address encryption and obfuscation in privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees.
+This document specifies secure, efficient methods for Internet Protocol (IP) address encryption and obfuscation in privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees.
 
 Four modes are defined: `ipcrypt-deterministic` (format-preserving, IP-address output), `ipcrypt-pfx` (prefix-preserving, native address size), `ipcrypt-nd` and `ipcrypt-ndx` (non-deterministic with random tweaks). All support high-performance processing at network speeds and produce interoperable results across implementations.
 
@@ -174,7 +174,7 @@ Four modes are defined: `ipcrypt-deterministic` (format-preserving, IP-address o
 
 # Introduction
 
-IP addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing variable privacy levels; a /24 mask may obscure one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and have limited interoperability.
+Internet Protocol (IP) addresses are personally identifiable information requiring protection, yet common anonymization approaches have fundamental limitations. Truncation (zeroing parts of addresses) irreversibly destroys data while providing variable privacy levels; a /24 mask may obscure one user or thousands depending on network allocation. Hashing produces non-reversible outputs unsuitable for operational tasks such as abuse investigation. Ad-hoc encryption schemes often lack rigorous security analysis and have limited interoperability.
 
 This document addresses these deficiencies by specifying secure, efficient, and interoperable methods for IP address encryption and obfuscation.
 
@@ -253,6 +253,7 @@ Throughout this document, the following terms and conventions apply:
 - Permutation: A bijective function where each distinct input maps to a unique output, ensuring reversibility.
 - Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from random values.
 - Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.
+- Exclusive OR (XOR): A bitwise operation whose output is 1 when its two input bits differ and 0 otherwise.
 - Tweak: A non-secret, additional input to a tweakable block cipher that further randomizes the output.
 - Deterministic Encryption: Encryption that always produces the same ciphertext for a given input and key.
 - Non-Deterministic Encryption: Encryption that produces different ciphertexts for the same input due to the inclusion of a randomly sampled tweak.
@@ -399,7 +400,7 @@ Organizations requiring network metadata for analytics have two options:
 
 1. Use `ipcrypt-pfx` to preserve network structure within the encrypted addresses, enabling network-level analysis while keeping actual network identities encrypted.
 
-2. For non-prefix-preserving modes (`ipcrypt-deterministic`, `ipcrypt-nd`, `ipcrypt-ndx`), extract and store metadata (geographic location, ASN, network classification) as separate fields before encryption.
+2. For non-prefix-preserving modes (`ipcrypt-deterministic`, `ipcrypt-nd`, `ipcrypt-ndx`), extract and store metadata (geographic location, autonomous system number (ASN), network classification) as separate fields before encryption.
 
 Both approaches provide advantages over IP address truncation, which provides inconsistent protection and irreversibly destroys data.
 
@@ -413,7 +414,7 @@ Unlike standard encryption that completely scrambles addresses, prefix-preservin
 
 - Detect traffic patterns from common networks without knowing which specific networks
 - Perform network-level rate limiting on encrypted addresses
-- Implement DDoS mitigation while preserving user privacy
+- Implement distributed denial-of-service (DDoS) mitigation while preserving user privacy
 - Analyze network topology without accessing raw IP addresses
 
 This mode balances privacy with analytical capability: individual addresses remain encrypted and network identities are cryptographically transformed, but network relationships remain visible through shared encrypted prefixes.
@@ -447,7 +448,7 @@ The `ipcrypt-pfx` instantiation implements prefix-preserving encryption using a 
 
 The encryption uses a pseudorandom function based on the XOR of two independently keyed AES-128 encryptions. The 32-byte key is split into two independent 16-byte AES-128 keys (`K1` and `K2`).
 
-For each bit position (processing from MSB to LSB):
+For each bit position (processing from the most significant bit (MSB) to the least significant bit (LSB)):
 
 1. Prefix Padding: The prefix (all bits processed so far from the original IP address) is padded to 128 bits using the format `zeros || 1 || prefix_bits`, where:
    - The prefix bits are extracted from the most significant bits of the original IP address
@@ -595,7 +596,7 @@ While this specification recommends uniformly random tweaks for non-deterministi
 
 - Monotonic Counter: A counter could be used as a tweak, but this is difficult to maintain in distributed systems. If the counter is not encrypted and the tweakable block cipher is not secure against related-tweak attacks, this could enable correlation attacks.
 
-- UUIDs: UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.
+- Universally unique identifiers (UUIDs), such as UUIDv6 or UUIDv7, could be used as tweaks; however, these would reveal the original timestamp of the logged IP addresses, which may not be desirable from a privacy perspective.
 
 Although the birthday bound presents considerations with random tweaks, random tweaks remain the recommended approach for practical deployments.
 
@@ -640,7 +641,7 @@ Implementations MUST ensure that:
 
 ## Key Derivation for Multiple Variants
 
-When using multiple encryption variants within the same deployment, implementations MUST derive separate keys for each variant to prevent cross-mode correlations. The RECOMMENDED approach uses HKDF ({{!RFC5869}}) to derive per-variant subkeys from a single master key:
+When using multiple encryption variants within the same deployment, implementations MUST derive separate keys for each variant to prevent cross-mode correlations. The RECOMMENDED approach uses the HMAC-based key derivation function (HKDF) {{!RFC5869}} to derive per-variant subkeys from a single master key. The pseudorandom key (PRK) is used as follows:
 
 - `K_deterministic = HKDF-Expand(PRK, "ipcrypt-deterministic", 16)`
 - `K_pfx = HKDF-Expand(PRK, "ipcrypt-pfx", 32)`
