@@ -10,7 +10,6 @@ author:
   - name: "Christopher Barber"
     organization: "Trim"
     email: cbarbernash@gmail.com
-author:
   - name: "Frank Denis"
     organization: "Fastly Inc."
     email: fde@00f.net
