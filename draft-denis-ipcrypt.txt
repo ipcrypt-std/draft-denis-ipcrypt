@@ -14,11 +14,11 @@ Expires: 25 February 2027                                    Fastly Inc.
 
 Abstract
 
-   This document specifies secure, efficient methods for IP address
-   encryption and obfuscation in privacy-preserving storage, logging,
-   and analytics.  Unlike truncation, which destroys data irreversibly,
-   these methods are reversible with the encryption key while providing
-   strong privacy guarantees.
+   This document specifies secure, efficient methods for Internet
+   Protocol (IP) address encryption and obfuscation in privacy-
+   preserving storage, logging, and analytics.  Unlike truncation, which
+   destroys data irreversibly, these methods are reversible with the
+   encryption key while providing strong privacy guarantees.
 
    Four modes are defined: ipcrypt-deterministic (format-preserving, IP-
    address output), ipcrypt-pfx (prefix-preserving, native address
@@ -65,7 +65,6 @@ Table of Contents
 
    1.  Introduction
      1.1.  Use Cases and Motivations
-     1.2.  Relationship to IETF Work
    2.  Terminology
    3.  IP Address Conversion
      3.1.  Converting to a 16-Byte Representation
@@ -132,11 +131,9 @@ Table of Contents
        9.9.4.  Key Schedule
        9.9.5.  Implementation Steps
        9.9.6.  Example Implementation
-   10. Implementation Status
-   11. Licensing
-   12. References
-     12.1.  Normative References
-     12.2.  Informative References
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
    Appendix A.  Test Vectors
      A.1.  ipcrypt-deterministic Test Vectors
      A.2.  ipcrypt-pfx Test Vectors
@@ -150,14 +147,15 @@ Table of Contents
 
 1.  Introduction
 
-   IP addresses are personally identifiable information requiring
-   protection, yet common anonymization approaches have fundamental
-   limitations.  Truncation (zeroing parts of addresses) irreversibly
-   destroys data while providing variable privacy levels; a /24 mask may
-   obscure one user or thousands depending on network allocation.
-   Hashing produces non-reversible outputs unsuitable for operational
-   tasks such as abuse investigation.  Ad-hoc encryption schemes often
-   lack rigorous security analysis and have limited interoperability.
+   Internet Protocol (IP) addresses are personally identifiable
+   information requiring protection, yet common anonymization approaches
+   have fundamental limitations.  Truncation (zeroing parts of
+   addresses) irreversibly destroys data while providing variable
+   privacy levels; a /24 mask may obscure one user or thousands
+   depending on network allocation.  Hashing produces non-reversible
+   outputs unsuitable for operational tasks such as abuse investigation.
+   Ad-hoc encryption schemes often lack rigorous security analysis and
+   have limited interoperability.
 
    This document addresses these deficiencies by specifying secure,
    efficient, and interoperable methods for IP address encryption and
@@ -230,9 +228,9 @@ Table of Contents
    *  Format-preserving: Valid IP addresses, same input always produces
       same output:
 
- 192.168.1.1   -> d1e9:518:d5bc:4487:51c6:c51f:44ed:e9f6
- 192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696
- 192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Same output
+   192.168.1.1   -> d1e9:518:d5bc:4487:51c6:c51f:44ed:e9f6
+   192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696
+   192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Repeated
 
    *  Prefix-preserving: Maintains network structure, same prefix when
       IPs share prefix:
@@ -254,21 +252,6 @@ Table of Contents
    [IPCRYPT].
 
    For implementation guidelines, see Section 9.
-
-1.2.  Relationship to IETF Work
-
-   _This section is to be removed before publishing as an RFC._
-
-   This document does not conflict with active IETF working group
-   efforts.  While the IETF has produced several RFCs related to privacy
-   ([RFC6973], [RFC7258], [RFC7624]), there is no current
-   standardization effort for IP address encryption methods.  This
-   specification complements existing IETF privacy guidance by providing
-   implementation methods.
-
-   The AES-based cryptographic primitives used align with IETF
-   cryptographic recommendations, and the document follows IETF
-   formatting and terminology conventions where applicable.
 
 2.  Terminology
 
@@ -303,6 +286,9 @@ Table of Contents
    *  Tweakable Block Cipher (TBC): A block cipher that accepts an
       additional non-secret parameter (tweak) along with the key and
       plaintext, allowing domain separation without changing keys.
+
+   *  Exclusive OR (XOR): A bitwise operation whose output is 1 when its
+      two input bits differ and 0 otherwise.
 
    *  Tweak: A non-secret, additional input to a tweakable block cipher
       that further randomizes the output.
@@ -344,16 +330,18 @@ Table of Contents
 
    _Example:_
 
-IPv6 Address:           2001:0db8:85a3:0000:0000:8a2e:0370:7334
-16-Byte Representation: [20 01 0d b8 85 a3 00 00 00 00 8a 2e 03 70 73 34]
+   IPv6 Address:           2001:0db8:85a3:0000:0000:8a2e:0370:7334
+   16-Byte Representation:
+     [20 01 0d b8 85 a3 00 00 00 00 8a 2e 03 70 73 34]
 
 3.1.2.  IPv4 Addresses
 
    IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6 format
    as specified in [RFC4291]:
 
-IPv4 Address:           192.0.2.1
-16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
+   IPv4 Address:           192.0.2.1
+   16-Byte Representation:
+     [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
 
    Note on representation equivalence: For all ipcrypt variants,
    encrypting an IPv4 address and encrypting its IPv4-mapped IPv6 form
@@ -524,8 +512,8 @@ IPv4 Address:           192.0.2.1
 
    2.  For non-prefix-preserving modes (ipcrypt-deterministic, ipcrypt-
        nd, ipcrypt-ndx), extract and store metadata (geographic
-       location, ASN, network classification) as separate fields before
-       encryption.
+       location, autonomous system number (ASN), network classification)
+       as separate fields before encryption.
 
    Both approaches provide advantages over IP address truncation, which
    provides inconsistent protection and irreversibly destroys data.
@@ -554,7 +542,8 @@ IPv4 Address:           192.0.2.1
 
    *  Perform network-level rate limiting on encrypted addresses
 
-   *  Implement DDoS mitigation while preserving user privacy
+   *  Implement distributed denial-of-service (DDoS) mitigation while
+      preserving user privacy
 
    *  Analyze network topology without accessing raw IP addresses
 
@@ -617,7 +606,8 @@ IPv4 Address:           192.0.2.1
    independently keyed AES-128 encryptions.  The 32-byte key is split
    into two independent 16-byte AES-128 keys (K1 and K2).
 
-   For each bit position (processing from MSB to LSB):
+   For each bit position (processing from the most significant bit (MSB)
+   to the least significant bit (LSB)):
 
    1.  Prefix Padding: The prefix (all bits processed so far from the
        original IP address) is padded to 128 bits using the format
@@ -888,10 +878,10 @@ IPv4 Address:           192.0.2.1
       not encrypted and the tweakable block cipher is not secure against
       related-tweak attacks, this could enable correlation attacks.
 
-   *  UUIDs: UUIDs (such as UUIDv6 or UUIDv7) could be used as tweaks;
-      however, these would reveal the original timestamp of the logged
-      IP addresses, which may not be desirable from a privacy
-      perspective.
+   *  Universally unique identifiers (UUIDs), such as UUIDv6 or UUIDv7,
+      could be used as tweaks; however, these would reveal the original
+      timestamp of the logged IP addresses, which may not be desirable
+      from a privacy perspective.
 
    Although the birthday bound presents considerations with random
    tweaks, random tweaks remain the recommended approach for practical
@@ -963,8 +953,10 @@ IPv4 Address:           192.0.2.1
 
    When using multiple encryption variants within the same deployment,
    implementations MUST derive separate keys for each variant to prevent
-   cross-mode correlations.  The RECOMMENDED approach uses HKDF
-   ([RFC5869]) to derive per-variant subkeys from a single master key:
+   cross-mode correlations.  The RECOMMENDED approach uses the HMAC-
+   based key derivation function (HKDF) [RFC5869] to derive per-variant
+   subkeys from a single root key.  The pseudorandom key (PRK) is used
+   as follows:
 
    *  K_deterministic = HKDF-Expand(PRK, "ipcrypt-deterministic", 16)
 
@@ -976,10 +968,10 @@ IPv4 Address:           192.0.2.1
 
    Where:
 
-   *  PRK = HKDF-Extract(salt, K_master) is a pseudorandom key derived
-      from the master key
+   *  PRK = HKDF-Extract(salt, K_root) is a pseudorandom key derived
+      from the root key
 
-   *  K_master is a uniformly random master key
+   *  K_root is a uniformly random root key
 
    *  salt is either empty or a fixed random value for the application
 
@@ -991,11 +983,10 @@ IPv4 Address:           192.0.2.1
 
    This ensures that:
 
-   1.  Using the same master key across different variants does not
-       enable cross-variant attacks
+   1.  Using the same root key across different variants does not enable
+       cross-variant attacks
 
-   2.  Key management is simplified by requiring only a single master
-       key
+   2.  Key management is simplified by requiring only a single root key
 
    3.  Each variant operates with cryptographically independent keys
 
@@ -1153,7 +1144,8 @@ IPv4 Address:           192.0.2.1
 
    function ipv6_to_16_bytes(ipv6_address):
        // Parse the IPv6 address into eight 16-bit words.
-       words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
+       words = parseIPv6(ipv6_address)
+       // Expands shorthand notation and returns eight words
        bytes16 = []
        for word in words:
             high_byte = (word >> 8) & 0xFF
@@ -1178,11 +1170,14 @@ IPv4 Address:           192.0.2.1
             raise Error("Invalid byte array")
 
        // Check for the IPv4-mapped prefix
-       // When an IPv4-mapped IPv6 address (::ffff:x.x.x.x) is detected,
-       // it is converted back to IPv4 format. This is expected
-       // behavior as IPv4 addresses are internally represented as IPv4-mapped
-       // IPv6 addresses for uniform processing.
-       ipv4_mapped_prefix = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF]
+       // When an IPv4-mapped IPv6 address (::ffff:x.x.x.x) is
+       // detected, convert it back to IPv4 format. This is expected
+       // because IPv4 addresses are represented as IPv4-mapped IPv6
+       // addresses for uniform processing.
+       ipv4_mapped_prefix = [
+           0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+           0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF
+       ]
        if bytes16[0..12] == ipv4_mapped_prefix:
             // Convert the 4 last bytes to an IPv4 address
             ipv4_parts = []
@@ -1191,7 +1186,7 @@ IPv4 Address:           192.0.2.1
             ipv4_address = join(ipv4_parts, ".")
             return ipv4_address
        else:
-            // Convert the 16 bytes to an IPv6 address with canonical representation
+            // Convert the 16 bytes to a canonical IPv6 address
             words = []
             for i from 0 to 8:
                 word = (bytes16[i*2] << 8) | bytes16[i*2+1]
@@ -1281,9 +1276,10 @@ IPv4 Address:           192.0.2.1
        // Initialize encrypted result with zeros
        encrypted = [0] * 16
 
-       // If we encrypt an IPv4 address, start where the IPv4 address starts (bit 96)
-       // Note the first 12 bytes of bytes16 are already set to the prefix for IPv4 mapping in that case
-       // This provides domain separation between an IPv4 address and the first 32 bits of an IPv6 address
+       // For IPv4, start at bit 96, where the address starts.
+       // The first 12 bytes already contain the IPv4-mapped prefix.
+       // This provides domain separation from the first 32 bits of
+       // an IPv6 address.
        if is_ipv4_mapped(bytes16):
            prefix_start = 96
            // Set up the IPv4-mapped IPv6 prefix
@@ -1296,19 +1292,21 @@ IPv4 Address:           192.0.2.1
        padded_prefix = pad_prefix(bytes16, prefix_start)
 
        // Process each bit position sequentially
-       // Note: prefix_len_bits represents how many bits from the MSB have been processed
-       // Range is [prefix_start, 128), i.e., up to but not including 128
+       // prefix_len_bits is the number of bits processed from the MSB.
+       // Its range is [prefix_start, 128), excluding 128.
        for prefix_len_bits from prefix_start to 128:
            // Compute pseudorandom function with dual AES encryption
            e1 = AES128_encrypt(K1, padded_prefix)
            e2 = AES128_encrypt(K2, padded_prefix)
            e = e1 ⊕ e2
-           // Output of the pseudorandom function is the least significant bit of e
+           // The PRF output is the least significant bit of e.
            cipher_bit = get_bit(e, 0)
 
-           // Encrypt the current bit position (processing from MSB to LSB)
-           // For IPv6: prefix_len_bits=0 encrypts bit 127, prefix_len_bits=1 encrypts bit 126, etc.
-           // For IPv4: prefix_len_bits=96 encrypts bit 31, prefix_len_bits=97 encrypts bit 30, etc.
+           // Encrypt the current bit, processing from MSB to LSB.
+           // For IPv6, prefix_len_bits=0 encrypts bit 127;
+           // prefix_len_bits=1 encrypts bit 126, etc.
+           // For IPv4, prefix_len_bits=96 encrypts bit 31;
+           // prefix_len_bits=97 encrypts bit 30, etc.
            bit_pos = 127 - prefix_len_bits
            original_bit = get_bit(bytes16, bit_pos)
            set_bit(encrypted, bit_pos, cipher_bit ^ original_bit)
@@ -1338,7 +1336,7 @@ IPv4 Address:           192.0.2.1
        // Initialize decrypted result with zeros
        decrypted = [0] * 16
 
-       // If we decrypt an IPv4 address, start where the IPv4 address starts (bit 96)
+       // For IPv4, start at bit 96, where the address starts.
        if is_ipv4_mapped(encrypted_bytes):
            prefix_start = 96
            // Set up the IPv4-mapped IPv6 prefix
@@ -1351,20 +1349,22 @@ IPv4 Address:           192.0.2.1
        padded_prefix = pad_prefix(decrypted, prefix_start)
 
        // Process each bit position sequentially
-       // Note: prefix_len_bits represents how many bits from the MSB have been processed
-       // Range is [prefix_start, 128), i.e., up to but not including 128
+       // prefix_len_bits is the number of bits processed from the MSB.
+       // Its range is [prefix_start, 128), excluding 128.
        for prefix_len_bits from prefix_start to 128:
            // Compute pseudorandom function with dual AES encryption
            e1 = AES128_encrypt(K1, padded_prefix)
            e2 = AES128_encrypt(K2, padded_prefix)
-           // e is expected to be the same as during encryption since the prefix is the same
+           // e matches encryption because the prefix is the same.
            e = e1 ⊕ e2
-           // Output of the pseudorandom function is the least significant bit of e
+           // The PRF output is the least significant bit of e.
            cipher_bit = get_bit(e, 0)
 
-           // Decrypt the current bit position (processing from MSB to LSB)
-           // For IPv6: prefix_len_bits=0 decrypts bit 127, prefix_len_bits=1 decrypts bit 126, etc.
-           // For IPv4: prefix_len_bits=96 decrypts bit 31, prefix_len_bits=97 decrypts bit 30, etc.
+           // Decrypt the current bit, processing from MSB to LSB.
+           // For IPv6, prefix_len_bits=0 decrypts bit 127;
+           // prefix_len_bits=1 decrypts bit 126, etc.
+           // For IPv4, prefix_len_bits=96 decrypts bit 31;
+           // prefix_len_bits=97 decrypts bit 30, etc.
            bit_pos = 127 - prefix_len_bits
            encrypted_bit = get_bit(encrypted_bytes, bit_pos)
            original_bit = cipher_bit ^ encrypted_bit
@@ -1384,12 +1384,17 @@ IPv4 Address:           192.0.2.1
    implementation:
 
    function is_ipv4_mapped(bytes16):
-       // Returns true if the 16-byte array has the IPv4-mapped IPv6 prefix (::ffff:0:0/96)
-       ipv4_mapped_prefix = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF]
+       // Return true for the IPv4-mapped IPv6 prefix
+       // (::ffff:0:0/96).
+       ipv4_mapped_prefix = [
+           0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+           0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF
+       ]
        return bytes16[0..12] == ipv4_mapped_prefix
 
    function get_bit(data, position):
-       // Extract bit at position from 16-byte array representing an IPv6 address in network byte order
+       // Extract a bit from a 16-byte IPv6 address in network byte
+       // order.
        // position: 0 = LSB of byte 15, 127 = MSB of byte 0
        // Example: position 127 refers to bit 7 (MSB) of data[0]
        // Example: position 0 refers to bit 0 (LSB) of data[15]
@@ -1398,7 +1403,7 @@ IPv4 Address:           192.0.2.1
        return (data[byte_index] >> bit_index) & 1
 
    function set_bit(data, position, value):
-       // Set bit at position in 16-byte array representing an IPv6 address in network byte order
+       // Set a bit in a 16-byte IPv6 address in network byte order.
        // position: 0 = LSB of byte 15, 127 = MSB of byte 0
        byte_index = 15 - (position / 8)
        bit_index = position % 8
@@ -1406,36 +1411,44 @@ IPv4 Address:           192.0.2.1
 
    function pad_prefix(data, prefix_len_bits):
        // Specialized for the only two cases used: 0 and 96
-       // For prefix_len_bits=0: Returns a block with only bit 0 set (position 0 = LSB of byte 15)
-       // For prefix_len_bits=96: Returns the IPv4-mapped prefix with separator at position 96
+       // For prefix_len_bits=0, return a block with only bit 0 set
+       // (position 0 = LSB of byte 15).
+       // For prefix_len_bits=96, return the IPv4-mapped prefix with
+       // the separator at position 96.
 
        if prefix_len_bits == 0:
            // For IPv6 addresses starting from bit 0
            padded_prefix = [0] * 16
-           padded_prefix[15] = 0x01  // Set bit at position 0 (LSB of byte 15)
+           // Set bit 0 (the LSB of byte 15).
+           padded_prefix[15] = 0x01
            return padded_prefix
 
        else if prefix_len_bits == 96:
-           // For IPv4 addresses, always returns the same value since all IPv4 addresses
-           // share the same IPv4-mapped prefix (00...00 ffff)
+           // All IPv4 addresses share the same IPv4-mapped prefix
+           // (00...00 ffff), so always return the same value.
            padded_prefix = [0] * 16
-           padded_prefix[3] = 0x01   // Set separator bit at position 96 (bit 0 of byte 3)
+           // Set the separator at position 96 (bit 0 of byte 3).
+           padded_prefix[3] = 0x01
            padded_prefix[14] = 0xFF  // IPv4-mapped prefix
            padded_prefix[15] = 0xFF  // IPv4-mapped prefix
            return padded_prefix
 
        else:
-           raise Error("pad_prefix only supports prefix_len_bits of 0 or 96")
+           raise Error(
+               "pad_prefix only supports prefix_len_bits of 0 or 96"
+           )
 
    function shift_left_one_bit(data):
        // Shift a 16-byte array one bit to the left
-       // The most significant bit is lost, and a zero bit is shifted in from the right
+       // Discard the most significant bit and shift in a zero from
+       // the right.
        result = [0] * 16
        carry = 0
 
-       // Process from least significant byte (byte 15) to most significant byte (byte 0)
+       // Process from the least significant byte (byte 15) to the
+       // most significant byte (byte 0).
        for i from 15 down to 0:
-           // Current byte shifted left by 1, with carry from previous byte
+           // Shift the byte left by 1 with the previous carry.
            result[i] = ((data[i] << 1) | carry) & 0xFF
            // Extract the bit that will be carried to the next byte
            carry = (data[i] >> 7) & 1
@@ -1460,7 +1473,8 @@ IPv4 Address:           192.0.2.1
        ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
 
        // Step 4: Concatenate tweak and ciphertext
-       result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
+       // 8 bytes || 16 bytes = 24 bytes total
+       result = concatenate(tweak, ciphertext)
        return result
 
 9.7.2.  Decryption
@@ -1495,7 +1509,8 @@ IPv4 Address:           192.0.2.1
        ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
 
        // Step 4: Concatenate tweak and ciphertext
-       result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
+       // 16 bytes || 16 bytes = 32 bytes total
+       result = concatenate(tweak, ciphertext)
        return result
 
 9.8.2.  Decryption
@@ -1653,7 +1668,8 @@ IPv4 Address:           192.0.2.1
            state = sub_bytes(state)
            state = shift_rows(state)
            state = mix_columns(state)
-           state = add_round_key(state, round_keys[round] ^ padded_tweak)
+           state = add_round_key(
+               state, round_keys[round] ^ padded_tweak)
 
        // Final round
        state = sub_bytes(state)
@@ -1677,38 +1693,9 @@ IPv4 Address:           192.0.2.1
    *  ipcrypt-ndx: Key: 32 bytes (256 bits, split into two AES-128
       keys), Tweak: 16 bytes (128 bits), Output: 32 bytes
 
-10.  Implementation Status
+10.  References
 
-   _This section is to be removed before publishing as an RFC._
-
-   This section records the status of known implementations of the
-   protocol defined by this specification at the time of posting of this
-   Internet-Draft, and is based on a proposal described in [RFC7942].
-
-   Multiple independent, interoperable implementations have been
-   developed and include Awk, C, D, Dart, Elixir, Go, Java, JavaScript,
-   Kotlin, Lua, PHP, Python, Ruby, Rust, Swift, and Zig.
-
-   A comprehensive list of implementations and their test results is
-   available at: https://ipcrypt-std.github.io/implementations/
-
-   All implementations pass the common test vectors specified in this
-   document, demonstrating interoperability across programming
-   languages.
-
-11.  Licensing
-
-   _This section is to be removed before publishing as an RFC._
-
-   Implementations of the ipcrypt methods are freely available under
-   permissive open source licenses (MIT, BSD, or Apache 2.0) at the
-   repository listed in the Implementation Status section.
-
-   There are no known patent claims on these methods.
-
-12.  References
-
-12.1.  Normative References
+10.1.  Normative References
 
    [FIPS-197] NIST, "Advanced Encryption Standard (AES)", NIST FIPS 197,
               DOI 10.6028/NIST.FIPS.197-upd1, May 2023,
@@ -1746,10 +1733,6 @@ IPv4 Address:           192.0.2.1
               DOI 10.17487/RFC6973, July 2013,
               <https://www.rfc-editor.org/rfc/rfc6973>.
 
-   [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
-              Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
-              2014, <https://www.rfc-editor.org/rfc/rfc7258>.
-
    [RFC7624]  Barnes, R., Schneier, B., Jennings, C., Hardie, T.,
               Trammell, B., Huitema, C., and D. Borkmann,
               "Confidentiality in the Face of Pervasive Surveillance: A
@@ -1757,24 +1740,15 @@ IPv4 Address:           192.0.2.1
               DOI 10.17487/RFC7624, August 2015,
               <https://www.rfc-editor.org/rfc/rfc7624>.
 
-   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
-              Code: The Implementation Status Section", BCP 205,
-              RFC 7942, DOI 10.17487/RFC7942, July 2016,
-              <https://www.rfc-editor.org/rfc/rfc7942>.
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-12.2.  Informative References
-
-   [BRW2005]  Black, J. and P. Rogaway, "Format-Preserving Encryption",
-              CT-RSA 2002, LNCS 2271, pp. 114–130 , 8 February 2002,
-              <https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf>.
+10.2.  Informative References
 
    [DEOXYS-TBC]
               Jean, J., Nikolić, I., Peyrin, T., and Y. Seurin, "The
-              Deoxys AEAD Family", Journal of Cryptology 34, 31 (2021) ,
+              Deoxys AEAD Family", Journal of Cryptology 34, 31 (2021),
               10 June 2021,
               <https://thomaspeyrin.github.io/web/assets/docs/papers/
               Jean-etal-JoC2021.pdf>.
@@ -1785,12 +1759,6 @@ IPv4 Address:           192.0.2.1
               14 September 2021,
               <https://eprint.iacr.org/2021/1171.pdf>.
 
-   [IEEE-P1619]
-              IEEE, "IEEE Standard for Cryptographic Protection of Data
-              on Block-Oriented Storage Devices", IEEE 1619-2007, 4
-              March 2008,
-              <https://ieeexplore.ieee.org/document/4493450>.
-
    [IPCRYPT]  Denis, F., "IPCrypt: Optimal, Practical Encryption of IP
               Addresses for Privacy and Measurement", Cryptology ePrint
               Archive Paper 2025/1689, 9 January 2025,
@@ -1798,23 +1766,18 @@ IPv4 Address:           192.0.2.1
 
    [KIASU-BC] Jean, J., Nikolić, I., and T. Peyrin, "Tweaks and Keys for
               Block Ciphers: the TWEAKEY Framework", ASIACRYPT 2014,
-              LNCS 8874, pp. 274–288 , December 2014,
+              LNCS 8874, pp. 274-288, December 2014,
               <https://eprint.iacr.org/2014/831.pdf>.
-
-   [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable Block
-              Ciphers", CRYPTO 2002, LNCS 2442, pp. 31–46 , 18 August
-              2002,
-              <https://people.csail.mit.edu/rivest/pubs/LRW02.pdf>.
 
    [PATARIN-2008]
               Patarin, J., "A Proof of Security in O(2^n) for the Xor of
               Two Random Permutations", ICITS 2008, LNCS 5155, pp.
-              232–248 , 2008, <https://link.springer.com/
+              232-248, 2008, <https://link.springer.com/
               chapter/10.1007/978-3-540-85093-9_22>.
 
    [PATARIN-H-COEFFICIENTS]
               Patarin, J., "The 'Coefficients H' Technique", SAC 2008,
-              LNCS 5381, pp. 328–345 , 2009, <https://link.springer.com/
+              LNCS 5381, pp. 328-345, 2009, <https://link.springer.com/
               chapter/10.1007/978-3-642-04159-4_21>.
 
    [RSSAC040] ICANN RSSAC, "RSSAC040: Recommendations on Anonymization
@@ -1826,12 +1789,12 @@ IPv4 Address:           192.0.2.1
    [SKINNY]   Beierle, C., Jean, J., Koelbl, S., Leander, G., Moradi,
               A., Peyrin, T., Sasaki, Y., Sasdrich, P., and S. Meng Sim,
               "The SKINNY Family of Block Ciphers and its Low-Latency
-              Variant MANTIS", CRYPTO 2016, LNCS 9815, pp. 123–153 , 14
+              Variant MANTIS", CRYPTO 2016, LNCS 9815, pp. 123-153, 14
               August 2016, <https://eprint.iacr.org/2016/660.pdf>.
 
    [SUM-OF-PRPS]
               Lucks, S., "The Sum of PRPs Is a Secure PRF", EUROCRYPT
-              2000, LNCS 1807, pp. 470–484 , 14 May 2000,
+              2000, LNCS 1807, pp. 470-484, 14 May 2000,
               <https://link.springer.com/content/
               pdf/10.1007/3-540-45539-6_34.pdf>.
 
@@ -1874,22 +1837,26 @@ A.2.  ipcrypt-pfx Test Vectors
 A.2.1.  Basic Test Vectors
 
    # Test vector 1 (IPv4)
-   Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+   Key:          0123456789abcdeffedcba9876543210
+                 1032547698badcfeefcdab8967452301
    Input IP:     0.0.0.0
    Encrypted IP: 151.82.155.134
 
    # Test vector 2 (IPv4)
-   Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+   Key:          0123456789abcdeffedcba9876543210
+                 1032547698badcfeefcdab8967452301
    Input IP:     255.255.255.255
    Encrypted IP: 94.185.169.89
 
    # Test vector 3 (IPv4)
-   Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+   Key:          0123456789abcdeffedcba9876543210
+                 1032547698badcfeefcdab8967452301
    Input IP:     192.0.2.1
    Encrypted IP: 100.115.72.131
 
    # Test vector 4 (IPv6)
-   Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+   Key:          0123456789abcdeffedcba9876543210
+                 1032547698badcfeefcdab8967452301
    Input IP:     2001:db8::1
    Encrypted IP: c180:5dd4:2587:3524:30ab:fa65:6ab6:f88
 
@@ -1900,54 +1867,66 @@ A.2.2.  Prefix-Preserving Test Vectors
    the corresponding prefix length.
 
    # IPv4 addresses from same /24 network (10.0.0.0/24)
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     10.0.0.47
    Encrypted IP: 19.214.210.244
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     10.0.0.129
    Encrypted IP: 19.214.210.80
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     10.0.0.234
    Encrypted IP: 19.214.210.30
 
    # IPv4 addresses from same /16 but different /24 networks
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     172.16.5.193
    Encrypted IP: 210.78.229.136
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     172.16.97.42
    Encrypted IP: 210.78.179.241
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     172.16.248.177
    Encrypted IP: 210.78.121.215
 
    # IPv6 addresses from same /64 network (2001:db8::/64)
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     2001:db8::a5c9:4e2f:bb91:5a7d
    Encrypted IP: 7cec:702c:1243:f70:1956:125:b9bd:1aba
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     2001:db8::7234:d8f1:3c6e:9a52
    Encrypted IP: 7cec:702c:1243:f70:a3ef:c8e:95c1:cd0d
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     2001:db8::f1e0:937b:26d4:8c1a
    Encrypted IP: 7cec:702c:1243:f70:443c:c8e:6a62:b64d
 
    # IPv6 addresses from same /32 but different /48 networks
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     2001:db8:3a5c:0:e7d1:4b9f:2c8a:f673
    Encrypted IP: 7cec:702c:3503:bef:e616:96bd:be33:a9b9
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     2001:db8:9f27:0:b4e2:7a3d:5f91:c8e6
    Encrypted IP: 7cec:702c:a504:b74e:194a:3d90:b047:2d1a
 
-   Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 a9f5ba40db214c3798f2e1c23456789a
    Input IP:     2001:db8:d8b4:0:193c:a5e7:8b2f:46d1
    Encrypted IP: 7cec:702c:f840:aa67:1b8:e84f:ac9d:77fb
 
@@ -1974,22 +1953,28 @@ A.3.  ipcrypt-nd Test Vectors
 A.4.  ipcrypt-ndx Test Vectors
 
    # Test vector 1
-   Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+   Key:          0123456789abcdeffedcba9876543210
+                 1032547698badcfeefcdab8967452301
    Input IP:     0.0.0.0
    Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-   Output:       21bd1834bc088cd2b4ecbe30b70898d782db0d4125fdace61db35b8339f20ee5
+   Output:       21bd1834bc088cd2b4ecbe30b70898d7
+                 82db0d4125fdace61db35b8339f20ee5
 
    # Test vector 2
-   Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
+   Key:          1032547698badcfeefcdab8967452301
+                 0123456789abcdeffedcba9876543210
    Input IP:     192.0.2.1
    Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
-   Output:       08e0c289bff23b7cb4ecbe30b70898d7766a533392a69edf1ad0d3ce362ba98a
+   Output:       08e0c289bff23b7cb4ecbe30b70898d7
+                 766a533392a69edf1ad0d3ce362ba98a
 
    # Test vector 3
-   Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
+   Key:          2b7e151628aed2a6abf7158809cf4f3c
+                 3c4fcf098815f7aba6d2ae2816157e2b
    Input IP:     2001:db8::1
    Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-   Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
+   Output:       21bd1834bc088cd2b4ecbe30b70898d7
+                 6089c7e05ae30c2d10ca149870a263e4
 
    For non-deterministic variants, the tweak values shown are examples.
    Tweaks MUST be uniformly random for each encryption operation.
@@ -2000,11 +1985,12 @@ IANA Considerations
 
 Acknowledgments
 
-   We would like to thank the members of the IETF and the cryptographic
-   community for their helpful comments on this work.  Tobias Fiebig
-   conducted a detailed review of this draft.  Additional valuable
-   feedback was provided by Eliot Lear.  Assistance with implementation
-   aspects was kindly provided by Wu Tingfeng.
+   We would like to thank the members of the Internet Engineering Task
+   Force (IETF) and the cryptographic community for their helpful
+   comments on this work.  Tobias Fiebig conducted a detailed review of
+   this document.  Additional valuable feedback was provided by Eliot
+   Lear.  Assistance with implementation aspects was kindly provided by
+   Wu Tingfeng.
 
 Authors' Addresses
 
