@@ -209,7 +209,7 @@ The following examples demonstrate how the same IP addresses transform under eac
 ~~~
 192.168.1.1   -> d1e9:518:d5bc:4487:51c6:c51f:44ed:e9f6
 192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696
-192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Same output
+192.168.1.254 -> fd7e:f70f:44d7:cdb2:2992:95a1:e692:7696  # Repeated
 ~~~
 
 - Prefix-preserving: Maintains network structure, same prefix when IPs share prefix:
@@ -274,7 +274,8 @@ _Example:_
 
 ~~~
 IPv6 Address:           2001:0db8:85a3:0000:0000:8a2e:0370:7334
-16-Byte Representation: [20 01 0d b8 85 a3 00 00 00 00 8a 2e 03 70 73 34]
+16-Byte Representation:
+  [20 01 0d b8 85 a3 00 00 00 00 8a 2e 03 70 73 34]
 ~~~
 
 ### IPv4 Addresses
@@ -283,7 +284,8 @@ IPv4 addresses (32 bits) are mapped using the IPv4-mapped IPv6 format as specifi
 
 ~~~
 IPv4 Address:           192.0.2.1
-16-Byte Representation: [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
+16-Byte Representation:
+  [00 00 00 00 00 00 00 00 00 00 FF FF C0 00 02 01]
 ~~~
 
 Note on representation equivalence: For all `ipcrypt` variants, encrypting an IPv4 address and encrypting its IPv4-mapped IPv6 form (`::FFFF:a.b.c.d`) produce the same encrypted output.
@@ -817,7 +819,8 @@ _Example:_ For `"192.0.2.1"`, the function returns
 ~~~pseudocode
 function ipv6_to_16_bytes(ipv6_address):
     // Parse the IPv6 address into eight 16-bit words.
-    words = parseIPv6(ipv6_address)  // Expands shorthand notation and returns 8 words
+    words = parseIPv6(ipv6_address)
+    // Expands shorthand notation and returns eight words
     bytes16 = []
     for word in words:
          high_byte = (word >> 8) & 0xFF
@@ -839,11 +842,14 @@ function bytes_16_to_ip(bytes16):
          raise Error("Invalid byte array")
 
     // Check for the IPv4-mapped prefix
-    // When an IPv4-mapped IPv6 address (::ffff:x.x.x.x) is detected,
-    // it is converted back to IPv4 format. This is expected
-    // behavior as IPv4 addresses are internally represented as IPv4-mapped
-    // IPv6 addresses for uniform processing.
-    ipv4_mapped_prefix = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF]
+    // When an IPv4-mapped IPv6 address (::ffff:x.x.x.x) is
+    // detected, convert it back to IPv4 format. This is expected
+    // because IPv4 addresses are represented as IPv4-mapped IPv6
+    // addresses for uniform processing.
+    ipv4_mapped_prefix = [
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF
+    ]
     if bytes16[0..12] == ipv4_mapped_prefix:
          // Convert the 4 last bytes to an IPv4 address
          ipv4_parts = []
@@ -852,7 +858,7 @@ function bytes_16_to_ip(bytes16):
          ipv4_address = join(ipv4_parts, ".")
          return ipv4_address
     else:
-         // Convert the 16 bytes to an IPv6 address with canonical representation
+         // Convert the 16 bytes to a canonical IPv6 address
          words = []
          for i from 0 to 8:
              word = (bytes16[i*2] << 8) | bytes16[i*2+1]
@@ -948,9 +954,10 @@ function ipcrypt_pfx_encrypt(ip_address, key):
     // Initialize encrypted result with zeros
     encrypted = [0] * 16
 
-    // If we encrypt an IPv4 address, start where the IPv4 address starts (bit 96)
-    // Note the first 12 bytes of bytes16 are already set to the prefix for IPv4 mapping in that case
-    // This provides domain separation between an IPv4 address and the first 32 bits of an IPv6 address
+    // For IPv4, start at bit 96, where the address starts.
+    // The first 12 bytes already contain the IPv4-mapped prefix.
+    // This provides domain separation from the first 32 bits of
+    // an IPv6 address.
     if is_ipv4_mapped(bytes16):
         prefix_start = 96
         // Set up the IPv4-mapped IPv6 prefix
@@ -963,19 +970,21 @@ function ipcrypt_pfx_encrypt(ip_address, key):
     padded_prefix = pad_prefix(bytes16, prefix_start)
 
     // Process each bit position sequentially
-    // Note: prefix_len_bits represents how many bits from the MSB have been processed
-    // Range is [prefix_start, 128), i.e., up to but not including 128
+    // prefix_len_bits is the number of bits processed from the MSB.
+    // Its range is [prefix_start, 128), excluding 128.
     for prefix_len_bits from prefix_start to 128:
         // Compute pseudorandom function with dual AES encryption
         e1 = AES128_encrypt(K1, padded_prefix)
         e2 = AES128_encrypt(K2, padded_prefix)
         e = e1 ⊕ e2
-        // Output of the pseudorandom function is the least significant bit of e
+        // The PRF output is the least significant bit of e.
         cipher_bit = get_bit(e, 0)
 
-        // Encrypt the current bit position (processing from MSB to LSB)
-        // For IPv6: prefix_len_bits=0 encrypts bit 127, prefix_len_bits=1 encrypts bit 126, etc.
-        // For IPv4: prefix_len_bits=96 encrypts bit 31, prefix_len_bits=97 encrypts bit 30, etc.
+        // Encrypt the current bit, processing from MSB to LSB.
+        // For IPv6, prefix_len_bits=0 encrypts bit 127;
+        // prefix_len_bits=1 encrypts bit 126, etc.
+        // For IPv4, prefix_len_bits=96 encrypts bit 31;
+        // prefix_len_bits=97 encrypts bit 30, etc.
         bit_pos = 127 - prefix_len_bits
         original_bit = get_bit(bytes16, bit_pos)
         set_bit(encrypted, bit_pos, cipher_bit ^ original_bit)
@@ -1007,7 +1016,7 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
     // Initialize decrypted result with zeros
     decrypted = [0] * 16
 
-    // If we decrypt an IPv4 address, start where the IPv4 address starts (bit 96)
+    // For IPv4, start at bit 96, where the address starts.
     if is_ipv4_mapped(encrypted_bytes):
         prefix_start = 96
         // Set up the IPv4-mapped IPv6 prefix
@@ -1020,20 +1029,22 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
     padded_prefix = pad_prefix(decrypted, prefix_start)
 
     // Process each bit position sequentially
-    // Note: prefix_len_bits represents how many bits from the MSB have been processed
-    // Range is [prefix_start, 128), i.e., up to but not including 128
+    // prefix_len_bits is the number of bits processed from the MSB.
+    // Its range is [prefix_start, 128), excluding 128.
     for prefix_len_bits from prefix_start to 128:
         // Compute pseudorandom function with dual AES encryption
         e1 = AES128_encrypt(K1, padded_prefix)
         e2 = AES128_encrypt(K2, padded_prefix)
-        // e is expected to be the same as during encryption since the prefix is the same
+        // e matches encryption because the prefix is the same.
         e = e1 ⊕ e2
-        // Output of the pseudorandom function is the least significant bit of e
+        // The PRF output is the least significant bit of e.
         cipher_bit = get_bit(e, 0)
 
-        // Decrypt the current bit position (processing from MSB to LSB)
-        // For IPv6: prefix_len_bits=0 decrypts bit 127, prefix_len_bits=1 decrypts bit 126, etc.
-        // For IPv4: prefix_len_bits=96 decrypts bit 31, prefix_len_bits=97 decrypts bit 30, etc.
+        // Decrypt the current bit, processing from MSB to LSB.
+        // For IPv6, prefix_len_bits=0 decrypts bit 127;
+        // prefix_len_bits=1 decrypts bit 126, etc.
+        // For IPv4, prefix_len_bits=96 decrypts bit 31;
+        // prefix_len_bits=97 decrypts bit 30, etc.
         bit_pos = 127 - prefix_len_bits
         encrypted_bit = get_bit(encrypted_bytes, bit_pos)
         original_bit = cipher_bit ^ encrypted_bit
@@ -1054,12 +1065,17 @@ The following helper functions are used in the `ipcrypt-pfx` implementation:
 
 ~~~pseudocode
 function is_ipv4_mapped(bytes16):
-    // Returns true if the 16-byte array has the IPv4-mapped IPv6 prefix (::ffff:0:0/96)
-    ipv4_mapped_prefix = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF]
+    // Return true for the IPv4-mapped IPv6 prefix
+    // (::ffff:0:0/96).
+    ipv4_mapped_prefix = [
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF
+    ]
     return bytes16[0..12] == ipv4_mapped_prefix
 
 function get_bit(data, position):
-    // Extract bit at position from 16-byte array representing an IPv6 address in network byte order
+    // Extract a bit from a 16-byte IPv6 address in network byte
+    // order.
     // position: 0 = LSB of byte 15, 127 = MSB of byte 0
     // Example: position 127 refers to bit 7 (MSB) of data[0]
     // Example: position 0 refers to bit 0 (LSB) of data[15]
@@ -1068,7 +1084,7 @@ function get_bit(data, position):
     return (data[byte_index] >> bit_index) & 1
 
 function set_bit(data, position, value):
-    // Set bit at position in 16-byte array representing an IPv6 address in network byte order
+    // Set a bit in a 16-byte IPv6 address in network byte order.
     // position: 0 = LSB of byte 15, 127 = MSB of byte 0
     byte_index = 15 - (position / 8)
     bit_index = position % 8
@@ -1076,36 +1092,44 @@ function set_bit(data, position, value):
 
 function pad_prefix(data, prefix_len_bits):
     // Specialized for the only two cases used: 0 and 96
-    // For prefix_len_bits=0: Returns a block with only bit 0 set (position 0 = LSB of byte 15)
-    // For prefix_len_bits=96: Returns the IPv4-mapped prefix with separator at position 96
+    // For prefix_len_bits=0, return a block with only bit 0 set
+    // (position 0 = LSB of byte 15).
+    // For prefix_len_bits=96, return the IPv4-mapped prefix with
+    // the separator at position 96.
 
     if prefix_len_bits == 0:
         // For IPv6 addresses starting from bit 0
         padded_prefix = [0] * 16
-        padded_prefix[15] = 0x01  // Set bit at position 0 (LSB of byte 15)
+        // Set bit 0 (the LSB of byte 15).
+        padded_prefix[15] = 0x01
         return padded_prefix
 
     else if prefix_len_bits == 96:
-        // For IPv4 addresses, always returns the same value since all IPv4 addresses
-        // share the same IPv4-mapped prefix (00...00 ffff)
+        // All IPv4 addresses share the same IPv4-mapped prefix
+        // (00...00 ffff), so always return the same value.
         padded_prefix = [0] * 16
-        padded_prefix[3] = 0x01   // Set separator bit at position 96 (bit 0 of byte 3)
+        // Set the separator at position 96 (bit 0 of byte 3).
+        padded_prefix[3] = 0x01
         padded_prefix[14] = 0xFF  // IPv4-mapped prefix
         padded_prefix[15] = 0xFF  // IPv4-mapped prefix
         return padded_prefix
 
     else:
-        raise Error("pad_prefix only supports prefix_len_bits of 0 or 96")
+        raise Error(
+            "pad_prefix only supports prefix_len_bits of 0 or 96"
+        )
 
 function shift_left_one_bit(data):
     // Shift a 16-byte array one bit to the left
-    // The most significant bit is lost, and a zero bit is shifted in from the right
+    // Discard the most significant bit and shift in a zero from
+    // the right.
     result = [0] * 16
     carry = 0
 
-    // Process from least significant byte (byte 15) to most significant byte (byte 0)
+    // Process from the least significant byte (byte 15) to the
+    // most significant byte (byte 0).
     for i from 15 down to 0:
-        // Current byte shifted left by 1, with carry from previous byte
+        // Shift the byte left by 1 with the previous carry.
         result[i] = ((data[i] << 1) | carry) & 0xFF
         // Extract the bit that will be carried to the next byte
         carry = (data[i] >> 7) & 1
@@ -1132,7 +1156,8 @@ function ipcrypt_nd_encrypt(ip_address, key):
     ciphertext = KIASU_BC_encrypt(key, tweak, bytes16)
 
     // Step 4: Concatenate tweak and ciphertext
-    result = concatenate(tweak, ciphertext)  // 8 bytes || 16 bytes = 24 bytes total
+    // 8 bytes || 16 bytes = 24 bytes total
+    result = concatenate(tweak, ciphertext)
     return result
 ~~~
 
@@ -1171,7 +1196,8 @@ function ipcrypt_ndx_encrypt(ip_address, key):
     ciphertext = AES_XTS_encrypt(key, tweak, bytes16)
 
     // Step 4: Concatenate tweak and ciphertext
-    result = concatenate(tweak, ciphertext)  // 16 bytes || 16 bytes = 32 bytes total
+    // 16 bytes || 16 bytes = 32 bytes total
+    result = concatenate(tweak, ciphertext)
     return result
 ~~~
 
@@ -1310,7 +1336,8 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
         state = sub_bytes(state)
         state = shift_rows(state)
         state = mix_columns(state)
-        state = add_round_key(state, round_keys[round] ^ padded_tweak)
+        state = add_round_key(
+            state, round_keys[round] ^ padded_tweak)
 
     // Final round
     state = sub_bytes(state)
@@ -1382,22 +1409,26 @@ The following test vectors demonstrate the prefix-preserving property of ipcrypt
 
 ~~~ test-vectors
 # Test vector 1 (IPv4)
-Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Key:          0123456789abcdeffedcba9876543210
+              1032547698badcfeefcdab8967452301
 Input IP:     0.0.0.0
 Encrypted IP: 151.82.155.134
 
 # Test vector 2 (IPv4)
-Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Key:          0123456789abcdeffedcba9876543210
+              1032547698badcfeefcdab8967452301
 Input IP:     255.255.255.255
 Encrypted IP: 94.185.169.89
 
 # Test vector 3 (IPv4)
-Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Key:          0123456789abcdeffedcba9876543210
+              1032547698badcfeefcdab8967452301
 Input IP:     192.0.2.1
 Encrypted IP: 100.115.72.131
 
 # Test vector 4 (IPv6)
-Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Key:          0123456789abcdeffedcba9876543210
+              1032547698badcfeefcdab8967452301
 Input IP:     2001:db8::1
 Encrypted IP: c180:5dd4:2587:3524:30ab:fa65:6ab6:f88
 ~~~
@@ -1408,54 +1439,66 @@ These test vectors demonstrate the prefix-preserving property. Addresses from th
 
 ~~~ test-vectors
 # IPv4 addresses from same /24 network (10.0.0.0/24)
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     10.0.0.47
 Encrypted IP: 19.214.210.244
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     10.0.0.129
 Encrypted IP: 19.214.210.80
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     10.0.0.234
 Encrypted IP: 19.214.210.30
 
 # IPv4 addresses from same /16 but different /24 networks
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     172.16.5.193
 Encrypted IP: 210.78.229.136
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     172.16.97.42
 Encrypted IP: 210.78.179.241
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     172.16.248.177
 Encrypted IP: 210.78.121.215
 
 # IPv6 addresses from same /64 network (2001:db8::/64)
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     2001:db8::a5c9:4e2f:bb91:5a7d
 Encrypted IP: 7cec:702c:1243:f70:1956:125:b9bd:1aba
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     2001:db8::7234:d8f1:3c6e:9a52
 Encrypted IP: 7cec:702c:1243:f70:a3ef:c8e:95c1:cd0d
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     2001:db8::f1e0:937b:26d4:8c1a
 Encrypted IP: 7cec:702c:1243:f70:443c:c8e:6a62:b64d
 
 # IPv6 addresses from same /32 but different /48 networks
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     2001:db8:3a5c:0:e7d1:4b9f:2c8a:f673
 Encrypted IP: 7cec:702c:3503:bef:e616:96bd:be33:a9b9
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     2001:db8:9f27:0:b4e2:7a3d:5f91:c8e6
 Encrypted IP: 7cec:702c:a504:b74e:194a:3d90:b047:2d1a
 
-Key:          2b7e151628aed2a6abf7158809cf4f3ca9f5ba40db214c3798f2e1c23456789a
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              a9f5ba40db214c3798f2e1c23456789a
 Input IP:     2001:db8:d8b4:0:193c:a5e7:8b2f:46d1
 Encrypted IP: 7cec:702c:f840:aa67:1b8:e84f:ac9d:77fb
 ~~~
@@ -1486,22 +1529,28 @@ Output:       b4ecbe30b70898d7553ac8974d1b4250eafc4b0aa1f80c96
 
 ~~~ test-vectors
 # Test vector 1
-Key:          0123456789abcdeffedcba98765432101032547698badcfeefcdab8967452301
+Key:          0123456789abcdeffedcba9876543210
+              1032547698badcfeefcdab8967452301
 Input IP:     0.0.0.0
 Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Output:       21bd1834bc088cd2b4ecbe30b70898d782db0d4125fdace61db35b8339f20ee5
+Output:       21bd1834bc088cd2b4ecbe30b70898d7
+              82db0d4125fdace61db35b8339f20ee5
 
 # Test vector 2
-Key:          1032547698badcfeefcdab89674523010123456789abcdeffedcba9876543210
+Key:          1032547698badcfeefcdab8967452301
+              0123456789abcdeffedcba9876543210
 Input IP:     192.0.2.1
 Tweak:        08e0c289bff23b7cb4ecbe30b70898d7
-Output:       08e0c289bff23b7cb4ecbe30b70898d7766a533392a69edf1ad0d3ce362ba98a
+Output:       08e0c289bff23b7cb4ecbe30b70898d7
+              766a533392a69edf1ad0d3ce362ba98a
 
 # Test vector 3
-Key:          2b7e151628aed2a6abf7158809cf4f3c3c4fcf098815f7aba6d2ae2816157e2b
+Key:          2b7e151628aed2a6abf7158809cf4f3c
+              3c4fcf098815f7aba6d2ae2816157e2b
 Input IP:     2001:db8::1
 Tweak:        21bd1834bc088cd2b4ecbe30b70898d7
-Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
+Output:       21bd1834bc088cd2b4ecbe30b70898d7
+              6089c7e05ae30c2d10ca149870a263e4
 ~~~
 
 For non-deterministic variants, the tweak values shown are examples. Tweaks MUST be uniformly random for each encryption operation.
