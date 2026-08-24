@@ -1,6 +1,6 @@
 ---
 title: "Methods for IP Address Encryption and Obfuscation"
-abbrev: "ipcrypt"
+abbrev: "IP Address Encryption and Obfuscation"
 docname: draft-denis-ipcrypt-latest
 category: info
 ipr: trust200902
