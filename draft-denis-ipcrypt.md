@@ -107,6 +107,23 @@ informative:
     date: 2016-08-14
     rc: "CRYPTO 2016, LNCS 9815, pp. 123-153"
     target: https://eprint.iacr.org/2016/660.pdf
+  LRW2002:
+    title: "Tweakable Block Ciphers"
+    author:
+      - ins: M. Liskov
+      - ins: R. Rivest
+      - ins: D. Wagner
+    date: 2002-08-18
+    rc: "CRYPTO 2002, LNCS 2442, pp. 31-46"
+    target: https://people.csail.mit.edu/rivest/pubs/LRW02.pdf
+  BRW2005:
+    title: "Format-Preserving Encryption"
+    author:
+      - ins: J. Black
+      - ins: P. Rogaway
+    date: 2002-02-08
+    rc: "CT-RSA 2002, LNCS 2271, pp. 114-130"
+    target: https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf
   KIASU-BC:
     title: "Tweaks and Keys for Block Ciphers: the TWEAKEY Framework"
     author:
@@ -116,8 +133,10 @@ informative:
     date: 2014-12
     rc: "ASIACRYPT 2014, LNCS 8874, pp. 274-288"
     target: https://eprint.iacr.org/2014/831.pdf
-  XTS-AES:
-    title: "The XTS-AES Mode for Disk Encryption"
+  IEEE-P1619:
+    title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
+    author:
+      - ins: IEEE
     date: 2008-03-04
     seriesinfo:
       IEEE: 1619-2007
@@ -211,7 +230,7 @@ Throughout this document, the following terms and conventions apply:
 - Block Cipher: A deterministic cryptographic algorithm that encrypts fixed-size blocks of data (128 bits with AES) using a secret key.
 - Permutation: A bijective function where each distinct input maps to a unique output, ensuring reversibility.
 - Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from random values.
-- Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.
+- Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys {{LRW2002}}.
 - Exclusive OR (XOR): A bitwise operation whose output is 1 when its two input bits differ and 0 otherwise.
 - Tweak: A non-secret, additional input to a tweakable block cipher that further randomizes the output.
 - Deterministic Encryption: Encryption that always produces the same ciphertext for a given input and key.
@@ -351,7 +370,7 @@ For methods other than `ipcrypt-pfx`, IPv4 addresses are typically encrypted as 
 
 IPv4 format preservation without prefix preservation (maintaining IPv4 addresses as IPv4 in deterministic or non-deterministic modes) is not specified in this document and is generally discouraged due to the limited 32-bit address space, which significantly reduces encryption security.
 
-If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD implement a Format-Preserving Encryption (FPE) mode such as the FF1 algorithm specified in {{NIST-SP-800-38G}} or FAST {{FAST}}.
+If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD implement a format-preserving encryption (FPE) mode {{BRW2005}}, such as the FF1 algorithm specified in {{NIST-SP-800-38G}} or FAST {{FAST}}.
 
 ### Preserving Metadata for Analytics
 
@@ -495,7 +514,7 @@ The output of non-deterministic encryption is binary data. For text representati
 This document defines two concrete instantiations:
 
 - `ipcrypt-nd`: Uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. See {{KIASU-BC}} for details.
-- `ipcrypt-ndx`: Uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. See {{XTS-AES}} for background.
+- `ipcrypt-ndx`: Uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. See {{IEEE-P1619}} for background.
 
 In both cases, if a tweak is generated randomly, it MUST be uniformly random. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.
 
