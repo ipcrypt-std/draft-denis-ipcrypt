@@ -163,7 +163,7 @@ informative:
 
 --- abstract
 
-This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees.
+This document specifies secure, efficient methods for IP address encryption and obfuscation in privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees.
 
 Four modes are defined: `ipcrypt-deterministic` (format-preserving, IP-address output), `ipcrypt-pfx` (prefix-preserving, native address size), `ipcrypt-nd` and `ipcrypt-ndx` (non-deterministic with random tweaks). All support high-performance processing at network speeds and produce interoperable results across implementations.
 
