@@ -14,7 +14,7 @@ author:
   - name: "Frank Denis"
     organization: "Fastly Inc."
     email: fde@00f.net
-date: "2025"
+date: "2026"
 v: 3
 stand_alone: yes
 smart_quotes: yes
