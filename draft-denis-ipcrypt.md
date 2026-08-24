@@ -5,7 +5,11 @@ docname: draft-denis-ipcrypt-latest
 category: info
 ipr: trust200902
 submissionType: independent
-keyword: Internet-Draft
+keyword:
+  - privacy
+  - format-preserving encryption
+  - prefix-preserving encryption
+  - tweakable block cipher
 author:
   - name: "Christopher Barber"
     organization: "Trim"
