@@ -2,10 +2,11 @@
 
 
 
-Network Working Group                                           F. Denis
-Internet-Draft                                               Fastly Inc.
-Intended status: Informational                            24 August 2026
-Expires: 25 February 2027
+Network Working Group                                          C. Barber
+Internet-Draft                                                      Trim
+Intended status: Informational                                  F. Denis
+Expires: 25 February 2027                                    Fastly Inc.
+                                                          24 August 2026
 
 
            Methods for IP Address Encryption and Obfuscation
@@ -13,11 +14,11 @@ Expires: 25 February 2027
 
 Abstract
 
-   This document specifies secure, efficient methods for encrypting IP
-   addresses for privacy-preserving storage, logging, and analytics.
-   Unlike truncation, which destroys data irreversibly, these methods
-   are reversible with the encryption key while providing strong privacy
-   guarantees.
+   This document specifies secure, efficient methods for IP address
+   encryption and obfuscation in privacy-preserving storage, logging,
+   and analytics.  Unlike truncation, which destroys data irreversibly,
+   these methods are reversible with the encryption key while providing
+   strong privacy guarantees.
 
    Four modes are defined: ipcrypt-deterministic (format-preserving, IP-
    address output), ipcrypt-pfx (prefix-preserving, native address
@@ -145,7 +146,7 @@ Table of Contents
      A.4.  ipcrypt-ndx Test Vectors
    IANA Considerations
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -1709,9 +1710,9 @@ IPv4 Address:           192.0.2.1
 
 12.1.  Normative References
 
-   [FIPS-197] NIST, "Advanced Encryption Standard (AES)", FIPS PUB 197,
-              26 November 2001, <https://nvlpubs.nist.gov/nistpubs/FIPS/
-              NIST.FIPS.197.pdf>.
+   [FIPS-197] NIST, "Advanced Encryption Standard (AES)", NIST FIPS 197,
+              DOI 10.6028/NIST.FIPS.197-upd1, May 2023,
+              <https://doi.org/10.6028/NIST.FIPS.197-upd1>.
 
    [NIST-SP-800-38G]
               NIST, "Recommendation for Block Cipher Modes of Operation:
@@ -2005,7 +2006,12 @@ Acknowledgments
    feedback was provided by Eliot Lear.  Assistance with implementation
    aspects was kindly provided by Wu Tingfeng.
 
-Author's Address
+Authors' Addresses
+
+   Christopher Barber
+   Trim
+   Email: cbarbernash@gmail.com
+
 
    Frank Denis
    Fastly Inc.

@@ -5,13 +5,17 @@
 <meta content="Common,Greek,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
 <title>Methods for IP Address Encryption and Obfuscation</title>
+<meta content="Christopher Barber" name="author">
 <meta content="Frank Denis" name="author">
 <meta content="
-       This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees. 
+       This document specifies secure, efficient methods for IP address encryption and obfuscation in privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees. 
        Four modes are defined:  ipcrypt-deterministic  (format-preserving, IP-address output),  ipcrypt-pfx  (prefix-preserving, native address size),  ipcrypt-nd  and  ipcrypt-ndx  (non-deterministic with random tweaks). All support high-performance processing at network speeds and produce interoperable results across implementations. 
     " name="description">
 <meta content="xml2rfc 3.34.0" name="generator">
-<meta content="Internet-Draft" name="keyword">
+<meta content="privacy" name="keyword">
+<meta content="format-preserving encryption" name="keyword">
+<meta content="prefix-preserving encryption" name="keyword">
+<meta content="tweakable block cipher" name="keyword">
 <meta content="draft-denis-ipcrypt-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.34.0
@@ -1041,11 +1045,11 @@ svg {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">ipcrypt</td>
+<td class="center">IP Address Encryption and Obfuscation</td>
 <td class="right">August 2026</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Denis</td>
+<td class="left">Barber &amp; Denis</td>
 <td class="center">Expires 25 February 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
@@ -1065,8 +1069,12 @@ svg {
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
 <dd class="expires"><time datetime="2027-02-25">25 February 2027</time></dd>
-<dt class="label-authors">Author:</dt>
+<dt class="label-authors">Authors:</dt>
 <dd class="authors">
+<div class="author">
+      <div class="author-name">C. Barber</div>
+<div class="org">Trim</div>
+</div>
 <div class="author">
       <div class="author-name">F. Denis</div>
 <div class="org">Fastly Inc.</div>
@@ -1077,7 +1085,7 @@ svg {
 <h1 id="title">Methods for IP Address Encryption and Obfuscation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies secure, efficient methods for encrypting IP addresses for privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document specifies secure, efficient methods for IP address encryption and obfuscation in privacy-preserving storage, logging, and analytics. Unlike truncation, which destroys data irreversibly, these methods are reversible with the encryption key while providing strong privacy guarantees.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">Four modes are defined: <code>ipcrypt-deterministic</code> (format-preserving, IP-address output), <code>ipcrypt-pfx</code> (prefix-preserving, native address size), <code>ipcrypt-nd</code> and <code>ipcrypt-ndx</code> (non-deterministic with random tweaks). All support high-performance processing at network speeds and produce interoperable results across implementations.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1423,7 +1431,7 @@ svg {
             <p id="section-toc.1-1.15.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.16.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -3279,7 +3287,7 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <dl class="references">
 <dt id="FIPS-197">[FIPS-197]</dt>
         <dd>
-<span class="refAuthor">NIST</span>, <span class="refTitle">"Advanced Encryption Standard (AES)"</span>, <span class="seriesInfo">FIPS PUB 197</span>, <time datetime="2001-11-26" class="refDate">26 November 2001</time>, <span>&lt;<a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf">https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf</a>&gt;</span>. </dd>
+<span class="refAuthor">NIST</span>, <span class="refTitle">"Advanced Encryption Standard (AES)"</span>, <span class="seriesInfo">NIST FIPS 197</span>, <span class="seriesInfo">DOI 10.6028/NIST.FIPS.197-upd1</span>, <time datetime="2023-05" class="refDate">May 2023</time>, <span>&lt;<a href="https://doi.org/10.6028/NIST.FIPS.197-upd1">https://doi.org/10.6028/NIST.FIPS.197-upd1</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="NIST-SP-800-38G">[NIST-SP-800-38G]</dt>
         <dd>
@@ -3597,9 +3605,17 @@ Output:       21bd1834bc088cd2b4ecbe30b70898d76089c7e05ae30c2d10ca149870a263e4
 </div>
 <div id="authors-addresses">
 <section id="appendix-D">
-      <h2 id="name-authors-address">
-<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Christopher Barber</span></div>
+<div dir="auto" class="left"><span class="org">Trim</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cbarbernash@gmail.com" class="email">cbarbernash@gmail.com</a>
+</div>
+</address>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Frank Denis</span></div>
 <div dir="auto" class="left"><span class="org">Fastly Inc.</span></div>
