@@ -232,14 +232,6 @@ These methods achieve optimal efficiency for their security goals: each variant 
 
 For implementation guidelines, see {{implementation-details}}.
 
-## Relationship to IETF Work
-
-*This section is to be removed before publishing as an RFC.*
-
-This document does not conflict with active IETF working group efforts. While the IETF has produced several RFCs related to privacy ({{!RFC6973}}, {{!RFC7258}}, {{!RFC7624}}), there is no current standardization effort for IP address encryption methods. This specification complements existing IETF privacy guidance by providing implementation methods.
-
-The AES-based cryptographic primitives used align with IETF cryptographic recommendations, and the document follows IETF formatting and terminology conventions where applicable.
-
 # Terminology
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 {{!RFC8174}} when, and only when, they appear in all capitals, as shown here.
@@ -1354,26 +1346,6 @@ Key and tweak sizes for each variant:
 - `ipcrypt-pfx`: Key: 32 bytes (256 bits, split into two independent AES-128 keys), no external tweak (uses prefix as cryptographic context), Output: 4 bytes for IPv4, 16 bytes for IPv6
 - `ipcrypt-nd`: Key: 16 bytes (128 bits), Tweak: 8 bytes (64 bits), Output: 24 bytes
 - `ipcrypt-ndx`: Key: 32 bytes (256 bits, split into two AES-128 keys), Tweak: 16 bytes (128 bits), Output: 32 bytes
-
-# Implementation Status
-
-*This section is to be removed before publishing as an RFC.*
-
-This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in {{!RFC7942}}.
-
-Multiple independent, interoperable implementations have been developed and include Awk, C, D, Dart, Elixir, Go, Java, JavaScript, Kotlin, Lua, PHP, Python, Ruby, Rust, Swift, and Zig.
-
-A comprehensive list of implementations and their test results is available at: https://ipcrypt-std.github.io/implementations/
-
-All implementations pass the common test vectors specified in this document, demonstrating interoperability across programming languages.
-
-# Licensing
-
-*This section is to be removed before publishing as an RFC.*
-
-Implementations of the ipcrypt methods are freely available under permissive open source licenses (MIT, BSD, or Apache 2.0) at the repository listed in the Implementation Status section.
-
-There are no known patent claims on these methods.
 
 --- back
 
