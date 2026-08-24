@@ -1536,4 +1536,4 @@ This document does not require any IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-We would like to thank the members of the IETF and the cryptographic community for their helpful comments on this work. Tobias Fiebig conducted a detailed review of this draft. Additional valuable feedback was provided by Eliot Lear. Assistance with implementation aspects was kindly provided by Wu Tingfeng.
+We would like to thank the members of the Internet Engineering Task Force (IETF) and the cryptographic community for their helpful comments on this work. {{{Tobias Fiebig}}} conducted a detailed review of this document. Additional valuable feedback was provided by {{{Eliot Lear}}}. Assistance with implementation aspects was kindly provided by {{{Wu Tingfeng}}}.
