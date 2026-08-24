@@ -1541,7 +1541,7 @@ svg {
           <p id="section-2-3.6.1">Pseudorandom Function (PRF): A deterministic function that produces output computationally indistinguishable from random values.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.7">
-          <p id="section-2-3.7.1">Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys.<a href="#section-2-3.7.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.7.1">Tweakable Block Cipher (TBC): A block cipher that accepts an additional non-secret parameter (tweak) along with the key and plaintext, allowing domain separation without changing keys <span>[<a href="#LRW2002" class="cite xref">LRW2002</a>]</span>.<a href="#section-2-3.7.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.8">
           <p id="section-2-3.8.1">Exclusive OR (XOR): A bitwise operation whose output is 1 when its two input bits differ and 0 otherwise.<a href="#section-2-3.8.1" class="pilcrow">¶</a></p>
@@ -1790,7 +1790,7 @@ IPv4 Address:           192.0.2.1
           </h4>
 <p id="section-5.2.2-1">For methods other than <code>ipcrypt-pfx</code>, IPv4 addresses are typically encrypted as IPv6 addresses.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-2">IPv4 format preservation without prefix preservation (maintaining IPv4 addresses as IPv4 in deterministic or non-deterministic modes) is not specified in this document and is generally discouraged due to the limited 32-bit address space, which significantly reduces encryption security.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.2-3">If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD implement a Format-Preserving Encryption (FPE) mode such as the FF1 algorithm specified in <span>[<a href="#NIST-SP-800-38G" class="cite xref">NIST-SP-800-38G</a>]</span> or FAST <span>[<a href="#FAST" class="cite xref">FAST</a>]</span>.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-3">If IPv4 format preservation is absolutely required despite the security limitations, implementers SHOULD implement a format-preserving encryption (FPE) mode <span>[<a href="#BRW2005" class="cite xref">BRW2005</a>]</span>, such as the FF1 algorithm specified in <span>[<a href="#NIST-SP-800-38G" class="cite xref">NIST-SP-800-38G</a>]</span> or FAST <span>[<a href="#FAST" class="cite xref">FAST</a>]</span>.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="preserving-metadata-for-analytics">
@@ -2072,7 +2072,7 @@ IPv4 Address:           192.0.2.1
             <p id="section-7.4-2.1.1"><code>ipcrypt-nd</code>: Uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. See <span>[<a href="#KIASU-BC" class="cite xref">KIASU-BC</a>]</span> for details.<a href="#section-7.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-2.2">
-            <p id="section-7.4-2.2.1"><code>ipcrypt-ndx</code>: Uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. See <span>[<a href="#XTS-AES" class="cite xref">XTS-AES</a>]</span> for background.<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-2.2.1"><code>ipcrypt-ndx</code>: Uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. See <span>[<a href="#IEEE-P1619" class="cite xref">IEEE-P1619</a>]</span> for background.<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-7.4-3">In both cases, if a tweak is generated randomly, it MUST be uniformly random. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
@@ -3319,6 +3319,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="BRW2005">[BRW2005]</dt>
+        <dd>
+<span class="refAuthor">Black, J.</span> and <span class="refAuthor">P. Rogaway</span>, <span class="refTitle">"Format-Preserving Encryption"</span>, <span class="refContent">CT-RSA 2002, LNCS 2271, pp. 114-130</span>, <time datetime="2002-02-08" class="refDate">8 February 2002</time>, <span>&lt;<a href="https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf">https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="DEOXYS-TBC">[DEOXYS-TBC]</dt>
         <dd>
 <span class="refAuthor">Jean, J.</span>, <span class="refAuthor">Nikolić, I.</span>, <span class="refAuthor">Peyrin, T.</span>, and <span class="refAuthor">Y. Seurin</span>, <span class="refTitle">"The Deoxys AEAD Family"</span>, <span class="refContent">Journal of Cryptology 34, 31 (2021)</span>, <time datetime="2021-06-10" class="refDate">10 June 2021</time>, <span>&lt;<a href="https://thomaspeyrin.github.io/web/assets/docs/papers/Jean-etal-JoC2021.pdf">https://thomaspeyrin.github.io/web/assets/docs/papers/Jean-etal-JoC2021.pdf</a>&gt;</span>. </dd>
@@ -3327,6 +3331,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
         <dd>
 <span class="refAuthor">Betul Durak, F.</span>, <span class="refAuthor">Horst, H.</span>, and <span class="refAuthor">S. Vaudenay</span>, <span class="refTitle">"FAST: Format-Preserving Encryption via Shortened AES Tweakable Block Cipher"</span>, <span class="seriesInfo">Cryptology ePrint Archive Paper 2021/1171</span>, <time datetime="2021-09-14" class="refDate">14 September 2021</time>, <span>&lt;<a href="https://eprint.iacr.org/2021/1171.pdf">https://eprint.iacr.org/2021/1171.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="IEEE-P1619">[IEEE-P1619]</dt>
+        <dd>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"</span>, <span class="seriesInfo">IEEE 1619-2007</span>, <time datetime="2008-03-04" class="refDate">4 March 2008</time>, <span>&lt;<a href="https://ieeexplore.ieee.org/document/4493450">https://ieeexplore.ieee.org/document/4493450</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="IPCRYPT">[IPCRYPT]</dt>
         <dd>
 <span class="refAuthor">Denis, F.</span>, <span class="refTitle">"IPCrypt: Optimal, Practical Encryption of IP Addresses for Privacy and Measurement"</span>, <span class="seriesInfo">Cryptology ePrint Archive Paper 2025/1689</span>, <time datetime="2025-01-09" class="refDate">9 January 2025</time>, <span>&lt;<a href="https://eprint.iacr.org/2025/1689">https://eprint.iacr.org/2025/1689</a>&gt;</span>. </dd>
@@ -3334,6 +3342,10 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <dt id="KIASU-BC">[KIASU-BC]</dt>
         <dd>
 <span class="refAuthor">Jean, J.</span>, <span class="refAuthor">Nikolić, I.</span>, and <span class="refAuthor">T. Peyrin</span>, <span class="refTitle">"Tweaks and Keys for Block Ciphers: the TWEAKEY Framework"</span>, <span class="refContent">ASIACRYPT 2014, LNCS 8874, pp. 274-288</span>, <time datetime="2014-12" class="refDate">December 2014</time>, <span>&lt;<a href="https://eprint.iacr.org/2014/831.pdf">https://eprint.iacr.org/2014/831.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="LRW2002">[LRW2002]</dt>
+        <dd>
+<span class="refAuthor">Liskov, M.</span>, <span class="refAuthor">Rivest, R.</span>, and <span class="refAuthor">D. Wagner</span>, <span class="refTitle">"Tweakable Block Ciphers"</span>, <span class="refContent">CRYPTO 2002, LNCS 2442, pp. 31-46</span>, <time datetime="2002-08-18" class="refDate">18 August 2002</time>, <span>&lt;<a href="https://people.csail.mit.edu/rivest/pubs/LRW02.pdf">https://people.csail.mit.edu/rivest/pubs/LRW02.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="PATARIN-2008">[PATARIN-2008]</dt>
         <dd>
@@ -3352,12 +3364,8 @@ function kiasu_bc_encrypt(key, tweak, plaintext):
 <span class="refAuthor">Beierle, C.</span>, <span class="refAuthor">Jean, J.</span>, <span class="refAuthor">Koelbl, S.</span>, <span class="refAuthor">Leander, G.</span>, <span class="refAuthor">Moradi, A.</span>, <span class="refAuthor">Peyrin, T.</span>, <span class="refAuthor">Sasaki, Y.</span>, <span class="refAuthor">Sasdrich, P.</span>, and <span class="refAuthor">S. Meng Sim</span>, <span class="refTitle">"The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"</span>, <span class="refContent">CRYPTO 2016, LNCS 9815, pp. 123-153</span>, <time datetime="2016-08-14" class="refDate">14 August 2016</time>, <span>&lt;<a href="https://eprint.iacr.org/2016/660.pdf">https://eprint.iacr.org/2016/660.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SUM-OF-PRPS">[SUM-OF-PRPS]</dt>
-        <dd>
-<span class="refAuthor">Lucks, S.</span>, <span class="refTitle">"The Sum of PRPs Is a Secure PRF"</span>, <span class="refContent">EUROCRYPT 2000, LNCS 1807, pp. 470-484</span>, <time datetime="2000-05-14" class="refDate">14 May 2000</time>, <span>&lt;<a href="https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf">https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="XTS-AES">[XTS-AES]</dt>
       <dd>
-<span class="refTitle">"The XTS-AES Mode for Disk Encryption"</span>, <span class="seriesInfo">IEEE 1619-2007</span>, <time datetime="2008-03-04" class="refDate">4 March 2008</time>, <span>&lt;<a href="https://ieeexplore.ieee.org/document/4493450">https://ieeexplore.ieee.org/document/4493450</a>&gt;</span>. </dd>
+<span class="refAuthor">Lucks, S.</span>, <span class="refTitle">"The Sum of PRPs Is a Secure PRF"</span>, <span class="refContent">EUROCRYPT 2000, LNCS 1807, pp. 470-484</span>, <time datetime="2000-05-14" class="refDate">14 May 2000</time>, <span>&lt;<a href="https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf">https://link.springer.com/content/pdf/10.1007/3-540-45539-6_34.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

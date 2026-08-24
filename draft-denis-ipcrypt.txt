@@ -285,7 +285,8 @@ Table of Contents
 
    *  Tweakable Block Cipher (TBC): A block cipher that accepts an
       additional non-secret parameter (tweak) along with the key and
-      plaintext, allowing domain separation without changing keys.
+      plaintext, allowing domain separation without changing keys
+      [LRW2002].
 
    *  Exclusive OR (XOR): A bitwise operation whose output is 1 when its
       two input bits differ and 0 otherwise.
@@ -497,9 +498,9 @@ Table of Contents
    encryption security.
 
    If IPv4 format preservation is absolutely required despite the
-   security limitations, implementers SHOULD implement a Format-
-   Preserving Encryption (FPE) mode such as the FF1 algorithm specified
-   in [NIST-SP-800-38G] or FAST [FAST].
+   security limitations, implementers SHOULD implement a format-
+   preserving encryption (FPE) mode [BRW2005], such as the FF1 algorithm
+   specified in [NIST-SP-800-38G] or FAST [FAST].
 
 5.2.3.  Preserving Metadata for Analytics
 
@@ -768,7 +769,7 @@ Table of Contents
       8-byte (64-bit) tweak.  See [KIASU-BC] for details.
 
    *  ipcrypt-ndx: Uses the AES-XTS tweakable block cipher with a
-      16-byte (128-bit) tweak.  See [XTS-AES] for background.
+      16-byte (128-bit) tweak.  See [IEEE-P1619] for background.
 
    In both cases, if a tweak is generated randomly, it MUST be uniformly
    random.  Reusing the same randomly generated tweak on different
@@ -1746,6 +1747,10 @@ Table of Contents
 
 10.2.  Informative References
 
+   [BRW2005]  Black, J. and P. Rogaway, "Format-Preserving Encryption",
+              CT-RSA 2002, LNCS 2271, pp. 114-130, 8 February 2002,
+              <https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf>.
+
    [DEOXYS-TBC]
               Jean, J., Nikolić, I., Peyrin, T., and Y. Seurin, "The
               Deoxys AEAD Family", Journal of Cryptology 34, 31 (2021),
@@ -1759,6 +1764,12 @@ Table of Contents
               14 September 2021,
               <https://eprint.iacr.org/2021/1171.pdf>.
 
+   [IEEE-P1619]
+              IEEE, "IEEE Standard for Cryptographic Protection of Data
+              on Block-Oriented Storage Devices", IEEE 1619-2007, 4
+              March 2008,
+              <https://ieeexplore.ieee.org/document/4493450>.
+
    [IPCRYPT]  Denis, F., "IPCrypt: Optimal, Practical Encryption of IP
               Addresses for Privacy and Measurement", Cryptology ePrint
               Archive Paper 2025/1689, 9 January 2025,
@@ -1768,6 +1779,11 @@ Table of Contents
               Block Ciphers: the TWEAKEY Framework", ASIACRYPT 2014,
               LNCS 8874, pp. 274-288, December 2014,
               <https://eprint.iacr.org/2014/831.pdf>.
+
+   [LRW2002]  Liskov, M., Rivest, R., and D. Wagner, "Tweakable Block
+              Ciphers", CRYPTO 2002, LNCS 2442, pp. 31-46, 18 August
+              2002,
+              <https://people.csail.mit.edu/rivest/pubs/LRW02.pdf>.
 
    [PATARIN-2008]
               Patarin, J., "A Proof of Security in O(2^n) for the Xor of
@@ -1797,10 +1813,6 @@ Table of Contents
               2000, LNCS 1807, pp. 470-484, 14 May 2000,
               <https://link.springer.com/content/
               pdf/10.1007/3-540-45539-6_34.pdf>.
-
-   [XTS-AES]  "The XTS-AES Mode for Disk Encryption", IEEE 1619-2007, 4
-              March 2008,
-              <https://ieeexplore.ieee.org/document/4493450>.
 
 Appendix A.  Test Vectors
 
