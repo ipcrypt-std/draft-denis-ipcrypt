@@ -61,14 +61,6 @@ informative:
     seriesinfo:
       Cryptology ePrint Archive: Paper 2021/1171
     target: https://eprint.iacr.org/2021/1171.pdf
-  IEEE-P1619:
-    title: "IEEE Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices"
-    author:
-      - ins: IEEE
-    date: 2008-03-04
-    seriesinfo:
-      IEEE: 1619-2007
-    target: https://ieeexplore.ieee.org/document/4493450
   SUM-OF-PRPS:
     title: "The Sum of PRPs Is a Secure PRF"
     author:
@@ -115,23 +107,6 @@ informative:
     date: 2016-08-14
     rc: "CRYPTO 2016, LNCS 9815, pp. 123-153"
     target: https://eprint.iacr.org/2016/660.pdf
-  LRW2002:
-    title: "Tweakable Block Ciphers"
-    author:
-      - ins: M. Liskov
-      - ins: R. Rivest
-      - ins: D. Wagner
-    date: 2002-08-18
-    rc: "CRYPTO 2002, LNCS 2442, pp. 31-46"
-    target: https://people.csail.mit.edu/rivest/pubs/LRW02.pdf
-  BRW2005:
-    title: "Format-Preserving Encryption"
-    author:
-      - ins: J. Black
-      - ins: P. Rogaway
-    date: 2002-02-08
-    rc: "CT-RSA 2002, LNCS 2271, pp. 114-130"
-    target: https://www.cs.ucdavis.edu/~rogaway/papers/subset.pdf
   KIASU-BC:
     title: "Tweaks and Keys for Block Ciphers: the TWEAKEY Framework"
     author:
