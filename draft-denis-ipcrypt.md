@@ -172,7 +172,7 @@ Organizations handling IP addresses require mechanisms to protect user privacy w
 
 - Efficiency and Compactness: All variants operate on 128 bits, achieving single-block encryption speed required for network-rate processing. Non-deterministic variants add only 8-16 bytes of tweak overhead.
 
-- High Usage Limits: Non-deterministic variants safely handle massive volumes: approximately 4 billion operations for `ipcrypt-nd` and 18 quintillion for `ipcrypt-ndx` per key, without degrading security. Generic encryption often requires complex key rotation schemes at lower thresholds.
+- Tweak-Collision Considerations: After 2<sup>32</sup> operations, `ipcrypt-nd` has about a 39% chance of a duplicate tweak. `ipcrypt-ndx` reaches the same probability after 2<sup>64</sup> operations. A duplicate tweak alone does not disclose an IP address.
 
 - Format Preservation: The `ipcrypt-deterministic` and `ipcrypt-pfx` variants produce valid IP addresses rather than arbitrary ciphertext, enabling encrypted addresses to pass through existing network infrastructure, monitoring tools, and databases without modification. The `ipcrypt-pfx` variant uniquely preserves network prefix relationships while maintaining the original address type and size, enabling network-level analytics while protecting individual address identity (see {{format-preservation-and-limitations}}).
 
@@ -503,7 +503,7 @@ Decryption process:
 2. Decrypt the encrypted IP using the key and the tweak
 3. Convert the resulting 16-byte representation back to an IP address
 
-Although the tweak is generated uniformly at random, occasional collisions may occur according to birthday bounds. An `(input, tweak)` collision reveals that the same input was encrypted with the same tweak but does not disclose the input's value. The usage limits apply per cryptographic key; rotating keys extends secure usage beyond these bounds.
+Although tweaks are generated uniformly at random, duplicate tweaks may occur according to birthday bounds. A duplicate tweak alone does not disclose either input. An `(input, tweak)` collision reveals that the input was repeated, but does not disclose its value. Usage accounting and key rotation apply per cryptographic key.
 
 ## Output Format and Encoding
 
@@ -516,7 +516,7 @@ This document defines two concrete instantiations:
 - `ipcrypt-nd`: Uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. See {{KIASU-BC}} for details.
 - `ipcrypt-ndx`: Uses the AES-XTS tweakable block cipher with a 16-byte (128-bit) tweak. See {{IEEE-P1619}} for background.
 
-In both cases, if a tweak is generated randomly, it MUST be uniformly random. Reusing the same randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.
+For both instantiations, each generated tweak MUST be sampled independently and uniformly from its full tweak space. Encryption MUST fail if its random source cannot provide such a tweak. Reusing a randomly generated tweak on different inputs is acceptable from a confidentiality standpoint.
 
 Test vectors are provided in {{ipcrypt-nd-test-vectors}} and {{ipcrypt-ndx-test-vectors}}.
 
@@ -524,9 +524,9 @@ Test vectors are provided in {{ipcrypt-nd-test-vectors}} and {{ipcrypt-ndx-test-
 
 The `ipcrypt-nd` instantiation uses the KIASU-BC tweakable block cipher with an 8-byte (64-bit) tweak. Implementation details are provided in {{implementing-kiasu-bc}}. The output is 24 bytes total, consisting of an 8-byte tweak concatenated with a 16-byte ciphertext.
 
-Random sampling of an 8-byte tweak yields an expected collision after about 2<sup>32</sup> operations (approximately 4 billion). An `(input, tweak)` collision indicates repetition without revealing the input's value.
+After 2<sup>32</sup> independent samples of an 8-byte tweak, the probability of at least one duplicate tweak is about 39%. A duplicate tweak alone does not reveal either input. An `(input, tweak)` collision indicates repetition without revealing the input's value.
 
-These collision bounds apply per cryptographic key. Regular key rotation can extend secure usage beyond these bounds. The effective security is determined by the underlying block cipher's strength.
+This probability applies per cryptographic key. Usage accounting and key rotation also apply per key. The effective security is determined by the underlying block cipher's strength.
 
 Test vectors are provided in {{ipcrypt-nd-test-vectors}}.
 
@@ -536,9 +536,9 @@ The `ipcrypt-ndx` instantiation uses the AES-XTS tweakable block cipher with a 1
 
 Since only a single block is encrypted, the construction is equivalent to AES-XEX, and identical to AES-XTS at block index 0, where the tweak is not multiplied by the primitive element α.
 
-For single-block AES-XTS, independent sampling of a 16-byte tweak results in an expected collision after about 2<sup>64</sup> operations (approximately 18 quintillion).
+After 2<sup>64</sup> independent samples of a 16-byte tweak, the probability of at least one duplicate tweak is about 39%.
 
-Similar to `ipcrypt-nd`, collisions reveal repetition without compromising the input value. These limits are per key, and regular key rotation extends secure usage. The effective security is governed by AES-128 strength (approximately 2<sup>128</sup> operations).
+As with `ipcrypt-nd`, a duplicate tweak alone does not reveal either input. An `(input, tweak)` collision reveals repetition without compromising the input value. This probability applies per key. The effective security is governed by AES-128 strength (approximately 2<sup>128</sup> operations).
 
 ### Comparison of Modes
 
@@ -560,13 +560,13 @@ Mode selection depends on specific privacy requirements and operational constrai
   - Output size: 24 bytes (16-byte ciphertext + 8-byte tweak)
   - Privacy: Same IP produces different ciphertexts (prevents most correlation)
   - Use case: General privacy protection with reasonable storage overhead
-  - Collision resistance: Approximately 4 billion operations per key
+  - Tweak duplicates: 39% probability after 2<sup>32</sup> operations per key
 
 - Non-Deterministic `ipcrypt-ndx` (AES-XTS):
   - Output size: 32 bytes (16-byte ciphertext + 16-byte tweak)
   - Privacy: Same IP produces different ciphertexts (prevents correlation)
   - Use case: Maximum privacy protection when storage permits
-  - Collision resistance: Approximately 18 quintillion operations per key
+  - Tweak duplicates: 39% probability after 2<sup>64</sup> operations per key
 
 ## Alternatives to Random Tweaks {#alternatives-to-random-tweaks}
 
@@ -580,21 +580,23 @@ Although the birthday bound presents considerations with random tweaks, random t
 
 # Security Considerations {#security-considerations}
 
-The methods specified in this document provide strong confidentiality guarantees but explicitly do not provide integrity protection:
+The methods specified in this document protect IP address values from parties without the key. They do not provide integrity, authentication, or key commitment.
 
 These methods provide protection against:
 
-- Unauthorized parties learning the original IP addresses (without the key)
-- Statistical analysis revealing patterns in network traffic (non-deterministic modes)
-- Brute-force attacks on the address space (128-bit security level)
+- Unauthorized parties recovering the original IP address without the key
+- Ciphertext equality correlation in non-deterministic modes, except for `(input, tweak)` collisions
+- Exhaustive recovery of a 128-bit cipher key
 
 These methods do not provide protection against:
 
 - Active attackers modifying, reordering, or removing encrypted addresses
-- Authorized key holders decrypting addresses (by design)
-- Traffic analysis based on volume and timing (metadata)
+- Authorized key holders decrypting addresses, by design
+- Equality correlation in deterministic mode or prefix correlation in `ipcrypt-pfx`
+- Traffic analysis based on volume, timing, and other metadata
+- Successful decryption under an incorrect key
 
-Applications requiring integrity protection must additionally employ authentication mechanisms such as HMAC, authenticated encryption modes, or digital signatures over the encrypted data.
+Applications MUST NOT treat successful decryption as proof of correct key selection. Applications requiring integrity or key binding must authenticate an envelope containing the encrypted data, a key identifier, and context.
 
 ## Deterministic Mode Security
 
@@ -606,7 +608,7 @@ This makes deterministic encryption suitable for applications where format prese
 
 The inclusion of a random tweak ensures that encrypting the same input generally produces different outputs. An `(input, tweak)` collision reveals only that the same input was processed with that tweak, not the input's value.
 
-Security is determined by the underlying block cipher (≈2<sup>128</sup> for AES-128) on a per-key basis. Key rotation is recommended to extend secure usage beyond the per-key collision bounds.
+Security is determined by the underlying block cipher (approximately 2<sup>128</sup> for AES-128) on a per-key basis. Deployments should track per-key usage and rotate keys according to their acceptable duplicate-tweak probability.
 
 ## Implementation Security
 
@@ -926,9 +928,10 @@ function ipcrypt_pfx_encrypt(ip_address, key):
     bytes16 = convert_to_16_bytes(ip_address)
 
     // Split the key into two AES-128 keys
-    // IMPORTANT: K1 and K2 MUST be different
     K1 = key[0:16]
     K2 = key[16:32]
+    if K1 == K2:
+        raise Error("The two halves of the key must be different")
 
     // Initialize encrypted result with zeros
     encrypted = [0] * 16
@@ -991,6 +994,8 @@ function ipcrypt_pfx_decrypt(encrypted_ip, key):
     // Split the key into two AES-128 keys
     K1 = key[0:16]
     K2 = key[16:32]
+    if K1 == K2:
+        raise Error("The two halves of the key must be different")
 
     // Initialize decrypted result with zeros
     decrypted = [0] * 16
@@ -1144,6 +1149,11 @@ function ipcrypt_nd_encrypt(ip_address, key):
 
 ~~~pseudocode
 function ipcrypt_nd_decrypt(ciphertext, key):
+    if length(key) != 16:
+        raise Error("Key must be 16 bytes")
+    if length(ciphertext) != 24:
+        raise Error("Ciphertext must be 24 bytes")
+
     // Step 1: Split ciphertext into tweak and encrypted IP
     tweak = ciphertext[0:8]  // First 8 bytes
     encrypted_ip = ciphertext[8:24]  // Remaining 16 bytes
@@ -1184,6 +1194,11 @@ function ipcrypt_ndx_encrypt(ip_address, key):
 
 ~~~pseudocode
 function ipcrypt_ndx_decrypt(ciphertext, key):
+    if length(key) != 32:
+        raise Error("Key must be 32 bytes (two AES-128 keys)")
+    if length(ciphertext) != 32:
+        raise Error("Ciphertext must be 32 bytes")
+
     // Step 1: Split ciphertext into tweak and encrypted IP
     tweak = ciphertext[0:16]  // First 16 bytes
     encrypted_ip = ciphertext[16:32]  // Remaining 16 bytes
